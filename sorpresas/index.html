@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para ti, mi amor 💜</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #7e5a9b;
+            --secondary-color: #a67fb5;
+            --background-light: #faf8f5;
+            --background-dark: #2c1810;
+            --text-light: #4a4a4a;
+            --text-dark: #e8e8e8;
+            --paper-light: #f9f7f4;
+            --paper-dark: #3a2317;
+            --border-light: #e8d5c4;
+            --border-dark: #5a3f2a;
+            --shadow-light: rgba(0, 0, 0, 0.1);
+            --shadow-dark: rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--background-light);
+            color: var(--text-light);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body.dark {
+            background: var(--background-dark);
+            color: var(--text-dark);
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 25% 25%, rgba(126, 90, 155, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(166, 127, 181, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--primary-color);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px var(--shadow-light);
+        }
+
+        .dark-mode-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px var(--shadow-light);
+        }
+
+        .dark-mode-toggle svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        .container {
+            max-width: 400px;
+            width: 90%;
+            background: var(--paper-light);
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px var(--shadow-light);
+            border: 2px solid var(--border-light);
+            position: relative;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        body.dark .container {
+            background: var(--paper-dark);
+            border-color: var(--border-dark);
+            box-shadow: 0 20px 40px var(--shadow-dark);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .header p {
+            font-size: 1rem;
+            opacity: 0.8;
+            font-weight: 300;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+
+        .code-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--border-light);
+            border-radius: 15px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.7);
+            color: var(--text-light);
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body.dark .code-input {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--border-dark);
+            color: var(--text-dark);
+        }
+
+        .code-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(126, 90, 155, 0.2);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(126, 90, 155, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .result {
+            text-align: center;
+            margin-top: 20px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+        }
+
+        .result.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .error-message {
+            color: #e74c3c;
+            padding: 15px;
+            background: rgba(231, 76, 60, 0.1);
+            border: 1px solid rgba(231, 76, 60, 0.2);
+            border-radius: 10px;
+            font-size: 0.95rem;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 25px;
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+            color: white;
+            text-decoration: none;
+            border-radius: 15px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            animation: bounceIn 0.6s ease;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(46, 204, 113, 0.3);
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 6s linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .heart-icon {
+            width: 20px;
+            height: 20px;
+            fill: var(--primary-color);
+        }
+
+        .envelope-icon {
+            width: 18px;
+            height: 18px;
+            fill: white;
+        }
+
+        .download-icon {
+            width: 18px;
+            height: 18px;
+            fill: white;
+        }
+
+        .sun-icon, .moon-icon {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+                margin: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .dark-mode-toggle {
+                top: 15px;
+                right: 15px;
+                width: 45px;
+                height: 45px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="dark-mode-toggle" id="darkModeToggle">
+        <svg class="sun-icon" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="moon-icon" viewBox="0 0 24 24" style="display: none;">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+    </button>
+
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1>
+                Para ti
+                <svg class="heart-icon" viewBox="0 0 24 24">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+            </h1>
+            <p>Ingresa el código secreto para descubrir tu sorpresa</p>
+        </div>
+
+        <form id="codeForm">
+            <div class="form-group">
+                <label for="secretCode">Código secreto:</label>
+                <input type="text" id="secretCode" class="code-input" placeholder="Escribe aquí el código..." required>
+            </div>
+            <button type="submit" class="submit-btn">
+                <svg class="envelope-icon" viewBox="0 0 24 24">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                </svg>
+                Verificar código
+            </button>
+        </form>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        // Datos de códigos y archivos
+        const codes = {
+            "rosas123": "downloads/carta_amor.pdf",
+            "nochelinda": "downloads/foto_besito.jpg",
+            "teadoro": "downloads/cancion_sorpresa.mp3"
+        };
+
+        // Elementos del DOM
+        const form = document.getElementById('codeForm');
+        const codeInput = document.getElementById('secretCode');
+        const result = document.getElementById('result');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        // Manejo del formulario
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const enteredCode = codeInput.value.trim();
+            
+            if (codes[enteredCode]) {
+                showDownloadButton(codes[enteredCode]);
+            } else {
+                showError();
+            }
+        });
+
+        // Mostrar botón de descarga
+        function showDownloadButton(filePath) {
+            result.innerHTML = `
+                <a href="${filePath}" class="download-btn" download>
+                    <svg class="download-icon" viewBox="0 0 24 24">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7,10 12,15 17,10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Descargar tu sorpresa
+                </a>
+            `;
+            result.classList.add('show');
+        }
+
+        // Mostrar mensaje de error
+        function showError() {
+            result.innerHTML = `
+                <div class="error-message">
+                    🥺 Código incorrecto, pero igual te amo.
+                </div>
+            `;
+            result.classList.add('show');
+        }
+
+        // Modo oscuro
+        darkModeToggle.addEventListener('click', function() {
+            body.classList.toggle('dark');
+            const isDark = body.classList.contains('dark');
+            
+            document.querySelector('.sun-icon').style.display = isDark ? 'none' : 'block';
+            document.querySelector('.moon-icon').style.display = isDark ? 'block' : 'none';
+            
+            // Guardar preferencia
+            localStorage.setItem('darkMode', isDark);
+        });
+
+        // Cargar preferencia de modo oscuro
+        const savedDarkMode = localStorage.getItem('darkMode');
+        if (savedDarkMode === 'true') {
+            body.classList.add('dark');
+            document.querySelector('.sun-icon').style.display = 'none';
+            document.querySelector('.moon-icon').style.display = 'block';
+        }
+
+        // Crear partículas flotantes
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Inicializar partículas
+        createParticles();
+
+        // Limpiar resultado cuando se cambia el código
+        codeInput.addEventListener('input', function() {
+            result.classList.remove('show');
+            setTimeout(() => {
+                result.innerHTML = '';
+            }, 300);
+        });
+    </script>
+</body>
+</html>
