@@ -1,12 +1,12 @@
 const codes = {
-    "VUQGSRNBBKUWSWTRWHJCQDNWDVYYPA": "assets/contrasenas_te_amo.PDF",
-    "MWKBAEFZZSTLCDFHQSVCSNDUFPEMYV": "assets/contrasenas_img.PDF",
-    "FJLPCXLHEUXGSUV": "assets/img_01.jpg.enc",
-    "LDURAZNLSXFBWBP": "assets/img_02.jpg.enc",
-    "PKSHUEBQPMMHPMD": "assets/img_03.jpg.enc",
-    "JCNHYTZTDGTLFJD": "assets/img_04.jpg.enc",
-    "VRSVSBZNZXEFLTW": "assets/img_05.jpg.enc",
-    "NZECHLNSQELSPAE": "assets/img_06.jpg.enc",
-    "FBHAXUHCDVSGJCQ": "assets/img_07.jpg.enc",
-    "TEAMO3000000": "assets/todos_tus_codigos.PDF",
+"VUQGSRNBBKUWSWTRWHJCQDNWDVYYPA": "downloads/contrasenas_te_amo.PDF",
+"MWKBAEFZZSTLCDFHQSVCSNDUFPEMYV": "downloads/contrasenas_img.PDF",
+"FJLPCXLHEUXGSUV": "downloads/img_01.jpg.enc",
+"LDURAZNLSXFBWBP": "downloads/img_02.jpg.enc",
+"PKSHUEBQPMMHPMD": "downloads/img_03.jpg.enc",
+"JCNHYTZTDGTLFJD": "downloads/img_04.jpg.enc",
+"VRSVSBZNZXEFLTW": "downloads/img_05.jpg.enc",
+"NZECHLNSQELSPAE": "downloads/img_06.jpg.enc",
+"FBHAXUHCDVSGJCQ": "downloads/img_07.jpg.enc",
+"TEAMO3000000": "downloads/todos_tus_codigos.PDF"
 };
