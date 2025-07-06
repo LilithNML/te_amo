@@ -1,0 +1,379 @@
+:root {
+    --primary-purple: #8B5CF6;
+    --primary-purple-dark: #7C3AED;
+    --bg-light: #FDF7F0;
+    --bg-dark: #1A1A1A;
+    --text-light: #4A4A4A;
+    --text-dark: #E5E5E5;
+    --card-light: rgba(255, 255, 255, 0.9);
+    --card-dark: rgba(30, 30, 30, 0.9);
+    --accent-light: #F3E8FF;
+    --accent-dark: #2D1B69;
+    --error-red: #FF6B6B;
+    --success-green: #10B981;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+    background: var(--bg-light);
+    color: var(--text-light);
+    overflow: hidden; /* Prevent scrollbars from the background effects */
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+body.dark {
+    background: var(--bg-dark);
+    color: var(--text-dark);
+}
+
+/* --- Fondo de luces moradas difusas y dinámicas (Show de luces sutil) --- */
+/* Primer capa de luz */
+body::before {
+    content: '';
+    position: fixed;
+    top: -30%;
+    left: -30%;
+    width: 160%;
+    height: 160%;
+    background: radial-gradient(circle at 20% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 60%);
+    animation: moveLight1 30s infinite alternate ease-in-out; /* Animación más larga y suave */
+    opacity: 0.7;
+    z-index: -3;
+    pointer-events: none;
+}
+
+/* Segunda capa de luz, más grande y con diferente movimiento */
+body::after {
+    content: '';
+    position: fixed;
+    bottom: -30%;
+    right: -30%;
+    width: 150%;
+    height: 150%;
+    background: radial-gradient(ellipse at 80% 80%, transparent 40%, rgba(173, 127, 255, 0.25) 70%, transparent 90%);
+    animation: moveLight2 35s infinite ease-in-out alternate-reverse; /* Animación diferente y más larga */
+    opacity: 0.6;
+    z-index: -4;
+    pointer-events: none;
+}
+
+@keyframes moveLight1 {
+    0% { transform: translate(0, 0) scale(1); opacity: 0.7; }
+    25% { transform: translate(10%, -10%) scale(1.05); opacity: 0.8; }
+    50% { transform: translate(20%, 0%) scale(1.1); opacity: 0.9; }
+    75% { transform: translate(10%, 10%) scale(1.05); opacity: 0.8; }
+    100% { transform: translate(0, 0) scale(1); opacity: 0.7; }
+}
+
+@keyframes moveLight2 {
+    0% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+    25% { transform: translate(-10%, 10%) scale(1.08); opacity: 0.7; }
+    50% { transform: translate(0%, 20%) scale(1.15); opacity: 0.8; }
+    75% { transform: translate(10%, 10%) scale(1.08); opacity: 0.7; }
+    100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+}
+
+body.dark::before {
+    background: radial-gradient(circle at 20% 20%, rgba(139, 92, 246, 0.25) 0%, transparent 60%);
+    opacity: 0.8;
+}
+
+body.dark::after {
+    background: radial-gradient(ellipse at 80% 80%, transparent 40%, rgba(173, 127, 255, 0.35) 70%, transparent 90%);
+    opacity: 0.7;
+}
+/* --- Fin Fondo de luces moradas difusas y dinámicas --- */
+
+/* --- Contenedor para Particles.js --- */
+#particles-js {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+}
+/* --- Fin Contenedor para Particles.js --- */
+
+.theme-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--card-light);
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+body.dark .theme-toggle {
+    background: var(--card-dark);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.3);
+}
+
+.theme-toggle:focus-visible {
+    outline: 2px solid var(--primary-purple);
+    outline-offset: 2px;
+}
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.love-card {
+    background: var(--card-light);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 450px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.8s ease-out;
+    z-index: 1;
+}
+
+body.dark .love-card {
+    background: var(--card-dark);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.love-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(139, 92, 246, 0.05), transparent);
+    animation: shine 3s infinite;
+    pointer-events: none;
+}
+
+@keyframes shine {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--primary-purple);
+    margin-bottom: 10px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.subtitle {
+    font-size: 1rem;
+    font-weight: 300;
+    margin-bottom: 30px;
+    opacity: 0.8;
+    line-height: 1.5;
+}
+
+.input-group {
+    margin-bottom: 25px;
+    position: relative;
+}
+
+.code-input {
+    width: 100%;
+    padding: 15px 20px;
+    border: 2px solid rgba(139, 92, 246, 0.3);
+    border-radius: 15px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.8);
+    color: var(--text-light);
+    outline: none;
+    transition: all 0.3s ease;
+    font-family: 'Poppins', sans-serif;
+}
+
+body.dark .code-input {
+    background: rgba(0, 0, 0, 0.3);
+    color: var(--text-dark);
+    border-color: rgba(139, 92, 246, 0.5);
+}
+
+.code-input:focus {
+    border-color: var(--primary-purple);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+    transform: translateY(-2px);
+}
+
+.code-input::placeholder {
+    color: rgba(139, 92, 246, 0.6);
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 15px 30px;
+    background: linear-gradient(135deg, var(--primary-purple), var(--primary-purple-dark));
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+    margin-bottom: 20px;
+}
+
+.submit-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+}
+
+.submit-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+    box-shadow: none;
+}
+
+.error-message {
+    color: var(--error-red);
+    font-size: 0.9rem;
+    margin-top: 10px;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    text-align: center;
+    role="alert";
+    aria-live="polite";
+}
+
+.error-message.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.download-section {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
+    margin-top: 20px;
+}
+
+.download-section.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.download-btn {
+    width: 100%;
+    padding: 15px 30px;
+    background: linear-gradient(135deg, var(--success-green), #059669);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.download-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.download-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.download-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: linear-gradient(135deg, #6ee7b7, #10b981);
+    box-shadow: none;
+}
+
+.shake {
+    animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.success-message {
+    color: var(--success-green);
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    text-align: center;
+    role="status";
+    aria-live="polite";
+}
+
+.success-message.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (max-width: 480px) {
+    .love-card {
+        padding: 30px 20px;
+        margin: 10px;
+    }
+
+    .title {
+        font-size: 1.5rem;
+    }
+}
