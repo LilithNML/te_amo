@@ -8,5 +8,5 @@ const codes = {
 "VRSVSBZNZXEFLTW": "downloads/img_05.jpg.enc",
 "NZECHLNSQELSPAE": "downloads/img_06.jpg.enc",
 "FBHAXUHCDVSGJCQ": "downloads/img_07.jpg.enc",
-"hola123": "downloads/todos_tus_codigos.PDF"
+"QUESO123": "downloads/todos_tus_codigos.PDF"
 };
