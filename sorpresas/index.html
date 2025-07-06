@@ -3,22 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Para ti, mi amor 💜</title>
+    <title>Para Ti Mi Amor 💜</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #7e5a9b;
-            --secondary-color: #a67fb5;
-            --background-light: #faf8f5;
-            --background-dark: #2c1810;
-            --text-light: #4a4a4a;
-            --text-dark: #e8e8e8;
-            --paper-light: #f9f7f4;
-            --paper-dark: #3a2317;
-            --border-light: #e8d5c4;
-            --border-dark: #5a3f2a;
-            --shadow-light: rgba(0, 0, 0, 0.1);
-            --shadow-dark: rgba(0, 0, 0, 0.3);
+            --primary-purple: #8B5CF6;
+            --primary-purple-dark: #7C3AED;
+            --bg-light: #FDF7F0;
+            --bg-dark: #1A1A1A;
+            --text-light: #4A4A4A;
+            --text-dark: #E5E5E5;
+            --card-light: rgba(255, 255, 255, 0.9);
+            --card-dark: rgba(30, 30, 30, 0.9);
+            --accent-light: #F3E8FF;
+            --accent-dark: #2D1B69;
+            --error-red: #FF6B6B;
+            --success-green: #10B981;
         }
 
         * {
@@ -29,153 +31,235 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: var(--background-light);
-            color: var(--text-light);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: all 0.3s ease;
+            background: var(--bg-light);
+            color: var(--text-light);
+            overflow: hidden; /* Prevent scrollbars from the background effects */
             position: relative;
-            overflow-x: hidden;
+            transition: all 0.3s ease;
         }
 
         body.dark {
-            background: var(--background-dark);
+            background: var(--bg-dark);
             color: var(--text-dark);
         }
 
+        /* --- Fondo de luces moradas difusas y dinámicas (Show de luces sutil) --- */
+        /* Primer capa de luz */
         body::before {
             content: '';
+            position: fixed;
+            top: -30%;
+            left: -30%;
+            width: 160%;
+            height: 160%;
+            background: radial-gradient(circle at 20% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 60%);
+            animation: moveLight1 30s infinite alternate ease-in-out; /* Animación más larga y suave */
+            opacity: 0.7;
+            z-index: -3;
+            pointer-events: none;
+        }
+
+        /* Segunda capa de luz, más grande y con diferente movimiento */
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -30%;
+            right: -30%;
+            width: 150%;
+            height: 150%;
+            background: radial-gradient(ellipse at 80% 80%, transparent 40%, rgba(173, 127, 255, 0.25) 70%, transparent 90%);
+            animation: moveLight2 35s infinite ease-in-out alternate-reverse; /* Animación diferente y más larga */
+            opacity: 0.6;
+            z-index: -4;
+            pointer-events: none;
+        }
+
+        @keyframes moveLight1 {
+            0% { transform: translate(0, 0) scale(1); opacity: 0.7; }
+            25% { transform: translate(10%, -10%) scale(1.05); opacity: 0.8; }
+            50% { transform: translate(20%, 0%) scale(1.1); opacity: 0.9; }
+            75% { transform: translate(10%, 10%) scale(1.05); opacity: 0.8; }
+            100% { transform: translate(0, 0) scale(1); opacity: 0.7; }
+        }
+
+        @keyframes moveLight2 {
+            0% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+            25% { transform: translate(-10%, 10%) scale(1.08); opacity: 0.7; }
+            50% { transform: translate(0%, 20%) scale(1.15); opacity: 0.8; }
+            75% { transform: translate(10%, 10%) scale(1.08); opacity: 0.7; }
+            100% { transform: translate(0, 0) scale(1); opacity: 0.6; }
+        }
+
+        body.dark::before {
+            background: radial-gradient(circle at 20% 20%, rgba(139, 92, 246, 0.25) 0%, transparent 60%);
+            opacity: 0.8;
+        }
+
+        body.dark::after {
+            background: radial-gradient(ellipse at 80% 80%, transparent 40%, rgba(173, 127, 255, 0.35) 70%, transparent 90%);
+            opacity: 0.7;
+        }
+        /* --- Fin Fondo de luces moradas difusas y dinámicas --- */
+
+        /* --- Contenedor para Particles.js --- */
+        #particles-js {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: 
-                radial-gradient(circle at 25% 25%, rgba(126, 90, 155, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 75% 75%, rgba(166, 127, 181, 0.1) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: -1;
+            z-index: -2;
         }
+        /* --- Fin Contenedor para Particles.js --- */
 
-        .dark-mode-toggle {
+        .theme-toggle {
             position: fixed;
             top: 20px;
             right: 20px;
-            background: var(--primary-color);
+            background: var(--card-light);
             border: none;
             border-radius: 50%;
             width: 50px;
             height: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            z-index: 1000;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 12px var(--shadow-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            appearance: none;
+            -webkit-appearance: none;
         }
 
-        .dark-mode-toggle:hover {
+        body.dark .theme-toggle {
+            background: var(--card-dark);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .theme-toggle:hover {
             transform: scale(1.1);
-            box-shadow: 0 6px 20px var(--shadow-light);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.3);
         }
 
-        .dark-mode-toggle svg {
-            width: 24px;
-            height: 24px;
-            fill: white;
+        .theme-toggle:focus-visible {
+            outline: 2px solid var(--primary-purple);
+            outline-offset: 2px;
         }
 
         .container {
-            max-width: 400px;
-            width: 90%;
-            background: var(--paper-light);
-            padding: 40px 30px;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px var(--shadow-light);
-            border: 2px solid var(--border-light);
-            position: relative;
-            transform: translateY(20px);
-            opacity: 0;
-            animation: fadeInUp 0.8s ease forwards;
-        }
-
-        body.dark .container {
-            background: var(--paper-dark);
-            border-color: var(--border-dark);
-            box-shadow: 0 20px 40px var(--shadow-dark);
-        }
-
-        @keyframes fadeInUp {
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .header h1 {
-            font-size: 2.2rem;
-            color: var(--primary-color);
-            font-weight: 600;
-            margin-bottom: 10px;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            padding: 20px;
         }
 
-        .header p {
+        .love-card {
+            background: var(--card-light);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out;
+            z-index: 1;
+        }
+
+        body.dark .love-card {
+            background: var(--card-dark);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .love-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(139, 92, 246, 0.05), transparent);
+            animation: shine 3s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes shine {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--primary-purple);
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
             font-size: 1rem;
-            opacity: 0.8;
             font-weight: 300;
+            margin-bottom: 30px;
+            opacity: 0.8;
+            line-height: 1.5;
         }
 
-        .form-group {
+        .input-group {
             margin-bottom: 25px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--primary-color);
+            position: relative;
         }
 
         .code-input {
             width: 100%;
-            padding: 15px;
-            border: 2px solid var(--border-light);
+            padding: 15px 20px;
+            border: 2px solid rgba(139, 92, 246, 0.3);
             border-radius: 15px;
             font-size: 1rem;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.8);
             color: var(--text-light);
+            outline: none;
             transition: all 0.3s ease;
             font-family: 'Poppins', sans-serif;
         }
 
         body.dark .code-input {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: var(--border-dark);
+            background: rgba(0, 0, 0, 0.3);
             color: var(--text-dark);
+            border-color: rgba(139, 92, 246, 0.5);
         }
 
         .code-input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(126, 90, 155, 0.2);
+            border-color: var(--primary-purple);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .code-input::placeholder {
+            color: rgba(139, 92, 246, 0.6);
         }
 
         .submit-btn {
             width: 100%;
-            padding: 15px;
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            padding: 15px 30px;
+            background: linear-gradient(135deg, var(--primary-purple), var(--primary-purple-dark));
             color: white;
             border: none;
             border-radius: 15px;
@@ -183,42 +267,90 @@
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
             margin-bottom: 20px;
+        }
+
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+        }
+
+        .submit-btn:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+            box-shadow: none;
+        }
+
+        .error-message {
+            color: var(--error-red);
+            font-size: 0.9rem;
+            margin-top: 10px;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            text-align: center;
+            role="alert";
+            aria-live="polite";
+        }
+
+        .error-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .download-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            margin-top: 20px;
+        }
+
+        .download-section.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .download-btn {
+            width: 100%;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, var(--success-green), #059669);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
         }
 
-        .submit-btn:hover {
+        .download-btn:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(126, 90, 155, 0.3);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
         }
 
-        .submit-btn:active {
+        .download-btn:active:not(:disabled) {
             transform: translateY(0);
         }
 
-        .result {
-            text-align: center;
-            margin-top: 20px;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.3s ease;
+        .download-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            background: linear-gradient(135deg, #6ee7b7, #10b981);
+            box-shadow: none;
         }
 
-        .result.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .error-message {
-            color: #e74c3c;
-            padding: 15px;
-            background: rgba(231, 76, 60, 0.1);
-            border: 1px solid rgba(231, 76, 60, 0.2);
-            border-radius: 10px;
-            font-size: 0.95rem;
+        .shake {
             animation: shake 0.5s ease-in-out;
         }
 
@@ -228,256 +360,313 @@
             75% { transform: translateX(5px); }
         }
 
-        .download-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 15px 25px;
-            background: linear-gradient(45deg, #27ae60, #2ecc71);
-            color: white;
-            text-decoration: none;
-            border-radius: 15px;
-            font-weight: 500;
+        .success-message {
+            color: var(--success-green);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            opacity: 0;
+            transform: translateY(-10px);
             transition: all 0.3s ease;
-            animation: bounceIn 0.6s ease;
+            text-align: center;
+            role="status";
+            aria-live="polite";
         }
 
-        .download-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(46, 204, 113, 0.3);
-        }
-
-        @keyframes bounceIn {
-            0% { transform: scale(0.3); opacity: 0; }
-            50% { transform: scale(1.05); }
-            70% { transform: scale(0.9); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .particle {
-            position: absolute;
-            width: 8px;
-            height: 8px;
-            background: var(--primary-color);
-            border-radius: 50%;
-            opacity: 0.6;
-            animation: float 6s linear infinite;
-        }
-
-        @keyframes float {
-            0% {
-                transform: translateY(100vh) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.6;
-            }
-            90% {
-                opacity: 0.6;
-            }
-            100% {
-                transform: translateY(-100px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        .heart-icon {
-            width: 20px;
-            height: 20px;
-            fill: var(--primary-color);
-        }
-
-        .envelope-icon {
-            width: 18px;
-            height: 18px;
-            fill: white;
-        }
-
-        .download-icon {
-            width: 18px;
-            height: 18px;
-            fill: white;
-        }
-
-        .sun-icon, .moon-icon {
-            width: 24px;
-            height: 24px;
-            fill: white;
+        .success-message.show {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         @media (max-width: 480px) {
-            .container {
+            .love-card {
                 padding: 30px 20px;
-                margin: 20px;
+                margin: 10px;
             }
-            
-            .header h1 {
-                font-size: 1.8rem;
-            }
-            
-            .dark-mode-toggle {
-                top: 15px;
-                right: 15px;
-                width: 45px;
-                height: 45px;
+
+            .title {
+                font-size: 1.5rem;
             }
         }
     </style>
 </head>
-<body>
-    <button class="dark-mode-toggle" id="darkModeToggle">
-        <svg class="sun-icon" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="5"/>
-            <line x1="12" y1="1" x2="12" y2="3"/>
-            <line x1="12" y1="21" x2="12" y2="23"/>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-            <line x1="1" y1="12" x2="3" y2="12"/>
-            <line x1="21" y1="12" x2="23" y2="12"/>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
-        </svg>
-        <svg class="moon-icon" viewBox="0 0 24 24" style="display: none;">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-        </svg>
+<body class="dark">
+    <div id="particles-js"></div>
+
+    <button class="theme-toggle" onclick="toggleTheme()" aria-label="Cambiar tema claro/oscuro">
+        <span id="theme-icon" aria-hidden="true">☀️</span>
     </button>
 
-    <div class="particles" id="particles"></div>
-
     <div class="container">
-        <div class="header">
-            <h1>
-                Para ti
-                <svg class="heart-icon" viewBox="0 0 24 24">
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                </svg>
-            </h1>
-            <p>Ingresa el código secreto para descubrir tu sorpresa</p>
-        </div>
+        <div class="love-card">
+            <h1 class="title">Para Ti, Mi Amor</h1>
+            <p class="subtitle">Ingresa el código secreto que te di para desbloquear tu sorpresa especial</p>
 
-        <form id="codeForm">
-            <div class="form-group">
-                <label for="secretCode">Código secreto:</label>
-                <input type="text" id="secretCode" class="code-input" placeholder="Escribe aquí el código..." required>
+            <div class="input-group">
+                <input type="text" class="code-input" id="codeInput" placeholder="Escribe el código aquí..." maxlength="20" autocomplete="off" aria-label="Código secreto">
             </div>
-            <button type="submit" class="submit-btn">
-                <svg class="envelope-icon" viewBox="0 0 24 24">
-                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                    <polyline points="22,6 12,13 2,6"/>
-                </svg>
-                Verificar código
-            </button>
-        </form>
 
-        <div class="result" id="result"></div>
+            <button class="submit-btn" id="submitBtn" onclick="validateCode()">
+                <span>Desbloquear Sorpresa</span>
+            </button>
+
+            <div class="error-message" id="errorMessage" aria-live="polite" role="alert">
+                🥺 Código incorrecto, pero igual te amo.
+            </div>
+
+            <div class="success-message" id="successMessage" aria-live="polite" role="status">
+                ¡Perfecto! Aquí está tu sorpresa especial 💕
+            </div>
+
+            <div class="download-section" id="downloadSection">
+                <button class="download-btn" id="downloadBtn" onclick="downloadFile()">
+                    <span aria-hidden="true">📥</span>
+                    <span>Descargar mi regalo</span>
+                </button>
+            </div>
+        </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
     <script>
-        // Datos de códigos y archivos
         const codes = {
             "rosas123": "downloads/carta_amor.pdf",
             "nochelinda": "downloads/foto_besito.jpg",
-            "teadoro": "downloads/cancion_sorpresa.mp3"
+            "teadoro": "downloads/cancion_sorpresa.mp3",
+            "mimundo": "downloads/poema_especial.txt",
+            "forever": "downloads/video_mensaje.mp4"
         };
 
-        // Elementos del DOM
-        const form = document.getElementById('codeForm');
-        const codeInput = document.getElementById('secretCode');
-        const result = document.getElementById('result');
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        const body = document.body;
+        let currentFile = null;
+        const codeInput = document.getElementById('codeInput');
+        const submitBtn = document.getElementById('submitBtn');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        const downloadSection = document.getElementById('downloadSection');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const loveCard = document.querySelector('.love-card');
 
-        // Manejo del formulario
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const enteredCode = codeInput.value.trim();
-            
-            if (codes[enteredCode]) {
-                showDownloadButton(codes[enteredCode]);
+        function initParticles() {
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": {
+                        "value": 130, // Aumentado a 180 partículas para mayor densidad
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#8B5CF6"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.8, // Opacidad ligeramente aumentada
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 4,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150, // Distancia de conexión ligeramente reducida para más conexiones
+                        "color": "#A05CF0",
+                        "opacity": 0.5, // Opacidad de las líneas aumentada
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 1.5, // Velocidad de movimiento de las partículas aumentada para mayor fluidez
+                        "direction": "none",
+                        "random": true,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 1
+                            }
+                        },
+                        "bubble": {
+                            "distance": 400,
+                            "size": 40,
+                            "duration": 2,
+                            "opacity": 8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200,
+                            "duration": 0.4
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+        }
+
+        function validateCode() {
+            submitBtn.disabled = true;
+            downloadBtn.disabled = true;
+
+            const code = codeInput.value.trim().toLowerCase();
+
+            errorMessage.classList.remove('show');
+            successMessage.classList.remove('show');
+            downloadSection.classList.remove('show');
+            loveCard.classList.remove('shake');
+
+            if (codes?.[code]) {
+                currentFile = codes?.[code];
+                setTimeout(() => {
+                    successMessage.classList.add('show');
+                    successMessage.focus();
+                    setTimeout(() => {
+                        downloadSection.classList.add('show');
+                        downloadBtn.focus();
+                        downloadBtn.disabled = false;
+                    }, 500);
+                }, 200);
             } else {
-                showError();
+                loveCard.classList.add('shake');
+                setTimeout(() => {
+                    errorMessage.classList.add('show');
+                    errorMessage.focus();
+                    loveCard.classList.remove('shake');
+                    submitBtn.disabled = false;
+                }, 300);
             }
-        });
 
-        // Mostrar botón de descarga
-        function showDownloadButton(filePath) {
-            result.innerHTML = `
-                <a href="${filePath}" class="download-btn" download>
-                    <svg class="download-icon" viewBox="0 0 24 24">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                        <polyline points="7,10 12,15 17,10"/>
-                        <line x1="12" y1="15" x2="12" y2="3"/>
-                    </svg>
-                    Descargar tu sorpresa
-                </a>
-            `;
-            result.classList.add('show');
-        }
-
-        // Mostrar mensaje de error
-        function showError() {
-            result.innerHTML = `
-                <div class="error-message">
-                    🥺 Código incorrecto, pero igual te amo.
-                </div>
-            `;
-            result.classList.add('show');
-        }
-
-        // Modo oscuro
-        darkModeToggle.addEventListener('click', function() {
-            body.classList.toggle('dark');
-            const isDark = body.classList.contains('dark');
-            
-            document.querySelector('.sun-icon').style.display = isDark ? 'none' : 'block';
-            document.querySelector('.moon-icon').style.display = isDark ? 'block' : 'none';
-            
-            // Guardar preferencia
-            localStorage.setItem('darkMode', isDark);
-        });
-
-        // Cargar preferencia de modo oscuro
-        const savedDarkMode = localStorage.getItem('darkMode');
-        if (savedDarkMode === 'true') {
-            body.classList.add('dark');
-            document.querySelector('.sun-icon').style.display = 'none';
-            document.querySelector('.moon-icon').style.display = 'block';
-        }
-
-        // Crear partículas flotantes
-        function createParticles() {
-            const particlesContainer = document.getElementById('particles');
-            
-            for (let i = 0; i < 30; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 6 + 's';
-                particle.style.animationDuration = (Math.random() * 3 + 4) + 's';
-                particlesContainer.appendChild(particle);
+            codeInput.value = '';
+            if (!codes?.[code]) {
+                setTimeout(() => {
+                    submitBtn.disabled = false;
+                }, 500);
             }
         }
 
-        // Inicializar partículas
-        createParticles();
+        function downloadFile() {
+            if (!currentFile) {
+                console.error("No hay archivo seleccionado para descargar.");
+                return;
+            }
 
-        // Limpiar resultado cuando se cambia el código
-        codeInput.addEventListener('input', function() {
-            result.classList.remove('show');
+            downloadBtn.disabled = true;
+            downloadBtn.textContent = 'Descargando...';
+
+            const link = document.createElement('a');
+            link.href = currentFile;
+            link.download = currentFile.split('/').pop();
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
             setTimeout(() => {
-                result.innerHTML = '';
-            }, 300);
+                alert('¡Espero que te guste mi regalo! Te amo mucho 💜');
+                resetUI();
+            }, 1000);
+        }
+
+        function resetUI() {
+            codeInput.value = '';
+            currentFile = null;
+            errorMessage.classList.remove('show');
+            successMessage.classList.remove('show');
+            downloadSection.classList.remove('show');
+            submitBtn.disabled = false;
+            downloadBtn.disabled = false;
+            downloadBtn.innerHTML = '<span aria-hidden="true">📥</span><span>Descargar mi regalo</span>';
+        }
+
+        codeInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                validateCode();
+            }
+        });
+
+        function toggleTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('theme-icon');
+
+            body.classList.toggle('dark');
+
+            if (body.classList.contains('dark')) {
+                themeIcon.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeIcon.textContent = '🌙';
+                localStorage.setItem('theme', 'light');
+            }
+        }
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const body = document.body;
+            const themeIcon = document.getElementById('theme-icon');
+
+            if (savedTheme === 'light') {
+                body.classList.remove('dark');
+                themeIcon.textContent = '🌙';
+            } else {
+                body.classList.add('dark');
+                themeIcon.textContent = '☀️';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initParticles();
+            loadTheme();
+            submitBtn.disabled = false;
         });
     </script>
 </body>
