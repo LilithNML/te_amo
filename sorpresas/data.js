@@ -1,3 +1,4 @@
+//codigos no superiores a 50 caracteres
 const codes = {
 "vuqgsrnbbkuwswtrwhjcqdnwdvyypa": "downloads/contrasenas_te_amo.PDF",
 "mwkbaefzzstlcdfhqsvcsndufpemyv": "downloads/contrasenas_img.PDF",
