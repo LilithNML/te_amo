@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "Enamorada", "El Sol y la Luna", "Primer hola", "Louie", "Round", "...", "Querido", "Hatsune Miku", ":)",
         "Cuarto creciente", "Gibosa menguante", "Luna llena", "Suegra", "Mami", "Suegrita", "Sexo", "Ojos verdes",
         "Cielo", "Acostados", "A tu lado", "Por que no puedo dejar de pensar en ti", "Te ame desde el primer dia que te conoci", "ha+ln", "teamo0315",
-        "Petit bisou", "Sofia Casarez Mendoza", "Star",
+        "Petit bisou", "Sofia Casarez Mendoza", "Star", "Namek", "Kamebesito",
     ];
 
     const tableBody = document.querySelector('#phrasesTable tbody');
