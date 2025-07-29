@@ -580,6 +580,22 @@ tu hijo peludo, Samuel.`,
   "star": {
   imagen: "assets/unlocked_content/images/cupon_jugar.webp"
   },
+  "namek": {
+  "texto": "Usa tu contraseña de siempre seguida de dos a minúsculas", 
+    descarga: {
+      url: "assets/unlocked_content/images/a01.jpg.enc",
+      nombre: "a01.jpg.enc",
+      textoEnlace: "Descargar fotito"
+    }
+  },
+"kamebesito": {
+  "texto": "Usa tu contraseña de siempre seguida de dos a minúsculas", 
+    descarga: {
+      url: "assets/unlocked_content/images/a02.jpg.enc",
+      nombre: "a02.jpg.enc",
+      textoEnlace: "Descargar fotito"
+    }
+  },
   
 };
 
