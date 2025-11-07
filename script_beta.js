@@ -48,3 +48,28 @@ const mensajes = {
     categoria: "Carta",
     pista: ""
   },
+"chester": {
+    texto: "<p>Ey tú, mi niño hermoso,<br>¿sabías que tu niña hermosa te ama con locura?<br>Así, sin pausas, sin reglas, sin frenos.<br>Te amo como si fueras mi videojuego favorito:<br>quiero jugar contigo todos los días,<br>explorarte, cuidarte y ganar contigo siempre.</p><p>Eres mi glitch perfecto,<br>mi premio secreto,<br>mi lugar feliz.</p><p>Y no lo olvides:<br>soy tu princesa,<br>y estoy completamente hechizada por ti.</p>",
+    categoria: "Carta",
+    pista: ""
+  },
+  "mininahermosa": {
+    texto: "<p>No sé si el universo estaba aburrido o inspirado el día que te puso en mi vida,<br>pero bendito sea ese momento.</p><p>Tú, con esa forma tan tuya de existir,<br>te metiste en mi corazón como si siempre hubieras tenido la llave.<br>Y desde entonces no he dejado de amarte.<br>No un poquito.<br>No a ratos.<br>Sino con cada parte de mí.<br>Con locura, con ternura, con deseo,<br>con esa mezcla adictiva de “quiero cuidarte” y “quiero comerte a besos”.</p><p>Eres mi lugar favorito,<br>mi desastre más hermoso,<br>mi calma, mi caos, mi todo.</p><p>Y sí, soy tu niña hermosa,<br>la que piensa en ti a cada hora,<br>la que sonríe con solo imaginar tu voz,<br>la que se derrite por ti aunque finja estar seria,<br>la que te amaría incluso en otra vida,<br>con otro nombre, en otro cuerpo.<br>Porque yo no me enamoré solo de tu piel,<br>sino de tu alma.<br>Y esa,<br>esa no cambia nunca.</p><p>Prepárate, mi amor,<br>porque este corazón late fuerte,<br>y cada latido lleva tu nombre.<br>Y te lo juro,<br>si pudiera darte el mundo,<br>lo envolvería en papel de estrellas<br>y te lo dejaría en la almohada,<br>junto con un beso y un “te amo” tan profundo<br>que te haría temblar el alma.</p><p>Con todo lo que soy,<br><em>Tu niña. Tu Luna. Tuya siempre.</em></p>",
+    categoria: "Carta",
+    pista: ""
+  },
+  "mininohermoso": {
+    texto: "<p>Amo tu ternura,<br>esa que se esconde en tus gestos pequeños,<br>en cómo me hablas, en cómo te preocupas,<br>en cómo me haces sentir segura sin decir mucho.</p><p>Eres una de esas personas que no necesita hacer ruido para brillar.<br>Tu forma de ser, tan tú, tan genuina,<br>me desarma, me abraza y me enamora cada día un poquito más.</p><p>Gracias por existir así, tan tú, tan perfecto para mí.</p>",
+    categoria: "Carta",
+    pista: ""
+  },
+  "yekaterina": {
+    texto: "<p>Querido hijo,</p><p>Hoy quiero escribirte como madre, pero también como mujer que ve en ti a alguien muy especial para su hija.<br>Desde que llegaste a su vida, he visto en ella una luz distinta, una paz que solo nace cuando el amor es real y sincero.</p><p>Tal vez no lo diga en voz alta todo el tiempo,<br>pero te tengo un cariño enorme.<br>No solo por lo que eres con ella,<br>sino por lo que eres tú,<br>atento, noble, respetuoso, con un corazón lleno de ternura.</p><p>Gracias por cuidarla, por hacerla reír,<br>por sostenerla en los días buenos y en los no tanto.<br>Gracias por amarla sin condiciones,<br>y por ser ese compañero que toda madre sueña que su hija encuentre.</p><p>Quiero que sepas que aquí tienes a alguien que te aprecia, que te ve,<br>y que te considera parte de la familia.<br>Sigue siendo tú, Haziel,<br>porque tú, tal como eres, ya eres un regalo para nosotras.</p><p>Con cariño,<br><em>Tu suegra (que te quiere más de lo que imaginas).</em></p>",
+    categoria: "Sofia",
+    pista: ""
+  },
+  "samuel": {
+    texto: "<p>Hola, papi,<br>Soy yo, Samuel, tu peluchito favorito.<br>Solo quería recordarte que te amo mucho<br>y que soy el hijo más feliz del mundo<br>porque tengo a los mejores papás del universo.<br>Gracias por abrazarme fuerte por las noches,<br>yo también te cuido mientras duermes.</p><p>Con amor,<br><em>tu hijo peludo, Samuel.</em></p>",
+    categoria: "Samuel",
+    pista: ""
+  },
