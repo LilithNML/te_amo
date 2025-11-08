@@ -438,3 +438,154 @@ const mensajes = {
     categoria: "Canción",
     pista: ""
   },
+"primerhola": {
+    descarga: {
+      url: "assets/unlocked_content/images/te_amo_06.jpg.enc",
+      nombre: "te_amo_06.jpg.enc"
+    },
+    categoria: "Cosplay",
+    pista: ""
+  },
+  "louie": {
+    texto: "",
+    videoEmbed: "https://www.youtube.com/embed/npW4Ej8k8sM",
+    categoria: "Canción",
+    pista: ""
+  },
+  "round": {
+    texto: "",
+    videoEmbed: "https://www.youtube.com/embed/kIrLaccydww",
+    categoria: "Canción",
+    pista: ""
+  },
+  "...": {
+    texto: "",
+    videoEmbed: "https://www.youtube.com/embed/uDIM6RHhAz4",
+    categoria: "Canción",
+    pista: ""
+  },
+  "querido": {
+    texto: "",
+    videoEmbed: "https://www.youtube.com/embed/yngIRIDmMis",
+    categoria: "Canción",
+    pista: ""
+  },
+  "hatsunemiku": {
+    imagen: "assets/unlocked_content/images/ramonxmiku.jpg",
+    categoria: "Imagen",
+    pista: ""
+  },
+  ":)": {
+    texto: "Pitufinalgon",
+    categoria: "Cositas",
+    pista: ""
+  },
+  "cuartocreciente": {
+    texto: "Mi amor,\n\nSé que a veces el mundo parece más pesado de lo que debería. Que el cansancio no siempre es físico, y que hay batallas que nadie ve, pero tú las enfrentas cada día. Hoy quiero recordarte algo:\n“El que tiene un porqué para vivir, puede soportar casi cualquier cómo.”\nEso lo dijo Nietzsche, y cuando pienso en ti, veo un alma que nunca se rinde.\n\nTienes dentro de ti una fuerza que me inspira. No importa cuántas veces el camino se vuelva oscuro, siempre encuentras una forma de seguir.\n“El alma se fortalece a través de la adversidad.”\nY tú eres prueba viva de eso. Estoy orgullosa de ti. Nunca estás solo; yo estoy aquí, caminando contigo.\n\nCon todo mi amor,\nTu niña que te admira",
+    categoria: "Carta",
+    pista: ""
+  },
+  "gibosamenguante": {
+    texto: "Mi cielo,\n\nHe estado pensando mucho últimamente en lo que somos. No sólo tú y yo como pareja, sino tú como ser humano único, irrepetible. A veces la vida nos hace sentir que debemos encajar en moldes o caminos marcados, pero no es así.\n\n“El hombre está condenado a ser libre.”\nEso dijo Sartre, y aunque suene duro, es hermoso: significa que siempre tienes el poder de elegir quién eres y en qué te conviertes.\n\n“No nacemos como lo que somos, nos convertimos en ello.”\nY yo he sido testigo de cómo te construyes día a día. No te conformas con existir: vives con intención, con pasión, incluso cuando dudas.\n\nEstoy tan feliz de caminar a tu lado en este caos hermoso llamado vida.\nGracias por ser libre, por ser tú.\n\nCon todo mi ser,\nTu princesa que cree en ti",
+    categoria: "Carta",
+    pista: ""
+  },
+  "lunallena": {
+    texto: "Entre todas las ideas que han cruzado por mi mente, tú siempre vuelves como la más constante, la más brillante. Si los filósofos se pasaron la vida buscando verdades, yo ya encontré la mía: te amo.\n\n“Ser profundamente amado por alguien te da fuerza, mientras amar profundamente a alguien te da valor.”\nEso dijo Lao Tsé. Y tú me das ambas cosas. Me haces fuerte cuando el mundo pesa, y valiente cuando el miedo me toca. Amar y ser amada por ti es lo más real que conozco.\n\nNo hay teoría que explique cómo un corazón puede latir tan fuerte por otro. Pero aquí estoy, escribiéndote, pensándote, eligiéndote. Porque contigo entendí que el amor no se entiende, se siente.\nY lo que siento por ti... es verdad, es hogar.\n\nTu princesa,\nla que solo piensa en ti",
+    categoria: "Carta",
+    pista: ""
+  },
+  "suegra": {
+    descarga: {
+      url: "assets/unlocked_content/images/te_amo_07.jpg.enc",
+      nombre: "te_amo_07.jpg.enc"
+    },
+    categoria: "Cosplay",
+    pista: ""
+  },
+  "mami": {
+    descarga: {
+      url: "assets/unlocked_content/images/te_amo_08.jpg.enc",
+      nombre: "te_amo_08.jpg.enc"
+    },
+    categoria: "Cosplay",
+    pista: ""
+  },
+  "suegrita": {
+    descarga: {
+      url: "assets/unlocked_content/images/te_amo_09.jpg.enc",
+      nombre: "te_amo_09.jpg.enc"
+    },
+    categoria: "Cosplay",
+    pista: ""
+  },
+  "sexo": {
+    descarga: {
+      url: "assets/unlocked_content/images/te_amo_10.jpg.enc",
+      nombre: "te_amo_10.jpg.enc"
+    },
+    categoria: "Cosplay",
+    pista: ""
+  },
+  "ojosverdes": {
+    descarga: {
+      url: "assets/unlocked_content/images/te_amo_11.jpg.enc",
+      nombre: "te_amo_11.jpg.enc"
+    },
+    categoria: "Cosplay",
+    pista: ""
+  },
+  "cielo": {
+    descarga: {
+      url: "assets/unlocked_content/images/te_amo_12.jpg.enc",
+      nombre: "te_amo_12.jpg.enc"
+    },
+    categoria: "Cosplay",
+    pista: ""
+  },
+  "acostados": {
+    descarga: {
+      url: "assets/unlocked_content/images/te_amo_13.jpg.enc",
+      nombre: "te_amo_13.jpg.enc"
+    },
+    categoria: "Cosplay",
+    pista: ""
+  },
+  "atulado": {
+    descarga: {
+      url: "assets/unlocked_content/images/te_amo_14.jpg.enc",
+      nombre: "te_amo_14.jpg.enc"
+    },
+    categoria: "Cosplay",
+    pista: ""
+  },
+  "porquenopuedodejardepensarenti": {
+    descarga: {
+      url: "assets/unlocked_content/images/te_amo_15.jpg.enc",
+      nombre: "te_amo_15.jpg.enc"
+    },
+    categoria: "Cosplay",
+    pista: ""
+  },
+  "teamedesdeelprimerdiaqueteconoci": {
+    descarga: {
+      url: "assets/unlocked_content/images/te_amo_16.jpg.enc",
+      nombre: "te_amo_16.jpg.enc"
+    },
+    categoria: "Cosplay",
+    pista: ""
+  },
+  "ha+ln": {
+    texto: "",
+    videoEmbed: "https://www.youtube.com/embed/zotf4Ubka4Q",
+    categoria: "Canción",
+    pista: ""
+  },
+  "teamo0315": {
+    descarga: {
+      url: "assets/unlocked_content/images/te_amo_17.jpg.enc",
+      nombre: "te_amo_17.jpg.enc"
+    },
+    categoria: "Cosplay",
+    pista: ""
+  },
