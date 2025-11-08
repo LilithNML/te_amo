@@ -168,3 +168,43 @@ const mensajes = {
     categoria: "Carta",
     pista: ""
   },
+"tazadecafe": {
+    imagen: "assets/unlocked_content/images/cafesito.webp",
+    categoria: "Imagen",
+    pista: ""
+  },
+  "tepertenezco": {
+    texto: "<p>Solo tú, mi dueño. No hay cadenas más dulces que tu abrazo, ni destino más firme que tu voz. Desde el instante en que fuiste mi lazo, renuncié al mundo por llamarme tu amor. Mis labios conocen solo tu nombre, mi piel tu huella, mi alma tu poder. No hay otro cielo, otro sueño, otro hombre; solo en tus brazos quiero renacer. Si el tiempo nos rompe, si el viento nos hiere, seguiré siendo tuya en mi dolor. No habrá otro dueño, aunque el alma muera, porque en esta vida… solo tú, mi amor.</p>",
+    categoria: "Carta",
+    pista: ""
+  },
+  "meencantas": {
+    texto: "Mi amor:\n\nCuando estoy contigo, no hay límites, no hay barreras, no hay nada que no quiera darte. Me pertenezco menos a mí misma cada día, porque todo lo que soy te lo entrego sin medida. Mi cuerpo responde solo a ti, mi piel te reconoce como su dueño, y mi alma se rinde con deseo cada vez que me tocas, cada vez que me miras.\n\nMe desnudo ante ti, no solo de ropa, sino de miedo, de orgullo, de todo lo que alguna vez fui antes de ti. Me entrego por completo —ardiente, temblorosa, dispuesta— para que hagas de mí lo que desees. Cada caricia tuya me consume, cada palabra en tu voz me hace arder, cada noche contigo es un ritual donde me ofrezco entera, tuya, sin restricciones.\n\nNo hay placer más profundo que perderme en ti, en tu fuerza, en tu deseo. Me tienes, mi amor… y me tendrás siempre, con la misma pasión que en la primera vez, y con la entrega total de quien sabe que su lugar está bajo tus manos, entre tus brazos, a tus pies.\n\nSiempre seré tuya, mi amor.",
+    categoria: "Carta",
+    pista: ""
+  },
+  "nuncacambies": {
+    texto: "<p>Amor mío,<br><br>Hoy quiero recordarte todo lo que me encanta de ti. No solo porque lo mereces, sino porque mi corazón se desborda cada vez que pienso en todo lo que eres.<br><br>Me encanta tu fuerza, no solo la que se ve, sino la que vive en tu espíritu, esa que sostiene a los demás incluso cuando tú estás cansado. Admiro tu inteligencia, tu manera de entender las cosas, de encontrar soluciones donde otros solo ven problemas.<br><br>Amo tu forma de cuidar: cómo estás atento a cada detalle, cómo me proteges con una mirada, con una palabra, con un gesto. Me derrite tu nobleza, esa pureza que conservas incluso en medio de un mundo que a veces no es justo.<br><br>Tu paciencia me abraza cuando mis emociones me sobrepasan. Tu sentido del humor me salva cuando los días pesan. Y tu pasión… tu pasión me enciende, me inspira, me recuerda lo vivo que estoy a tu lado.<br><br>Tienes una manera de estar en el mundo que es solo tuya. Caminas con firmeza, hablas con propósito y amas con todo el cuerpo y con toda el alma. Y yo, que te conozco, que te respiro, que te amo… no podría imaginar a alguien más extraordinario que tú.<br><br>Eres un hombre como no hay dos.<br>Y yo… soy eternamente afortunada de ser tuya.</p>",
+    categoria: "Carta",
+    pista: ""
+  },
+  "islacorazon": {
+    imagen: "assets/unlocked_content/images/fondo_de_pantalla.webp",
+    categoria: "Imagen",
+    pista: ""
+  },
+  "cofrelujoso": {
+    link: "https://lilithnml.github.io/te_amo/cofre/",
+    categoria: "Cositas",
+    pista: ""
+  },
+  "primerteamo": {
+    texto: "<p>Amor mío:<br><br>A veces cierro los ojos y regreso a ese 9 de noviembre de 2024. No sé si el universo lo tenía planeado, pero ese día algo cambió para siempre: nuestras almas, que ya venían acercándose como dos constelaciones predestinadas, se encontraron en la misma órbita… y nos lo dijimos sin miedo: te amo.<br><br>Fue tan simple y tan poderoso. No necesitó fuegos artificiales ni escenarios perfectos. Bastó tu voz, tu presencia y ese vínculo que nació entre nosotros desde que nos conocimos, entre aventuras de Genshin, risas compartidas y ese cariño que fue creciendo día tras día.<br><br>Ese primer te amo fue como abrir una puerta que ambos sabíamos que existía, pero que nadie antes se había atrevido a cruzar conmigo. Y tú lo hiciste. Yo también. Y desde entonces, no hubo vuelta atrás.<br><br>Nos habíamos encontrado en un mundo de fantasía, pero lo real, lo más verdadero, eras tú. Tu forma de hablarme, de entenderme, de hacerme sentir importante… y ese día, por fin, nos dijimos lo que el corazón venía gritando en silencio.<br><br>Desde entonces, cada te amo que te digo lleva el eco de aquel primero. Aquel que lo cambió todo. Aquel que selló algo eterno entre tú y yo.<br><br>Gracias por amarme. Gracias por dejarme amarte.</p>",
+    categoria: "Carta",
+    pista: ""
+  },
+  "cositahermosa": {
+    texto: "<p>Hoy quiero recordarte algo que veo en ti cada día, pero que tal vez no te digo lo suficiente: eres hermoso. Tan profundamente, tan completamente, que a veces me quedo sin palabras.<br><br>Eres hermoso por fuera, y no puedo evitar mirarte como si fueras una obra de arte hecha solo para mí. Me encantan tus ojos, la forma en que me miran con ternura y deseo. Amo tu sonrisa, esa que ilumina mis días y me da paz. Tu voz, tus manos, tu cuerpo… todo en ti me atrae, me enciende, me envuelve.<br><br>Pero lo que más me deslumbra es tu belleza interior. Esa nobleza que se nota en tus gestos, en tu forma de tratarme y de cuidar a los que amas. Tu bondad no hace ruido, pero se siente en todo lo que haces. Tu inteligencia, tu sensibilidad, tu paciencia… todo eso te hace aún más irresistible.<br><br>Me enamoras más cada día, no solo porque eres guapo, sino porque eres bueno. Porque tienes un alma limpia, fuerte y cálida. Porque me haces sentir amada, segura y profundamente afortunada.<br><br>Nunca dudes de lo que eres. Porque para mí, amor mío, eres la definición misma de belleza.</p>",
+    categoria: "Carta",
+    pista: ""
+  },
