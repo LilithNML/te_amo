@@ -589,3 +589,40 @@ const mensajes = {
     categoria: "Cosplay",
     pista: ""
   },
+"petitbisou": {
+    imagen: "assets/unlocked_content/images/cartita_25_jun.webp",
+    categoria: "Imagen",
+    pista: ""
+  },
+  "sofiacasarezmendoza": {
+    descarga: {
+      url: "assets/unlocked_content/images/soy_tuya.jpg.enc",
+      nombre: "soy_tuya.jpg.enc"
+    },
+    categoria: "Cosplaý",
+    pista: ""
+  },
+  "star": {
+    imagen: "assets/unlocked_content/images/cupon_jugar.webp",
+    categoria: "Imagen",
+    pista: ""
+  },
+  "namek": {
+    texto: "Usa tu contraseña de siempre seguida de dos a minúsculas",
+    descarga: {
+      url: "assets/unlocked_content/images/a01.jpg.enc",
+      nombre: "a01.jpg.enc"
+    },
+    categoria: "Cosplay",
+    pista: ""
+  },
+  "kamebesito": {
+    texto: "Usa tu contraseña de siempre seguida de dos a minúsculas",
+    descarga: {
+      url: "assets/unlocked_content/images/a02.jpg.enc",
+      nombre: "a02.jpg.enc"
+    },
+    categoria: "Cosplay",
+    pista: ""
+  },
+};
