@@ -362,3 +362,79 @@ const mensajes = {
     categoria: "Carta",
     pista: ""
   },
+"colette": {
+    descarga: {
+      url: "assets/unlocked_content/images/te_amo_01.jpg.enc",
+      nombre: "te_amo_01.jpg.enc"
+    },
+    categoria: "Cosplay",
+    pista: ""
+  },
+  "vegetto": {
+    descarga: {
+      url: "assets/unlocked_content/images/te_amo_02.jpg.enc",
+      nombre: "te_amo_02.jpg.enc"
+    },
+    categoria: "Cosplay",
+    pista: ""
+  },
+  "ellenjoe": {
+    descarga: {
+      url: "assets/unlocked_content/images/te_amo_03.jpg.enc",
+      nombre: "te_amo_03.jpg.enc"
+    },
+    categoria: "Cosplay",
+    pista: ""
+  },
+  "himikotoga": {
+    descarga: {
+      url: "assets/unlocked_content/images/te_amo_04.jpg.enc",
+      nombre: "te_amo_04.jpg.enc"
+    },
+    categoria: "Cosplay",
+    pista: ""
+  },
+  "elmejorpadredelmundo": {
+    descarga: {
+      url: "assets/unlocked_content/images/te_amo_05.jpg.enc",
+      nombre: "te_amo_06.jpg.enc"
+    },
+    categoria: "Cosplay",
+    pista: ""
+  },
+"amoreterno": {
+    texto: "Mi amor por ti es eterno.",
+    videoEmbed: "https://www.youtube.com/embed/BzLFsD0Wi6I",
+    categoria: "Canción",
+    pista: ""
+  },
+  "nadanosvaaseparar": {
+    texto: "",
+    videoEmbed: "https://www.youtube.com/embed/7V-yIwSnVyc",
+    categoria: "Canción",
+    pista: ""
+  },
+  "megustasmucho": {
+    texto: "Cada vez que escucho esta canción, no puedo evitar pensar en ti… me gustas muchísimo.",
+    videoEmbed: "https://www.youtube.com/embed/miZbcXBk_xQ",
+    categoria: "Canción",
+    pista: ""
+  },
+  "esperaunpoco": {
+    texto: "Solo un poco más… y estaremos juntos como tanto soñamos.",
+    videoEmbed: "https://www.youtube.com/embed/M_Dk9demut0",
+    categoria: "Musica",
+    pista: ""
+  },
+  "enamorada": {
+    texto: "",
+    videoEmbed: "https://www.youtube.com/embed/tWsQvv5Mysc",
+    categoria: "Canción",
+    pista: ""
+  },
+  "elsolylaluna": {
+    texto: "",
+    videoEmbed: "https://www.youtube.com/embed/Qw7G_ug_y7w",
+    categoria: "Canción",
+    pista: ""
+  },
