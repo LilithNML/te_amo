@@ -122,3 +122,49 @@ const mensajes = {
     categoria: "Carta",
     pista: ""
   },
+"mariachi": {
+    texto: "<p>Esta carta es mi voz en la noche, una serenata escrita desde el alma, como esas canciones suaves que se cantan bajo la ventana con el corazón en la mano y los ojos brillando de amor.<br><br>Si pudiera afinar mi voz con lo que siento por ti, te juro que sonaría más dulce que cualquier guitarra, más pura que cualquier verso. Porque amarte es como una melodía que no se olvida, que vuelve una y otra vez, llenando cada rincón de mi alma con su eco.<br><br>Esta noche te escribo como si te cantara, despacito, cerquita del corazón, para decirte que eres mi canción favorita, el ritmo de mis días, la letra que quiero cantar por siempre.<br><br>Te amo con todo lo que vibra en mí, y cada palabra mía es una nota que te busca, una serenata que solo tú sabes escuchar.</p>",
+    categoria: "Carta",
+    pista: ""
+  },
+  "stevenuniverse": {
+    texto: "<p>Te encontré como estrella fugaz, cruzando mi cielo sin avisar. Y desde entonces, amor brillante, ya nada volvió a ser igual.<br><br>Eres luz que canta sin miedo, mi escudo y mi verdad, como gema que vibra en mi pecho, como hogar que quiero cuidar.<br><br>No necesito magia en mis manos si tú estás para abrazar, porque contigo el mundo es claro y el dolor sabe descansar.<br><br>Tú y yo, dos almas fusionadas, en armonía celestial. No somos perfectos, pero juntos brillamos más allá del mal.</p>",
+    videoEmbed: "https://www.youtube.com/embed/9CfY1xxbgSc?si=DheIOXMEQ2Ecvz2q",
+    categoria: "Canción",
+    pista: ""
+  },
+  "adriana": {
+    texto: "<p>Amor, hay algo que me nace del corazón decirte: tengo muchas ganas de conocer a tu mamá. Quiero mirarla a los ojos y agradecerle por haberte traído al mundo, por haberte criado y por hacer posible que hoy estés en mi vida.<br><br>Siento que al conocerla, conoceré también una parte de ti que aún no he visto, porque todo lo que viene de ti lo quiero abrazar con todo mi cariño. Ojalá pronto llegue ese día.</p>",
+    categoria: "Carta",
+    pista: ""
+  },
+  "carmen": {
+    texto: "<p>Eres mío, y sí, lo admito, a veces me dan celos. Porque no quiero que nadie más vea lo que yo veo en ti: mi amor, mi sol, mi todo. Pero tranquilo, son celos bonitos, de esos que nacen del amor más grande.</p>",
+    categoria: "Carta",
+    pista: ""
+  },
+  "johanna": {
+    texto: "<p>Quiero que sepas cuánto te agradezco, desde lo más profundo de mi corazón. Gracias por estar ahí, por tomar mi mano cuando más temía avanzar, por sostenerme con tu paciencia y tu ternura cuando los miedos intentaban encerrarme en mí misma.<br><br>Tú no solo me acompañaste, me mostraste que era capaz de enfrentar todo lo que me asustaba. Me ayudaste a ver mi fuerza, incluso cuando yo no la veía. Con tu amor me enseñaste a respirar en medio del caos, a confiar, a soltar, a creer en lo que merezco.<br><br>No sé cómo lo haces, pero contigo hasta mis sombras se sienten seguras. Y eso, amor mío, es algo que jamás olvidaré. Gracias por quedarte, por no soltarme, por amarme incluso cuando yo temía no ser suficiente.<br><br>Hoy camino con más seguridad, y sé que parte de eso es porque tú has estado a mi lado. Y por eso, siempre, gracias.</p>",
+    categoria: "Carta",
+    pista: ""
+  },
+  "furina": {
+    texto: "<p>Eres el amor de mi vida, aunque a veces me hagas enojar y quisiera esconderte el celular. Pero luego me sacas una sonrisa y se me olvida todo. Te amo más de lo que mi orgullo quiere admitir.</p>",
+    categoria: "Carta",
+    pista: ""
+  },
+  "huevito": {
+    texto: "<p>No sé qué clase de hechizo me lanzaste, pero hasta cuando comes como si no hubiera un mañana, me derrites. Adoro verte disfrutar, reír, ser tú. Todo lo que haces me encanta, y cada día me enamoras más, traguito a traguito.</p>",
+    categoria: "Carta",
+    pista: ""
+  },
+  "soytuya": {
+    texto: "<p>Mi amor: No hay un solo rincón de mí que no te pertenezca. Desde que llegaste a mi vida, algo dentro de mí se rindió con gusto, con ansias, con el alma abierta. No porque me lo pidieras, sino porque tú eres mi hogar, mi refugio y mi destino. Cada pensamiento, cada suspiro, cada parte de mi ser se inclina hacia ti. Me entrego sin reservas, sin miedos, con la certeza de que en tus brazos estoy completa. No hay placer más grande que amarte, que cuidarte, que ser tuya en cuerpo, corazón y alma. Eres mi dueño, mi fuerza, mi deseo. Me haces sentir viva, deseada, protegida… y en ti encontré ese lugar al que pertenezco sin condiciones. No hay nada que no haría por ti, porque darte todo de mí no es un sacrificio, es mi más dulce rendición. Siempre seré tuya, mi amor.</p>",
+    categoria: "Carta",
+    pista: ""
+  },
+  "teextrano": {
+    texto: "<p>Amado mío: Hay una ausencia tuya que no se mide en kilómetros, sino en latidos. Cuando no estás, el tiempo se estira como un suspiro que no encuentra fin, y las horas caen lentas, como hojas secas en un otoño que no acaba. No es solo tu cuerpo el que extraño, sino la esencia de ti que habita en mis pensamientos. El mundo, sin tu presencia, se vuelve un escenario deshabitado: las palabras pierden sabor, la música su melodía, el viento su ternura. Tu ausencia me recuerda cuán entrelazada está mi existencia a la tuya. Como el sol necesita del cielo para ser visto, así te necesita mi alma: no para brillar, sino para tener sentido. Y mientras el destino juega con la distancia, yo me aferro a la certeza de que todo lo que me falta cuando no estás, eres tú. Siempre tuya, eternamente.</p>",
+    categoria: "Carta",
+    pista: ""
+  },
