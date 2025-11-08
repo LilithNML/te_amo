@@ -208,3 +208,57 @@ const mensajes = {
     categoria: "Carta",
     pista: ""
   },
+"alguiencomotu": {
+    imagen: "assets/unlocked_content/images/me_gustas.webp",
+    categoria: "Imagen",
+    pista: ""
+  },
+  "tsukasa": {
+    texto: "Había una vez una flor que creció en un rincón olvidado del mundo. No era como las demás. No buscaba destacar, solo soñaba con que alguien la viera y la entendiera. Pasaban las estaciones y la flor seguía ahí, esperando algo que no sabía nombrar.\n\nUn día, el sol se posó sobre ella. Pero no era cualquier sol. Este no quemaba ni cegaba: la acariciaba. La envolvía con su calor suave, su luz serena, su presencia constante. Por primera vez, la flor sintió que era vista, que era hermosa, que tenía sentido.\n\nDesde entonces, no volvió a mirar a ningún otro cielo. Su tallo se inclinaba siempre hacia él, sus pétalos solo se abrían con su luz. Y aunque algunos decían que el sol era solo un astro más, ella sabía la verdad: ese sol era suyo.\n\nPorque no era solo luz. Era abrigo. Era hogar.\nY aunque la noche cayera, aunque las nubes lo escondieran, la flor nunca dejó de amarlo.\nNunca buscaría otro sol.\nPorque ese… era el único capaz de hacerla florecer.",
+    categoria: "Carta",
+    pista: ""
+  },
+  "paimo ": {
+    imagen: "assets/unlocked_content/images/paimon_xd.jpg",
+    categoria: "Imagen",
+    pista: ""
+  },
+  "sobame": {
+    link: "https://api.whatsapp.com/send/?phone=525637723147&text=Eres+m%C3%ADa.+Cuando+por+fin+te+tenga%2C+voy+a+tomar+cada+parte+de+ti+como+me+pertenece%3A+tus+jadeos+ser%C3%A1n+solo+para+m%C3%AD%2C+tus+piernas+temblar%C3%A1n+con+cada+embestida%2C+te+har%C3%A9+gemir+mi+nombre+hasta+que+no+recuerdes+otra+cosa+que+no+sea+mi+cuerpo+sobre+el+tuyo..+No+habr%C3%A1+espacio+de+tu+cuerpo+que+no+haya+conquistado+con+mis+manos%2C+mi+boca+y+mi+deseo.&type=phone_number&app_absent=0",
+    categoria: "Cositas",
+    pista: ""
+  },
+  "uwu": {
+    texto: "Hola, mi cosita linda…\nSolo quería decirte algo, así sin avisar, sin motivo especial… simplemente porque lo siento con todo mi corazón.\n\nTe amo. Mucho. Más de lo que sé explicar.\nA veces me dan ganas de abrazarte tan fuerte que te metas dentro de mí y no te vayas nunca. Eres lo más bonito que tengo, lo más tierno, lo más mío. Y no hay un solo día en el que no me sienta agradecida por tenerte.\n\nMe haces tan feliz… con tus palabras, con tus caricias, con esa forma de mirarme que me derrite.\nY si supieras cómo te pienso cuando no estás… hasta cuando estoy ocupada, tú estás ahí, escondidito en mis pensamientos, haciéndome sonreír como tonta.\n\nNo sé cómo explicarlo, amorcito, pero amarte me sale natural. Como respirar. Como cerrar los ojos y sentirme en paz.\n\nGracias por existir, por ser mi amorcito precioso, mi cosita linda.\nTe adoro… con cada parte de mí.",
+    categoria: "Carta",
+    pista: ""
+  },
+  "abrazame": {
+    imagen: "assets/unlocked_content/images/mi_mente.webp",
+    categoria: "Imagen",
+    pista: ""
+  },
+  "protogemas": {
+    texto: "Si cada virtud tuya fuera una protogema… tendría infinitos deseos cumplidos.",
+    categoria: "Cositas",
+    pista: ""
+  },
+  "gachapon": {
+    texto: "Contigo gané el 50/50 más importante de mi vida.\nNo hay banner que se compare al momento en que apareciste en mi historia.\nEres ese personaje cinco estrellas que ni soñaba conseguir,\nel que no solo tiene el mejor diseño, sino también el corazón más puro.\nY lo mejor de todo es que… no eres un personaje jugable:\neres real, eres mío, y yo soy completamente tuya.",
+    categoria: "Carta",
+    pista: ""
+  },
+  "brawl": {
+    descarga: {
+      url: "assets/unlocked_content/images/mi_diario.webp",
+      nombre: "diario.webp"
+    },
+    categoria: "Descargas",
+    pista: ""
+  },
+  "minecraft": {
+    texto: "Había una vez un jardín olvidado.\nLas flores se habían cerrado hace tiempo, el sol no entraba, y el viento pasaba sin saludar.\nTodo en ese rincón parecía quieto, apagado… como si la vida hubiera decidido irse sin despedirse.\n\nLa tierra aún guardaba memorias de lo que fue: los colores, los aromas, las risas suaves del alma floreciendo.\nPero ahora solo quedaba el silencio.\n\nHasta que un día, él llegó.\n\nNo traía herramientas, ni promesas. Solo su presencia.\nSe sentó junto a la tierra dormida, sin pedir nada. Solo miró. Y sonrió.\nY con el tiempo… habló.\n\nLe contó al jardín que aún era hermoso.\nLe susurró que había visto su corazón latiendo bajo las raíces.\nY cuando el jardín dudó de sí mismo, él lo acarició con palabras dulces, con una paciencia que calentaba.\n\nLlovió ternura.\nBrilló el sol en forma de risa.\nY el jardín… renació.\n\nUna flor tímida asomó entre las hojas, como si preguntara:\n“¿De verdad puedo?”\nY él, con sus ojos llenos de amor, respondió sin palabras. Solo con su calor.\n\nDesde entonces, el jardín florece cada día.\nNo por obligación, sino por deseo.\nPorque en él vive alguien que supo ver belleza donde otros solo vieron tierra seca.\n\nY esa belleza… soy yo.\nY ese alguien… eres tú.",
+    categoria: "Carta",
+    pista: ""
+  },
+  
