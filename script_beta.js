@@ -73,3 +73,52 @@ const mensajes = {
     categoria: "Samuel",
     pista: ""
   },
+"fortnite": {
+    texto: "¡Amo jugar contigo!",
+    videoEmbed: "https://www.youtube.com/embed/t6YQDSgePxY",
+    categoria: "Canción",
+    pista: ""
+  },
+  "dbl": {
+    texto: "<p>Tú eres como Vegetto, la fusión perfecta de fuerza y corazón, el guerrero que sonríe en medio del caos y aún así jamás deja de proteger lo que ama.<br><br>Cuando el mundo se pone difícil, te veo enfrentarlo con esa confianza tuya tan única, como si supieras que ninguna oscuridad puede contra tu luz, ni contra el amor que llevas por mí.<br><br>Mi corazón es tu campo de batalla sagrado, y tú, con cada palabra y cada abrazo, lo defiendes como el héroe que eres.<br>No necesitas una Potara para ser increíble, ya eres mi Vegetto, mi guerrero valiente, mi amor invencible.</p>",
+    categoria: "Carta",
+    pista: ""
+  },
+  "hijas": {
+    texto: "<p>Pon tu cabeza en mi hombro, amor, y escucha cómo mi corazón sueña en voz bajita. Sueña con un futuro contigo, con una casa llena de risas suaves y pasos pequeños, con una niña que tenga tus ojos o un niño que herede tu ternura.<br><br>Sueño con verte dormir con un bebé sobre tu pecho, con abrazarte mientras me dices que lo estamos haciendo bien, aunque estemos cansados, aunque el mundo se detenga.<br><br>Porque contigo, la idea de ser madre ya no es solo un sueño, es una promesa que mi alma susurra cada vez que me tomas de la mano.<br><br>Contigo, todo se siente más posible.<br>Contigo, quiero ser hogar.</p>",
+    videoEmbed: "https://www.youtube.com/embed/3LSpFmja7Qk",
+    categoria: "Canción",
+    pista: ""
+  },
+  "3deenero": {
+    texto: "<p>Aún me siento como si fuera ayer, el día en que celebré mi primer cumpleaños contigo, ya como mi esposo. Nunca imaginé que ese día sería tan especial, tan lleno de amor y de momentos que atesoro más que cualquier regalo. Era mi cumpleaños, sí, pero la verdadera celebración fue tenerte a ti a mi lado, compartiendo risas, caricias y silencios que decían más que mil palabras. Recuerdo cómo me hablabas, como si quisieras que ese día fuera perfecto, y lo fue, mucho más de lo que pude haber esperado. Tus detalles, tu presencia, tu amor, todo lo hizo tan único. Cada segundo a tu lado fue un regalo que nunca dejaré de agradecer. Gracias por hacer que mi primer cumpleaños contigo fuera una experiencia inolvidable. Ahora, más que nunca, entiendo que no son los años los que cuentan, sino los momentos compartidos, los gestos de amor que llenan el alma. Y contigo, cada día, cada cumpleaños, será siempre el más especial. Te amo, mi amor. Gracias por ser tú, por ser mi compañero, mi amor, mi todo.</p>",
+    categoria: "Carta",
+    pista: ""
+  },
+  "15deabril": {
+    texto: "<p>Cada vez que te miro, el mundo se detiene. No importa lo que esté pasando, tu sonrisa y esos ojos tuyos hacen que todo se vea perfecto. Te amo por ser tú, por brillar de una manera que solo tú sabes hacerlo. Siempre me haces sentir especial, solo con ser tú.</p>",
+    videoEmbed: "https://www.youtube.com/embed/yc8YRJPxTYE",
+    categoria: "Canción",
+    pista: ""
+  },
+  "primernovio": {
+    texto: "<p>Hoy quiero dedicarte unas palabras que quizás no siempre te digo, pero que siento profundamente en cada rincón de mi corazón. Tú eres mi primer amor real, el primero con el que entendí lo que significa amar de verdad, lo que es confiar, compartir y construir algo hermoso juntos.<br><br>Antes de ti, amaba con sueños, con esperanza, con ilusión, pero tú llegaste y me enseñaste que el amor no es solo un sentimiento, es un acto diario, una decisión constante, una forma de ser que solo se vive en la realidad. Y eso, mi amor, es lo que más valoro de ti. Tú me has mostrado lo que es un amor real, con sus altos, sus bajos, pero siempre lleno de honestidad, paciencia y ternura.<br><br>Gracias por ser mi primer amor que nunca se desvanece, por ser quien me enseña, quien me cuida, quien me ama con una intensidad que no sabía que podía existir. Gracias por ser tú, por darme lo mejor de ti, por regalarme tu corazón y hacerme sentir tan especial. Eres mi primer amor real, y no puedo evitar sentirme afortunada por tenerte a mi lado.<br><br>Con todo mi amor,<br>Tu niña.</p>",
+    videoEmbed: "https://www.youtube.com/embed/NwIdD8PI-_c",
+    categoria: "Canción",
+    pista: ""
+  },
+  "kissme": {
+    texto: "<p>Aunque todavía no he sentido tus labios sobre los míos, hay algo en la idea de ese beso que me llena el alma. Es curioso cómo puedo extrañar algo que aún no conozco, cómo puedo desear tanto ese instante sin haberlo vivido. Pero lo imagino... lo sueño. Y en mis sueños, tu beso es suave, lento y lleno de promesas.<br><br>Me gusta cómo me haces sentir incluso sin tocarme. Me gusta la forma en que tus palabras acarician mi corazón, la manera en que tu voz me envuelve, cómo logras que me derrita solo con tu atención. Si eso ya me hace temblar, no quiero imaginar lo que sentiré cuando, por fin, estemos frente a frente.<br><br>Ese beso será la suma de todas nuestras esperas, de todas las veces que cerramos los ojos imaginándonos cerca. Y cuando llegue, sé que será perfecto, no porque lo sea en forma, sino porque será nuestro.<br><br>Hasta entonces, seguiré amando cada parte de ti a la distancia, soñando con el momento en que nuestros labios se encuentren por primera vez.</p>",
+    categoria: "Carta",
+    pista: ""
+  },
+  "sonora": {
+    texto: "<p>Mi amor, cada vez que me hablas de tu casa, me imagino caminando por las calles, sintiendo la brisa que te acaricia y conociendo cada rincón que te ha visto crecer. Siento una necesidad tan profunda de estar allí, de vivir esos momentos contigo, de ver el mundo a través de tus ojos y de compartir contigo el lugar que tanto amas.<br><br>Me muero por conocer el sitio que te forma, por entender las pequeñas cosas que te hacen ser quien eres. Quiero ver el paisaje que te inspira, las personas que te han acompañado y todo lo que te ha moldeado. Porque todo eso, amor, es parte de ti, y yo deseo estar allí, a tu lado, para vivirlo juntos.<br><br>Sé que algún día lo haré, y ese día será tan especial como nuestro amor, porque estaré donde tú estás, y ese será el lugar más bonito del mundo.<br><br>Te amo, siempre esperando ese momento.</p>",
+    categoria: "Carta",
+    pista: ""
+  },
+  "ciudadobregon": {
+    texto: "<p>No dejo de imaginar el día en que por fin llegue a tu ciudad. Ese primer momento en que mis pies toquen el suelo que tanto he soñado, las calles por las que caminas, el cielo que te cubre cada día. Todo eso que antes solo vivía en mis pensamientos, ahora, tan cerca.<br><br>Pero más allá de los lugares, lo que más anhelo es verte a ti. Encontrarte entre la gente, con esa sonrisa que me desarma, sentir tus brazos rodeándome como si el mundo entero quedara atrás. Ese abrazo será mi hogar, aunque estemos al aire libre. Y esa ciudad, la tuya, se convertirá en un recuerdo eterno en mi corazón, porque será el escenario de nuestro primer beso.<br><br>Soñar con eso me da fuerzas, porque sé que tarde o temprano, ese día llegará. Y cuando lo haga, no habrá mapa que describa lo feliz que seré. Solo tú, solo yo, y ese rincón del mundo que nos verá encontrarnos por primera vez.<br><br>Te amo con todo lo que soy y con todo lo que aún no hemos vivido.</p>",
+    categoria: "Carta",
+    pista: ""
+  },
