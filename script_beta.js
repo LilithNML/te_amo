@@ -307,4 +307,58 @@ const mensajes = {
     categoria: "Carta",
     pista: ""
   },
-  
+  "genial": {
+    texto: "Manual para amar a mi criatura favorita\n\nCapítulo 1: Lo encontré en el lugar menos esperado.\nNo en un café, ni en una librería romántica…\nsino en un videojuego donde jamás pensé encontrar pareja.\nAhí, entre espadazos y risas, apareció él.\n\nCapítulo 2: Al principio pensé que era solo un compañero de aventuras.\nHasta que me di cuenta de que quería que me acompañara\ntambién cuando se acabara el juego.\nY cuando me hablaba, mi corazón latía demasiado rápido.\n\nCapítulo 3: No hay botón para “guardar partida” en el amor,\npero si lo hubiera, lo pulsaría cada vez que me dice\n\"te amo\",\ncada vez que me escucha con paciencia,\ncada vez que me hace sentir que soy su hogar,\naunque estemos en distintas ciudades.\n\nCapítulo 4: Él no es perfecto.\nRonca, se ríe a veces cuando no debe,\ny se burla de mi miedo al coco.\nPero aún así…\n¿cómo no amar a alguien que, sin pedirme nada,\nme enseñó que no tengo que ser invencible todo el tiempo?\n\nCapítulo final (por ahora):\nSi tuviera que volver a elegir en qué mundo aparecer,\nentre todos los reinos, tierras y servidores…\nlo haría aquí.\nContigo.\nAunque el lag sea horrible a veces,\naunque el mundo no siempre cargue bien,\nmi lugar seguro eres tú.\n\nFin.\nO mejor dicho… Continuará.",
+    categoria: "Carta",
+    pista: ""
+  },
+  "soylamujermasfelizdelmundo": {
+    texto: "Para ti, que amas a mi hija:\n\nNo sé si alguna vez imaginaste recibir una carta de su madre,\npero hoy quiero hablarte desde el corazón,\ncomo alguien que la ha cuidado desde que era tan pequeña\nque cabía en mis brazos…\ny ahora la veo caber, perfectamente, en los tuyos.\n\nTú no solo llegaste a su vida,\nllegaste también a la mía.\nY desde que te vi hacerla sonreír de esa manera —esa que tiene brillo de verdad—\nsupe que había algo especial entre ustedes.\n\nGracias por quererla como es: con sus risas espontáneas, sus locuras dulces,\nsus días de luz y sus tormentas.\nGracias por verla con los mismos ojos con los que yo siempre la vi:\ncomo alguien que merece amor, ternura, respeto y cuidado.\n\nSé que no puedo caminar con ustedes todo el camino,\npero me da paz saber que ella ha encontrado a alguien\nque no solo la acompaña,\nsino que la impulsa, la protege, y la admira.\n\nCuídense, háblense con el alma,\ny no olviden nunca lo afortunados que son de haberse encontrado.\n\nDe corazón,\nla mamá de la mujer que te ama.",
+    categoria: "Carta",
+    pista: ""
+  },
+  "gracias": {
+    texto: "Eres ese pensamiento suave que se cuela en mi mente sin aviso… y se queda ahí, haciéndome sonreír como tonta. Te adoro, mi cosita linda.",
+    categoria: "Carta",
+    pista: ""
+  },
+  "ereselmejor": {
+    texto: "Si mi alma hubiera nacido mil veces, en cada vida habría vuelto a buscarte… porque el verdadero amor no se descubre, se recuerda.",
+    categoria: "Carta",
+    pista: ""
+  },
+  "mininoconsentido": {
+    texto: "'Amar no es mirarse el uno al otro; es mirar juntos en la misma dirección.' — Antoine de Saint-Exupéry",
+    categoria: "Citas",
+    pista: ""
+  },
+  "cartas": {
+    texto: "'El verdadero amor no es sino el encuentro de dos almas que se reconocen en la eternidad.' — Platón",
+    categoria: "Citas",
+    pista: ""
+  },
+  "peluche": {
+    texto: "Permiso oficial otorgado a mi persona favorita:\n\nTe doy permiso para robarme besos cuando menos lo espere, para abrazarme fuerte sin aviso, y para quedarte en mis pensamientos todo el día.\n\nPorque con cada uno de esos “robos”, me enamoro un poco más de ti.\n\nFirma: Tu dueña eterna.",
+    categoria: "Carta",
+    pista: ""
+  },
+  "mikunakano": {
+    texto: "Permiso exclusivo para ti, mi dueño:\n\nTe concedo total libertad para tocarme con deseo, para susurrarme al oído lo que quieras, y para hacer que cada encuentro sea un fuego que nunca se apague.\n\nEste permiso no tiene fecha de expiración, solo el límite de nuestra imaginación.\n\nFirma: Tuya, completamente.",
+    categoria: "Carta",
+    pista: ""
+  },
+  "gatito": {
+    texto: "Permiso especial para ti, mi dueño:\n\nTe autorizo a explorar cada rincón de mi piel con la lentitud de quien conoce un secreto.\nA provocar suspiros que solo tú sabes despertar, y a encender en mí deseos que ni siquiera sabía que existían.\n\nEste permiso es solo para ti, para jugar con el tiempo y perdernos en el silencio de nuestra pasión.\n\nFirma: Tuya, siempre.",
+    categoria: "Carta",
+    pista: ""
+  },
+  "mywayoflife": {
+    texto: "Imagino un futuro donde nuestras hijas crezcan rodeadas del amor que hoy nos une. Quiero que aprendan de nosotros el valor del respeto, la paciencia y la ternura. Que en nuestro hogar haya risas, juegos y abrazos sinceros, pero también enseñanzas firmes y ejemplos de compromiso.\n\nJuntos construiremos un refugio seguro donde ellas puedan ser libres, soñadoras y valientes, sabiendo siempre que cuentan con dos pilares inquebrantables: tú y yo.\n\nQuiero que nuestras hijas vean en nosotros no solo a sus padres, sino a sus mejores amigos, sus guías y cómplices en esta aventura hermosa llamada vida.\n\nPorque criar a nuestras hijas será la extensión más hermosa de nuestro amor, y juntos, nada será imposible.",
+    categoria: "Carta",
+    pista: ""
+  },
+  "enana": {
+    texto: "Sueño con un futuro donde, arrugados por los años, sigamos tomados de la mano, compartiendo silencios que hablan más que mil palabras. Quiero que nuestras canas sean testigos de las batallas que enfrentamos y las risas que nos regalaron.\n\nImagino tardes tranquilas, cafés compartidos y miradas cómplices que no necesitan explicaciones. Que el paso del tiempo solo fortalezca el amor que hoy nos une y nos convierta en compañeros inseparables de vida.\n\nQuiero envejecer contigo, con la certeza de que cada día será una nueva oportunidad para amarte, cuidarte y agradecer que estamos juntos en esta hermosa aventura.",
+    categoria: "Carta",
+    pista: ""
+  },
