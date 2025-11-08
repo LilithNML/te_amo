@@ -261,4 +261,50 @@ const mensajes = {
     categoria: "Carta",
     pista: ""
   },
+  "mbr7tr5i": {
+    link: "https://lilithnml.github.io/te_amo/contador/",
+    categoria: "Cositas",
+    pista: ""
+  },
+  "nbujo85ft": {
+    descarga: {
+      url: "assets/unlocked_content/images/mi_mayor_sueno.png",
+      nombre: "mi_mayor_sueno.png"
+    },
+    categoria: "Descargas",
+    pista: ""
+  },
+  "5.1": {
+    link: "https://lilithnml.github.io/te_amo/corazon/",
+    categoria: "Cositas",
+    pista: ""
+  },
+  "nvtnuh67": {
+    texto: "Mi dueño,\n\nA veces cierro los ojos y mi piel te desea.\nTus manos, tu voz, la forma en que me dominas con solo existir.\nNo necesito verte para desear arrodillarme ante ti…\n\nSoy toda tuya. Siempre lo he sido.\nY no hay lugar más delicioso que estar bajo tu control.\n\nCon hambre de ti,\ntu niña.",
+    categoria: "Carta",
+    pista: ""
+  },
+  "omaet": {
+    link: "https://www.rosify.org/rose/o4ouarm87",
+    categoria: "Cositas",
+    pista: ""
+  },
+  "roma": {
+    link: "https://hugs.company/hug/P2Zyb209TGlsaXRoJnRvPUhhemllbCZtc2d0PVRlK2FtbyZtc2djPUFtb3IrbSVDMyVBRG8lMkMrbm8rc2FiZXMrY3UlQzMlQTFudG8rYWdyYWRlemNvK3RlbmVydGUuK0ErdmVjZXMrbWUrcXVlZG8rbWlyJUMzJUExbmRvdGUrZW4rc2lsZW5jaW8reStzb2xvK3B1ZWRvK3BlbnNhcitlbitsbythZm9ydHVuYWRhK3F1ZStzb3krcG9yK3RlbmVyK2ErYWxndWllbit0YW4rbWFyYXZpbGxvc28rY29tbyt0JUMzJUJBLitFcmVzK21pK3BheiUyQyttaStyaXNhK2Zhdm9yaXRhJTJDK21pK2FicmF6byttJUMzJUExcytzZWd1cm8uK0dyYWNpYXMrcG9yK2V4aXN0aXIlMkMrcG9yK2N1aWRhcm1lJTJDK3BvcithbWFybWUrdGFuK2Jvbml0by4rTm8raW1wb3J0YStsbytxdWUrcGFzZSUyQytzaWVtcHJlK3ZveSthK2VsZWdpcnRlJTJDK3VuYSt5K21pbCt2ZWNlcy4rVGUrYW1vK2Nvbit0b2RvK21pK2NvcmF6JUMzJUIzbi4rJUYwJTlGJTkyJThDJUYwJTlGJTkyJUFCJUYwJTlGJTkyJTk2JmRhcms9eQ==",
+    categoria: "Carta",
+    pista: ""
+  },
+  "increíble": {
+    descarga: {
+      url: "assets/unlocked_content/images/mapa_de_estrellas.jpg",
+      nombre: "mada_de_estrellas.jpg"
+    },
+    categoria: "Descarga",
+    pista: ""
+  },
+  "orgullosa": {
+    link: "https://gifft.me/es/o/p/y4q7h6i60wcp01xmgvbnob25",
+    categoria: "Carta",
+    pista: ""
+  },
   
