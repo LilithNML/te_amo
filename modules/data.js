@@ -31,7 +31,7 @@ export const mensajes = {
   },
   "9denoviembre": {
     type: "text",
-    texto: "holi",
+    texto: "<p>Mi amor:</p><p>A veces me gusta cerrar los ojos y volver a ese primer momento en que coincidimos en Genshin. No fue casualidad, fue destino disfrazado de juego. Entre combates, misiones y risas, ahí estabas tú, al principio solo un amigo, pero con una energía que poco a poco me fue envolviendo.</p><p>Recuerdo cómo nos ayudábamos en el juego, cómo sin darnos cuenta empezamos a hablar más allá de los objetivos del día. No sabía que, tras ese personaje, había alguien que se convertiría en alguien tan especial para mí. Que ese primer saludo se transformaría en tantas conversaciones, cariño, y complicidad.</p><p>Nunca imaginé que un juego de fantasía me llevaría al mejor encuentro de mi vida, tú. Y desde entonces, cada día contigo ha sido una aventura más hermosa que cualquier historia dentro del juego.</p><p>Gracias por aparecer en mi mundo como un regalo inesperado. Gracias por quedarte.</p><p>Con todo mi amor,<br><em>Lilith</em></p>",
     categoria: "carta",
     pista: "un saludo"
   }
