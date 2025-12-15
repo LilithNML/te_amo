@@ -5,19 +5,19 @@
 export const mensajes = {
   "descargapdf": {
     type: "download",
-    descarga: { url: "assets/hola.pdf", nombre: "hola.pdf" },
+    descarga: { url: "assets/images/moon.webp", nombre: "hola.webp" },
     categoria: "descargas",
     pista: "un archivo que hicimos juntos"
   },
   "playlistsecreta": {
     type: "link",
-    link: "https://hoyo/music3",
+    link: "https://anilist.co/home",
     categoria: "musica",
     pista: "nuestra canción favorita"
   },
   "fotonuestra": {
     type: "image",
-    imagen: "assets/image/hola.jpg",
+    imagen: "assets/images/moon.webp",
     texto: "Últimas vacaciones juntos",
     categoria: "recuerdos",
     pista: "últimas vacaciones juntos"
@@ -25,7 +25,7 @@ export const mensajes = {
   "fortnite": {
     type: "video",
     texto: "Amo jugar contigo",
-    videoEmbed: "https://www.youtube.com/embed/VIDEO_ID", 
+    videoEmbed: "https://www.youtube.com/embed/3LSpFmja7Qk", 
     categoria: "dedicatorias",
     pista: "una serenata que te hice"
   },
