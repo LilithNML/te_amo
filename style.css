@@ -240,3 +240,76 @@ input[type=range] { flex-grow: 1; accent-color: var(--highlight-pink); }
   
   .menu-button { top: 15px; left: 15px; }
                                                                 }
+
+/* =========================================
+   NUEVAS IMPLEMENTACIONES (Tools & Zoom)
+   ========================================= */
+
+/* Estilo para enlaces dentro del menú (Love Arcade) */
+.menu-link-button {
+  display: flex; align-items: center; gap: 10px; width: 100%; padding: 12px;
+  color: var(--text-light); background: none; border: none; text-align: left;
+  cursor: pointer; border-radius: 8px; font-family: var(--body-font); font-size: 1em;
+  text-decoration: none; /* Quitar subrayado de enlace */
+}
+.menu-link-button:hover { background: rgba(255,255,255,0.1); color: var(--highlight-pink); }
+
+/* Reutilizamos estilos de panel lateral para Herramientas */
+.side-panel {
+  position: fixed; top: 0; right: 0; width: 300px; height: 100vh;
+  background: var(--content-bg); backdrop-filter: blur(15px);
+  box-shadow: -5px 0 20px rgba(0,0,0,0.5); padding: 25px;
+  transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 2500; display: flex; flex-direction: column;
+}
+.side-panel.show { transform: translateX(0); }
+
+.panel-header {
+  width: 100%; display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;
+}
+.close-panel-btn { background: none; border: none; color: var(--text-light); font-size: 1.2em; cursor: pointer; }
+
+/* Lista de Herramientas */
+.tools-container { overflow-y: auto; flex-grow: 1; }
+.tool-card {
+  background: rgba(255,255,255,0.05); border-radius: 10px; padding: 15px;
+  margin-bottom: 15px; transition: transform 0.2s; border: 1px solid rgba(255,255,255,0.05);
+}
+.tool-card:hover { transform: translateY(-3px); background: rgba(255,255,255,0.08); }
+.tool-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; color: var(--highlight-pink); font-size: 1.1em; font-weight: 600; }
+.tool-desc { font-size: 0.9em; color: var(--text-medium); margin-bottom: 12px; line-height: 1.4; }
+.tool-btn {
+  display: block; text-align: center; background: var(--button-bg-initial);
+  color: white; padding: 8px; border-radius: 6px; text-decoration: none; font-size: 0.9em;
+}
+.tool-btn:hover { background: var(--highlight-pink); }
+
+/* AJUSTES DEL MODAL Y ZOOM */
+.modal {
+  /* Asegurar que el modal ocupe todo y oculte desbordes */
+  overflow: hidden; 
+}
+
+/* Wrapper que recorta la imagen si se hace zoom muy grande cerca de los bordes */
+.panzoom-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; 
+}
+
+.modal-content {
+  /* Reseteamos margenes y max-width para que Panzoom controle el tamaño */
+  max-width: 100%;
+  max-height: 90vh; /* Dejar espacio para botón cerrar */
+  object-fit: contain;
+  margin: 0;
+  cursor: grab; /* Cursor de manita para indicar que se puede arrastrar */
+}
+.modal-content:active { cursor: grabbing; }
+
+/* Botón cerrar modal más visible */
+.close { z-index: 3001; background: rgba(0,0,0,0.5); width: 40px; height: 40px; text-align: center; line-height: 40px; border-radius: 50%; }
