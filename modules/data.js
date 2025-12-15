@@ -1,11 +1,10 @@
 /**
  * modules/data.js
- * Contiene la "base de datos" de secretos y logros.
  */
 
 export const mensajes = {
   "descargapdf": {
-    type: "download", // Normalizado para usar switch
+    type: "download",
     descarga: { url: "assets/hola.pdf", nombre: "hola.pdf" },
     categoria: "descargas",
     pista: "un archivo que hicimos juntos"
@@ -16,10 +15,10 @@ export const mensajes = {
     categoria: "musica",
     pista: "nuestra canción favorita"
   },
-  "fotonuestra": { // Clave normalizada (sin guion bajo)
+  "fotonuestra": {
     type: "image",
     imagen: "assets/image/hola.jpg",
-    texto: "Últimas vacaciones juntos", // Texto Alt
+    texto: "Últimas vacaciones juntos",
     categoria: "recuerdos",
     pista: "últimas vacaciones juntos"
   },
@@ -42,19 +41,21 @@ export const logros = [
   {
     id: "primer_paso",
     codigo_requerido: 1,
-    mensaje: "¡Primer paso desbloqueado!",
-    categoria: "Intro"
+    mensaje: "¡Primer paso desbloqueado! Hay muchos más esperándote.",
+  },
+  {
+    id: "cinco_secretos",
+    codigo_requerido: 5,
+    mensaje: "¡Cinco secretos revelados! Eres una gran exploradora.",
   },
   {
     id: "mitad_camino",
     codigo_requerido: Math.floor(Object.keys(mensajes).length / 2),
-    mensaje: "¡A mitad del camino!",
-    categoria: "Progreso"
+    mensaje: "¡A mitad del camino! ¡Vas muy bien!",
   },
   {
     id: "todos_los_secretos",
     codigo_requerido: Object.keys(mensajes).length,
-    mensaje: "¡Todos los secretos desbloqueados!",
-    categoria: "Final"
+    mensaje: "¡Todos los secretos desbloqueados! ¡Eres increíble!",
   }
 ];
