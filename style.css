@@ -1,0 +1,575 @@
+/* =========================================
+   STYLE.CSS - Versión Final Profesional v2.0
+   ========================================= */
+
+/* Importamos fuentes: Courgette (Romántica) y Montserrat (Legible) */
+@import url('https://fonts.googleapis.com/css2?family=Courgette&family=Montserrat:wght@300;400;500;600&display=swap');
+
+:root {
+  /* Fuentes */
+  --title-font: 'Courgette', cursive;
+  --body-font: 'Montserrat', sans-serif;
+
+  /* Paleta de Colores (Tema Claro - Default) */
+  --text-light: #CDD8D5;
+  --text-medium: #AEA5A5;
+  --text-dark: #E0CFC1;
+  --header-color: #BCBDB9;
+  
+  /* Fondos y Capas */
+  --background-overlay: rgba(20, 18, 28, 0.75); /* Más oscuro para contraste */
+  --container-bg: rgba(32, 30, 43, 0.65); /* Más opacidad para legibilidad */
+  --content-bg: rgba(30, 32, 33, 0.8);
+  
+  /* Interacción */
+  --border-color-input: #8E7383;
+  --input-bg: rgba(107, 93, 116, 0.5);
+  --button-bg-initial: #9A8C8B;
+  --button-bg-hover: #3F3938;
+  
+  /* Estados */
+  --progress-color: #A3C3BD;
+  --highlight-pink: #ff7aa8;
+  --highlight-pink-light: #ffaed0;
+  --highlight-green: #7B9D8F;
+  --highlight-red: #E74C3C;
+  
+  /* Componentes */
+  --link-color: #FFC0CB;
+  --link-hover: #FFDDEE;
+  --achievement-bg: #4A4A6A;
+  --achievement-text: #E0CFC1;
+  --modal-bg: rgba(0, 0, 0, 0.92);
+  
+  /* Iconos */
+  --favorite-icon-default: #888;
+  --favorite-icon-active: #FFD700; /* Dorado */
+}
+
+/* Variables Modo Oscuro (Ajustes finos) */
+body.dark-mode {
+  --text-light: #f2e6df;
+  --text-medium: #d8ccc3;
+  --header-color: #E0CFC1;
+  --background-overlay: rgba(5, 5, 5, 0.85);
+  --container-bg: rgba(20, 20, 20, 0.7);
+  --content-bg: rgba(17, 17, 17, 0.9);
+  --input-bg: rgba(44, 44, 44, 0.6);
+  --button-bg-initial: #4A4A4A;
+  --button-bg-hover: #606060;
+  --progress-color: #8C82B5;
+  --highlight-pink: #A860A8;
+}
+
+/* =========================================
+   Reset & Estructura Base
+   ========================================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--body-font); /* Usamos Montserrat para lectura general */
+  background: url('assets/images/fondo-romantico.jpg') no-repeat center center fixed;
+  background-size: cover;
+  color: var(--text-light);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Capa de oscurecimiento global */
+.background-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background-color: var(--background-overlay);
+  backdrop-filter: blur(4px); /* Blur ligero al fondo global */
+  z-index: -1;
+}
+
+/* =========================================
+   Contenedor Principal (Glassmorphism)
+   ========================================= */
+.container {
+  background-color: var(--container-bg);
+  padding: 2.5rem;
+  border-radius: 16px;
+  text-align: center;
+  max-width: 900px;
+  width: 90%;
+  margin: 4rem auto 2rem auto;
+  position: relative;
+  
+  /* Efecto Cristal Real */
+  backdrop-filter: blur(12px) saturate(120%);
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* =========================================
+   Tipografía y Encabezados
+   ========================================= */
+h1, h2, .section-title {
+  font-family: var(--title-font); /* Courgette solo para títulos */
+  color: var(--header-color);
+  font-weight: 400;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+h1 {
+  margin-bottom: 1.5rem;
+  font-size: 3em;
+}
+
+.intro-text {
+  font-size: 1.1em;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  color: var(--text-medium);
+}
+
+.header-img {
+  width: 140px;
+  height: auto;
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+  animation: float 6s ease-in-out infinite;
+}
+
+/* =========================================
+   Inputs y Formularios
+   ========================================= */
+.input-container {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 2rem;
+  justify-content: center;
+  align-items: center;
+}
+
+#codeInput {
+  flex-grow: 1;
+  max-width: 350px;
+  padding: 15px 20px;
+  border: 2px solid var(--border-color-input);
+  border-radius: 12px;
+  background-color: var(--input-bg);
+  color: var(--text-light);
+  font-family: var(--body-font); /* Letra legible para escribir */
+  font-size: 1.1em;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+#codeInput::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 300;
+}
+
+#codeInput:focus {
+  border-color: var(--highlight-pink);
+  background-color: rgba(30, 32, 33, 0.9);
+  box-shadow: 0 0 15px rgba(255, 122, 168, 0.3);
+  outline: none;
+}
+
+/* Estados de validación */
+#codeInput.success { border-color: var(--highlight-green); }
+#codeInput.error { border-color: var(--highlight-red); }
+
+/* =========================================
+   Botones
+   ========================================= */
+.button {
+  background-color: var(--button-bg-initial);
+  color: var(--text-light);
+  border: none;
+  border-radius: 12px;
+  padding: 15px 25px;
+  font-family: var(--body-font);
+  font-weight: 600;
+  font-size: 1em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.button:hover {
+  background-color: var(--button-bg-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.button:active { transform: scale(0.98); }
+
+.button.small-button {
+  padding: 10px 18px;
+  font-size: 0.9em;
+}
+
+/* =========================================
+   Contenido Dinámico (Resultados)
+   ========================================= */
+.contenido-container {
+  background-color: var(--content-bg);
+  padding: 2rem;
+  border-radius: 12px;
+  margin-top: 2rem;
+  text-align: left;
+  line-height: 1.7;
+  color: var(--text-medium);
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+/* Animación fade-in */
+.fade-in { animation: fadeIn 0.6s ease-out forwards; }
+
+/* Elementos dentro del contenido dinámico */
+.contenido-container img {
+  max-width: 100%;
+  border-radius: 8px;
+  margin: 1.5em auto;
+  display: block;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: transform 0.3s;
+}
+
+.contenido-container img:hover { transform: scale(1.02); }
+
+.video-frame {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  margin: 1em 0;
+  background: #000;
+}
+
+.mensaje-texto {
+  font-size: 1.2em;
+  white-space: pre-wrap;
+  color: var(--text-light);
+}
+
+/* =========================================
+   Sección de Progreso
+   ========================================= */
+.achievements-section {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px dashed rgba(255,255,255,0.2);
+}
+
+.progress-bar-container {
+  width: 100%;
+  max-width: 400px;
+  background-color: rgba(255,255,255,0.1);
+  border-radius: 20px;
+  height: 16px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--progress-color), var(--highlight-pink-light));
+  border-radius: 20px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* =========================================
+   Lista de Códigos Desbloqueados
+   ========================================= */
+.unlocked-codes-panel {
+  background-color: var(--content-bg);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-top: 1.5rem;
+}
+
+.filter-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 1.5rem;
+  justify-content: center;
+}
+
+.filter-controls input, .filter-controls select {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color-input);
+  background: var(--input-bg);
+  color: var(--text-light);
+  font-family: var(--body-font);
+}
+
+.lista-codigos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  list-style: none;
+}
+
+.lista-codigo-item {
+  background: rgba(255,255,255,0.05);
+  padding: 12px 15px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.lista-codigo-item:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.lista-codigo-item .codigo-text {
+  font-weight: 500;
+  color: var(--text-dark);
+}
+
+.category {
+  font-size: 0.75em;
+  background: rgba(0,0,0,0.3);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 8px;
+  color: var(--text-medium);
+}
+
+/* =========================================
+   Botón Favoritos (Corrección de Especificidad)
+   ========================================= */
+.favorite-toggle-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1em;
+  padding: 5px;
+  transition: transform 0.2s;
+}
+
+.favorite-toggle-btn:hover { transform: scale(1.2); }
+
+/* Estado Inactivo (Default) */
+.favorite-toggle-btn i, 
+.favorite-toggle-btn svg {
+  color: var(--favorite-icon-default);
+  transition: color 0.3s;
+}
+
+/* Estado Activo (Dorado) - Alta especificidad */
+.lista-codigo-item .favorite-toggle-btn.active i,
+.lista-codigo-item .favorite-toggle-btn.active svg {
+  color: var(--favorite-icon-active);
+  filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.4));
+}
+
+/* Botón de filtro "Solo Favoritos" activado */
+#filterFavoritesBtn.active {
+  background-color: var(--highlight-pink);
+  color: white;
+}
+
+/* =========================================
+   Animaciones Nuevas
+   ========================================= */
+
+/* Error Shake */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.shake {
+  animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+/* Spinner de carga */
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+/* Flotar */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================
+   Componentes Flotantes (Toast, Menu, Audio)
+   ========================================= */
+
+/* Toast de Logros */
+#achievement-toast-container {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+}
+
+.achievement-toast {
+  background: var(--achievement-bg);
+  color: var(--achievement-text);
+  padding: 12px 24px;
+  border-radius: 50px;
+  margin-bottom: 10px;
+  font-weight: 600;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+  animation: slideDown 0.5s ease-out, fadeOut 0.5s ease-in 3.5s forwards;
+}
+
+@keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes fadeOut { to { opacity: 0; } }
+
+/* Modal Imagen */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 3000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: var(--modal-bg);
+  backdrop-filter: blur(5px);
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.modal-content {
+  max-width: 90%;
+  max-height: 85vh;
+  border-radius: 8px;
+  box-shadow: 0 0 30px rgba(0,0,0,0.8);
+  animation: zoomIn 0.3s;
+}
+
+@keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+.close {
+  position: absolute;
+  top: 20px; right: 30px;
+  color: white;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 3001;
+}
+
+/* Menú Hamburguesa */
+.menu-button {
+  position: fixed;
+  top: 20px; left: 20px;
+  z-index: 1500;
+  background: var(--highlight-pink);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 45px; height: 45px;
+  font-size: 1.2em;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: transform 0.3s;
+}
+
+.menu-button:hover { transform: rotate(90deg); }
+
+.dropdown-menu {
+  position: fixed;
+  top: 75px; left: 20px;
+  background: var(--container-bg);
+  backdrop-filter: blur(15px);
+  border-radius: 12px;
+  padding: 10px;
+  min-width: 200px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  transform: translateX(-150%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1499;
+  visibility: hidden;
+}
+
+.dropdown-menu.show {
+  transform: translateX(0);
+  visibility: visible;
+}
+
+.dropdown-menu a, .dropdown-menu button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px;
+  color: var(--text-light);
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 8px;
+  font-family: var(--body-font);
+  font-size: 1em;
+}
+
+.dropdown-menu button:hover {
+  background: rgba(255,255,255,0.1);
+  color: var(--highlight-pink);
+}
+
+/* =========================================
+   Responsive
+   ========================================= */
+@media (max-width: 600px) {
+  h1 { font-size: 2.2em; }
+  
+  .container {
+    padding: 1.5rem;
+    width: 95%;
+    margin-top: 5rem;
+  }
+  
+  .input-container { flex-direction: column; }
+  #codeInput { width: 100%; max-width: none; }
+  .button { width: 100%; }
+  
+  .filter-controls input, .filter-controls select {
+    width: 100%;
+  }
+  
+  .menu-button { top: 15px; left: 15px; }
+}
