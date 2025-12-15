@@ -1,44 +1,45 @@
 /**
  * modules/uiManager.js
  * ------------------------------------------------------------------
- * Maneja toda la interacción con el DOM, paneles laterales, modales,
- * renderizado de contenido y actualizaciones visuales.
+ * Gestor de Interfaz de Usuario.
+ * Se encarga de manipular el DOM, mostrar modales, gestionar paneles,
+ * renderizar listas y controlar la librería de Zoom.
  */
 
 import { normalizeText } from './utils.js';
-import { herramientasExternas } from './data.js'; // Importamos la lista de herramientas
+import { herramientasExternas } from './data.js';
 
 export class UIManager {
     constructor() {
-        // Cacheo de referencias al DOM para mejorar rendimiento
+        // Cacheo de elementos del DOM para mejorar rendimiento
         this.elements = {
-            // Inputs y Áreas principales
+            // Entradas y Salidas principales
             input: document.getElementById("codeInput"),
             contentDiv: document.getElementById("contenido"),
             progressBar: document.querySelector(".progress-bar-fill"),
             progressText: document.getElementById("progreso"),
             toastContainer: document.getElementById("achievement-toast-container"),
             
-            // Modal de Imágenes (Zoom)
+            // Modal de Imagen (Zoom)
             modal: document.getElementById("imageModal"),
             modalImg: document.getElementById("modalImg"),
-            closeModalBtn: document.getElementById("closeModalBtn"), // Botón X del modal
+            closeModalBtn: document.getElementById("closeModalBtn"),
             
-            // Menú Principal
+            // Menú Hamburguesa
             menuButton: document.getElementById("menuButton"),
             dropdownMenu: document.getElementById("dropdownMenu"),
             importInput: document.getElementById("importInput"),
             
-            // Panel de Audio
+            // Panel Lateral de Audio
             audioPanel: document.getElementById("audioPanel"),
             closeAudioPanel: document.getElementById("closeAudioPanel"),
             
-            // Panel de Herramientas (NUEVO)
+            // Panel Lateral de Herramientas
             toolsPanel: document.getElementById("toolsPanel"),
             closeToolsPanel: document.getElementById("closeToolsPanel"),
             toolsListContainer: document.getElementById("toolsListContainer"),
             
-            // Sección de Desbloqueados (Listas y Filtros)
+            // Sección de Códigos Desbloqueados
             unlockedSection: document.getElementById("unlockedSection"),
             unlockedList: document.getElementById("unlockedList"),
             searchUnlocked: document.getElementById("searchUnlocked"),
@@ -47,19 +48,28 @@ export class UIManager {
             closeUnlockedBtn: document.getElementById("closeUnlockedBtn")
         };
 
-        // Estado interno de la UI
+        // Estado interno
         this.showingFavoritesOnly = false;
-        this.panzoomInstance = null; // Instancia para controlar el zoom
+        this.panzoomInstance = null; // Instancia de la librería Panzoom
 
         // Inicialización
         this.initTheme();
         this.setupMenuListeners();
         this.setupListListeners();
-        this.setupModalListeners(); // Lógica de zoom y gestos
+        this.setupModalListeners();
     }
 
     /**
-     * Inicializa el tema (Claro/Oscuro) basado en LocalStorage
+     * Cierra el teclado virtual (útil en móviles tras enviar formulario)
+     */
+    dismissKeyboard() {
+        if (this.elements.input) {
+            this.elements.input.blur(); // Quitar foco cierra el teclado
+        }
+    }
+
+    /**
+     * Inicializa el tema (Oscuro/Claro) según preferencia guardada
      */
     initTheme() {
         const savedTheme = localStorage.getItem("theme");
@@ -68,9 +78,6 @@ export class UIManager {
         }
     }
 
-    /**
-     * Alterna entre modo claro y oscuro
-     */
     toggleDarkMode() {
         document.body.classList.toggle("dark-mode");
         const isDark = document.body.classList.contains("dark-mode");
@@ -79,17 +86,17 @@ export class UIManager {
     }
 
     // =================================================================
-    // GESTIÓN DE MENÚS Y PANELES
+    // MENÚS Y PANELES
     // =================================================================
 
     setupMenuListeners() {
         // Toggle Menú Hamburguesa
         this.elements.menuButton.addEventListener("click", (e) => {
-            e.stopPropagation(); // Evitar cerrar inmediatamente
+            e.stopPropagation();
             this.elements.dropdownMenu.classList.toggle("show");
         });
 
-        // Cerrar menú al hacer clic fuera
+        // Cerrar al hacer clic fuera
         document.addEventListener("click", (e) => {
             if (!this.elements.menuButton.contains(e.target) && 
                 !this.elements.dropdownMenu.contains(e.target)) {
@@ -97,7 +104,7 @@ export class UIManager {
             }
         });
 
-        // --- Navegación Principal ---
+        // --- Acciones del Menú ---
         this.bindMenuAction("menuHome", () => {
             this.toggleUnlockedPanel(false);
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -112,56 +119,33 @@ export class UIManager {
             this.triggerListFilter();
         });
 
-        // --- Herramientas del Sistema ---
         this.bindMenuAction("menuDarkMode", () => this.toggleDarkMode());
 
-        // Panel de Audio
-        this.bindMenuAction("menuAudio", () => {
-            this.elements.audioPanel.classList.add("show");
-            this.elements.audioPanel.setAttribute("aria-hidden", "false");
-        });
-
-        // Panel de Herramientas (NUEVO)
+        // Paneles Laterales
+        this.bindMenuAction("menuAudio", () => this.openPanel(this.elements.audioPanel));
         this.bindMenuAction("menuTools", () => {
-            this.renderTools(); // Generar lista al abrir
-            this.elements.toolsPanel.classList.add("show");
-            this.elements.toolsPanel.setAttribute("aria-hidden", "false");
+            this.renderTools();
+            this.openPanel(this.elements.toolsPanel);
         });
 
-        // --- Importar / Exportar ---
+        // Importar / Exportar
         this.bindMenuAction("menuExport", () => this.exportProgress());
-        
-        this.bindMenuAction("menuImport", () => {
-            this.elements.importInput.click(); // Trigger input file oculto
-        });
+        this.bindMenuAction("menuImport", () => this.elements.importInput.click());
 
-        // Listener para el archivo seleccionado
         this.elements.importInput.addEventListener("change", (e) => {
-            if (e.target.files.length > 0) {
-                this.handleImportFile(e.target.files[0]);
-            }
-            this.elements.importInput.value = ""; // Resetear input
+            if (e.target.files.length > 0) this.handleImportFile(e.target.files[0]);
+            this.elements.importInput.value = "";
         });
 
-        // --- Cerrar Paneles Laterales ---
+        // Botones de cerrar paneles
         if (this.elements.closeAudioPanel) {
-            this.elements.closeAudioPanel.addEventListener("click", () => {
-                this.elements.audioPanel.classList.remove("show");
-                this.elements.audioPanel.setAttribute("aria-hidden", "true");
-            });
+            this.elements.closeAudioPanel.addEventListener("click", () => this.closePanel(this.elements.audioPanel));
         }
-
         if (this.elements.closeToolsPanel) {
-            this.elements.closeToolsPanel.addEventListener("click", () => {
-                this.elements.toolsPanel.classList.remove("show");
-                this.elements.toolsPanel.setAttribute("aria-hidden", "true");
-            });
+            this.elements.closeToolsPanel.addEventListener("click", () => this.closePanel(this.elements.toolsPanel));
         }
     }
 
-    /**
-     * Helper para asignar acciones a botones del menú y cerrar el menú automáticamente
-     */
     bindMenuAction(id, action) {
         const btn = document.getElementById(id);
         if (btn) {
@@ -172,26 +156,34 @@ export class UIManager {
         }
     }
 
+    openPanel(panel) {
+        if (panel) {
+            panel.classList.add("show");
+            panel.setAttribute("aria-hidden", "false");
+        }
+    }
+
+    closePanel(panel) {
+        if (panel) {
+            panel.classList.remove("show");
+            panel.setAttribute("aria-hidden", "true");
+        }
+    }
+
     // =================================================================
-    // PANEL DE HERRAMIENTAS
+    // HERRAMIENTAS
     // =================================================================
 
-    /**
-     * Renderiza la lista de herramientas externas definida en data.js
-     */
     renderTools() {
         const container = this.elements.toolsListContainer;
         if (!container) return;
-
-        container.innerHTML = ""; // Limpiar lista anterior
+        container.innerHTML = "";
 
         herramientasExternas.forEach(tool => {
             const card = document.createElement("div");
             card.className = "tool-card";
             card.innerHTML = `
-                <div class="tool-header">
-                    <i class="${tool.icono}"></i> ${tool.nombre}
-                </div>
+                <div class="tool-header"><i class="${tool.icono}"></i> ${tool.nombre}</div>
                 <div class="tool-desc">${tool.descripcion}</div>
                 <a href="${tool.url}" target="_blank" rel="noopener noreferrer" class="tool-btn">
                     Abrir <i class="fas fa-external-link-alt"></i>
@@ -202,34 +194,34 @@ export class UIManager {
     }
 
     // =================================================================
-    // MODAL DE IMAGEN CON ZOOM (PANZOOM)
+    // MODAL DE IMAGEN (ZOOM FIX)
     // =================================================================
 
     setupModalListeners() {
-        // Cerrar con botón X
+        // Botón Cerrar
         if (this.elements.closeModalBtn) {
             this.elements.closeModalBtn.addEventListener("click", () => this.closeModal());
         }
 
-        // Cerrar con tecla Escape
+        // Tecla Escape
         document.addEventListener("keydown", (ev) => {
             if (ev.key === "Escape" && this.elements.modal.style.display === "flex") {
                 this.closeModal();
             }
         });
 
-        // LÓGICA DE DOBLE TAP (Móvil)
+        // Doble Tap para Zoom Inteligente
         let lastTap = 0;
         this.elements.modalImg.addEventListener('touchend', (e) => {
             const currentTime = new Date().getTime();
             const tapLength = currentTime - lastTap;
             
-            // Detectar si fue un tap rápido (<300ms) después del anterior
+            // Detectar doble tap (<300ms)
             if (tapLength < 300 && tapLength > 0) {
-                e.preventDefault(); // Evitar zoom nativo del navegador
+                e.preventDefault();
                 if (this.panzoomInstance) {
                     const currentScale = this.panzoomInstance.getScale();
-                    // Si está en zoom normal -> Zoom In (2.5x). Si ya tiene zoom -> Reset.
+                    // Alternar entre Zoom 2.5x y 1x
                     this.panzoomInstance.zoom(currentScale === 1 ? 2.5 : 1, { animate: true });
                 }
             }
@@ -237,45 +229,40 @@ export class UIManager {
         });
     }
 
-    /**
-     * Abre el modal e inicializa Panzoom
-     * @param {string} src - URL de la imagen
-     */
     openModal(src) {
-        this.elements.modalImg.src = src;
+        // 1. Mostrar contenedor (display flex)
         this.elements.modal.style.display = "flex";
+        
+        // 2. Asignar fuente
+        this.elements.modalImg.src = src;
 
-        // Pequeño timeout para asegurar que el elemento es visible antes de calcular dimensiones
-        setTimeout(() => {
-            // Limpieza defensiva: Si ya existe una instancia, destruirla primero
-            if (this.panzoomInstance) {
-                this.panzoomInstance.dispose();
-            }
+        // 3. Limpiar instancia previa de Panzoom si existe (evita conflictos)
+        if (this.panzoomInstance) {
+            this.panzoomInstance.dispose();
+            this.panzoomInstance = null;
+        }
 
+        // 4. FIX ZOOM: Esperar a que la imagen cargue completamente
+        this.elements.modalImg.onload = () => {
             // Inicializar Panzoom
-            // @ts-ignore (Si usaras TypeScript, Panzoom es global)
+            // @ts-ignore
             this.panzoomInstance = Panzoom(this.elements.modalImg, {
-                maxScale: 5,        // Zoom máximo 5x
-                minScale: 1,        // No permitir zoom negativo
-                contain: 'outside', // La imagen se contiene visualmente
-                startScale: 1,
-                animate: true       // Animaciones suaves
+                maxScale: 5,        // Zoom máximo
+                minScale: 1,        // No permitir reducir menos del tamaño original
+                contain: 'inside',  // CLAVE: La imagen respeta los bordes iniciales (no zoom invasivo)
+                startScale: 1,      // Empieza al 100% de su tamaño visual (ajustado al CSS)
+                animate: true       // Transiciones suaves
             });
 
-            // Habilitar zoom con la rueda del mouse (Desktop)
-            // Se adjunta al padre para mejor control
+            // Habilitar zoom con rueda del mouse
             this.elements.modalImg.parentElement.addEventListener('wheel', this.panzoomInstance.zoomWithWheel);
-        }, 50);
+        };
     }
 
-    /**
-     * Cierra el modal y limpia memoria
-     */
     closeModal() {
         this.elements.modal.style.display = "none";
-        this.elements.modalImg.src = ""; // Liberar recurso visual
+        this.elements.modalImg.src = ""; // Liberar memoria
 
-        // Importante: Destruir instancia para evitar memory leaks y resetear posición
         if (this.panzoomInstance) {
             this.panzoomInstance.dispose();
             this.panzoomInstance = null;
@@ -283,64 +270,19 @@ export class UIManager {
     }
 
     // =================================================================
-    // IMPORTAR / EXPORTAR
-    // =================================================================
-
-    exportProgress() {
-        const data = {
-            unlocked: JSON.parse(localStorage.getItem("desbloqueados") || "[]"),
-            favorites: JSON.parse(localStorage.getItem("favoritos") || "[]"),
-            achievements: JSON.parse(localStorage.getItem("logrosAlcanzados") || "[]"),
-            timestamp: new Date().toISOString()
-        };
-
-        const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-        const url = URL.createObjectURL(blob);
-        
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `progreso_${new Date().toISOString().slice(0, 10)}.json`;
-        a.click();
-        
-        URL.revokeObjectURL(url);
-        this.showToast("Progreso exportado correctamente");
-    }
-
-    handleImportFile(file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            try {
-                const data = JSON.parse(e.target.result);
-                // Callback al Engine para procesar los datos
-                if (this.onImportData) {
-                    this.onImportData(data);
-                }
-            } catch (err) {
-                this.showToast("Error: El archivo no es válido");
-            }
-        };
-        reader.readAsText(file);
-    }
-
-    // =================================================================
-    // LISTAS Y FILTROS (Desbloqueados)
+    // LISTAS Y FILTROS
     // =================================================================
 
     setupListListeners() {
-        // Búsqueda en tiempo real
         this.elements.searchUnlocked.addEventListener("input", () => this.triggerListFilter());
-        
-        // Filtro por categoría
         this.elements.categoryFilter.addEventListener("change", () => this.triggerListFilter());
         
-        // Botón toggle "Solo Favoritos"
         this.elements.filterFavBtn.addEventListener("click", () => {
             this.showingFavoritesOnly = !this.showingFavoritesOnly;
             this.updateFilterUI();
             this.triggerListFilter();
         });
 
-        // Cerrar panel de lista
         this.elements.closeUnlockedBtn.addEventListener("click", () => this.toggleUnlockedPanel(false));
     }
 
@@ -362,14 +304,10 @@ export class UIManager {
         }
     }
 
-    /**
-     * Renderiza la lista completa de códigos desbloqueados
-     */
     renderUnlockedList(unlockedSet, favoritesSet, mensajesData) {
-        // Guardamos referencia a los datos actuales para usar en el filtrado
         this.currentData = { unlockedSet, favoritesSet, mensajesData };
 
-        // Actualizar Select de Categorías dinámicamente
+        // Actualizar Select de Categorías
         const categories = new Set();
         unlockedSet.forEach(code => {
             if (mensajesData[code]) categories.add(mensajesData[code].categoria);
@@ -389,35 +327,26 @@ export class UIManager {
         this.triggerListFilter();
     }
 
-    /**
-     * Filtra y dibuja la lista en el DOM
-     */
     triggerListFilter() {
         if (!this.currentData) return;
         const { unlockedSet, favoritesSet, mensajesData } = this.currentData;
-        
         const searchTerm = normalizeText(this.elements.searchUnlocked.value);
         const catFilter = this.elements.categoryFilter.value;
 
         this.elements.unlockedList.innerHTML = "";
-        
-        // Ordenar alfabéticamente
         const sortedCodes = Array.from(unlockedSet).sort();
-
-        let visibleCount = 0;
+        let count = 0;
 
         sortedCodes.forEach(code => {
             const data = mensajesData[code];
             if (!data) return;
 
-            // Aplicar Filtros
+            // Filtros
             if (this.showingFavoritesOnly && !favoritesSet.has(code)) return;
             if (searchTerm && !normalizeText(code).includes(searchTerm)) return;
             if (catFilter && data.categoria !== catFilter) return;
 
-            visibleCount++;
-
-            // Crear Elemento LI
+            count++;
             const li = document.createElement("li");
             li.className = "lista-codigo-item";
             li.innerHTML = `
@@ -427,21 +356,18 @@ export class UIManager {
                 </div>
             `;
 
-            // Botón Corazón
+            // Botón Favorito
             const favBtn = document.createElement("button");
             favBtn.className = `favorite-toggle-btn ${favoritesSet.has(code) ? 'active' : ''}`;
             favBtn.innerHTML = `<i class="${favoritesSet.has(code) ? 'fas' : 'far'} fa-heart"></i>`;
-            
-            // Evento Favorito (Stop Propagation para no abrir el contenido)
             favBtn.onclick = (e) => {
                 e.stopPropagation();
                 if (this.onToggleFavorite) this.onToggleFavorite(code);
             };
 
-            // Evento Abrir Contenido
+            // Click en item -> Abrir
             li.onclick = () => {
                 if (this.onCodeSelected) this.onCodeSelected(code);
-                // Scroll suave hacia el contenido
                 this.elements.contentDiv.scrollIntoView({ behavior: 'smooth' });
             };
 
@@ -449,53 +375,46 @@ export class UIManager {
             this.elements.unlockedList.appendChild(li);
         });
 
-        // Mensaje de vacío
-        if (visibleCount === 0) {
-            this.elements.unlockedList.innerHTML = '<p style="text-align:center; width:100%; opacity:0.7">No se encontraron resultados.</p>';
+        if (count === 0) {
+            this.elements.unlockedList.innerHTML = '<p style="text-align:center; width:100%; opacity:0.7">Sin resultados.</p>';
         }
     }
 
     // =================================================================
-    // RENDERIZADO DE CONTENIDO (Main Display)
+    // RENDERIZADO DE CONTENIDO
     // =================================================================
 
     renderContent(data, key) {
         const container = this.elements.contentDiv;
         container.hidden = false;
-        container.innerHTML = ""; // Limpiar previo
+        container.innerHTML = "";
 
-        // Título del hallazgo
         const title = document.createElement("h2");
         title.textContent = key ? `Descubierto: ${key}` : "¡Sorpresa!";
         title.style.textTransform = "capitalize";
         container.appendChild(title);
 
-        // Texto descriptivo (si no es tipo 'text' puro)
         if (data.texto && data.type !== 'text') {
             const p = document.createElement("p");
             p.textContent = data.texto;
             container.appendChild(p);
         }
 
-        // Switch de tipos de contenido
         switch (data.type) {
             case "text":
-                const pText = document.createElement("p");
-                pText.className = "mensaje-texto";
-                pText.textContent = data.texto;
-                container.appendChild(pText);
+                const pt = document.createElement("p");
+                pt.className = "mensaje-texto";
+                pt.textContent = data.texto;
+                container.appendChild(pt);
                 break;
-
             case "image":
                 const img = document.createElement("img");
                 img.src = data.imagen;
-                img.alt = data.texto || "Imagen secreta";
-                img.style.cursor = "pointer"; // Indicar que es clickeable
-                // Abrir modal con zoom al hacer click
+                img.alt = data.texto || "Imagen";
+                img.style.cursor = "pointer";
                 img.onclick = () => this.openModal(data.imagen);
                 container.appendChild(img);
                 break;
-
             case "video":
                 if (data.videoEmbed) {
                     const iframe = document.createElement("iframe");
@@ -506,17 +425,14 @@ export class UIManager {
                     container.appendChild(iframe);
                 }
                 break;
-
             case "link":
                 const a = document.createElement("a");
                 a.href = data.link;
                 a.target = "_blank";
-                a.rel = "noopener noreferrer";
                 a.className = "button";
                 a.innerHTML = 'Abrir Enlace <i class="fas fa-external-link-alt"></i>';
                 container.appendChild(a);
                 break;
-
             case "download":
                 const dl = document.createElement("a");
                 dl.href = data.descarga.url;
@@ -527,24 +443,22 @@ export class UIManager {
                 break;
         }
 
-        // Reiniciar animación Fade In
-        container.classList.remove("fade-in");
-        void container.offsetWidth; // Trigger Reflow
-        container.classList.add("fade-in");
-    }
-
-    renderMessage(titleText, bodyHTML) {
-        const container = this.elements.contentDiv;
-        container.hidden = false;
-        container.innerHTML = `<h2>${titleText}</h2><p>${bodyHTML}</p>`;
-        
         container.classList.remove("fade-in");
         void container.offsetWidth;
         container.classList.add("fade-in");
     }
 
+    renderMessage(title, bodyHTML) {
+        const c = this.elements.contentDiv;
+        c.hidden = false;
+        c.innerHTML = `<h2>${title}</h2><p>${bodyHTML}</p>`;
+        c.classList.remove("fade-in");
+        void c.offsetWidth;
+        c.classList.add("fade-in");
+    }
+
     // =================================================================
-    // UI HELPERS (Utilidades visuales)
+    // UTILIDADES VISUALES
     // =================================================================
 
     showError() {
@@ -559,37 +473,61 @@ export class UIManager {
 
     clearInput() {
         this.elements.input.value = "";
-        this.elements.input.focus();
+        // No hacemos focus() aquí para evitar que el teclado vuelva a saltar en móviles
     }
 
-    updateProgress(unlockedCount, totalCount) {
-        const percent = totalCount > 0 ? Math.round((unlockedCount / totalCount) * 100) : 0;
-        this.elements.progressBar.style.width = `${percent}%`;
-        this.elements.progressText.textContent = `Descubiertos: ${unlockedCount} / ${totalCount}`;
+    updateProgress(u, t) {
+        const p = t > 0 ? Math.round((u / t) * 100) : 0;
+        this.elements.progressBar.style.width = `${p}%`;
+        this.elements.progressText.textContent = `Descubiertos: ${u} / ${t}`;
     }
 
-    showToast(message) {
-        const toast = document.createElement("div");
-        toast.className = "achievement-toast";
-        toast.textContent = message;
-        this.elements.toastContainer.appendChild(toast);
-        // Eliminar del DOM tras la animación (4s)
-        setTimeout(() => toast.remove(), 4000);
+    showToast(msg) {
+        const t = document.createElement("div");
+        t.className = "achievement-toast";
+        t.textContent = msg;
+        this.elements.toastContainer.appendChild(t);
+        setTimeout(() => t.remove(), 4000);
     }
 
-    /**
-     * Actualiza el panel de audio (Icono play/pause y nombre de pista)
-     */
     updateAudioUI(isPlaying, trackName) {
         const btn = document.getElementById("audioPlayPause");
         const txt = document.getElementById("trackName");
-        
-        if (btn) {
-            btn.innerHTML = isPlaying ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>';
-        }
-        if (txt && trackName) {
-            // Limpiar nombre de archivo para que se vea bonito
-            txt.textContent = trackName.replace(/_/g, " ").replace(/\.[^/.]+$/, "");
-        }
+        if (btn) btn.innerHTML = isPlaying ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>';
+        if (txt && trackName) txt.textContent = trackName.replace(/_/g, " ").replace(/\.[^/.]+$/, "");
+    }
+
+    // =================================================================
+    // IMPORT / EXPORT
+    // =================================================================
+
+    exportProgress() {
+        const data = {
+            unlocked: JSON.parse(localStorage.getItem("desbloqueados") || "[]"),
+            favorites: JSON.parse(localStorage.getItem("favoritos") || "[]"),
+            achievements: JSON.parse(localStorage.getItem("logrosAlcanzados") || "[]"),
+            timestamp: new Date().toISOString()
+        };
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `progreso_${new Date().toISOString().slice(0, 10)}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        this.showToast("Progreso exportado correctamente");
+    }
+
+    handleImportFile(file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const data = JSON.parse(e.target.result);
+                if (this.onImportData) this.onImportData(data);
+            } catch (err) {
+                this.showToast("Error: Archivo inválido");
+            }
+        };
+        reader.readAsText(file);
     }
 }
