@@ -1,31 +1,19 @@
-/**
- * modules/utils.js
- * Utilidades puras y funciones criptográficas.
+/** * modules/utils.js 
  */
 
-// Normaliza texto: minúsculas, sin acentos, sin espacios extra
 export function normalizeText(text) {
     if (!text) return "";
     return text
         .toString()
         .toLowerCase()
         .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "") // Quitar tildes
-        .replace(/ñ/g, "n")
-        .replace(/[^a-z0-9]/g, "") // Solo alfanumérico estricto
+        .replace(/[\u0300-\u036f]/g, "") // Sin tildes
+        .replace(/ñ/g, "n") // ñ -> n
+        .replace(/[^a-z0-9]/g, "") // Solo alfanumérico
         .trim();
 }
 
-// Genera un Hash SHA-256 del texto (Devuelve una promesa)
-// Esto oculta los códigos reales en la consola del navegador
-export async function hashString(message) {
-    const msgBuffer = new TextEncoder().encode(normalizeText(message));
-    const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-}
-
-// Distancia de Levenshtein (para pistas de "estás cerca")
+// Distancia Levenshtein para sugerencias de "estás cerca"
 export function levenshtein(a, b) {
     const matrix = [];
     for (let i = 0; i <= b.length; i++) matrix[i] = [i];
