@@ -9,6 +9,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Courgette&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <script src="https://unpkg.com/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
   
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -32,6 +34,13 @@
         <button id="menuHome"><i class="fas fa-home"></i> Inicio</button>
         <button id="menuShowUnlocked"><i class="fas fa-lock-open"></i> Desbloqueados</button>
         <button id="menuFavorites"><i class="fas fa-heart"></i> Favoritos</button>
+        
+        <div class="menu-divider"></div>
+        
+        <a href="https://www.wikipedia.org/" target="_blank" class="menu-link-button">
+        <i class="fas fa-gamepad"></i> Love Arcade
+        </a>
+        <button id="menuTools"><i class="fas fa-toolbox"></i> Herramientas</button>
         
         <div class="menu-divider"></div>
 
@@ -105,6 +114,15 @@
       <button id="closeAudioPanel" class="close-audio-btn"><i class="fas fa-times"></i></button>
     </div>
 
+    <div id="toolsPanel" class="side-panel" aria-hidden="true">
+  <div class="panel-header">
+    <h3>Herramientas</h3>
+    <button id="closeToolsPanel" class="close-panel-btn"><i class="fas fa-times"></i></button>
+  </div>
+  <div id="toolsListContainer" class="tools-container">
+    </div>
+    </div>
+
     <div class="audio-info">
       <p id="trackName">Selecciona música</p>
     </div>
@@ -130,11 +148,12 @@
   <audio id="incorrectSound" src="assets/audio/incorrect.mp3" preload="auto"></audio>
   <audio id="bgMusic" preload="auto"></audio>
 
-  <div id="imageModal" class="modal">
-    <span class="close" onclick="document.getElementById('imageModal').style.display='none'">×</span>
+<div id="imageModal" class="modal">
+  <span class="close" id="closeModalBtn">×</span>
+  <div class="panzoom-wrapper">
     <img id="modalImg" class="modal-content">
-    <p id="modalCaption" class="modal-caption"></p>
   </div>
+</div>
 
   <script type="module" src="main.js"></script>
   <script>
