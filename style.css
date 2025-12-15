@@ -43,7 +43,7 @@ body.dark-mode {
 html { scroll-behavior: smooth; }
 body {
   font-family: var(--body-font);
-  background: url('assets/images/fondo-romantico.jpg') no-repeat center center fixed;
+  background: url('assets/images/fondo-romantico.webp') no-repeat center center fixed;
   background-size: cover;
   color: var(--text-light);
   display: flex; flex-direction: column; min-height: 100vh;
