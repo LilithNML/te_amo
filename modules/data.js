@@ -59,3 +59,15 @@ export const logros = [
     mensaje: "¡Todos los secretos desbloqueados! ¡Eres increíble!",
   }
 ];
+
+/* seccion de herramientas */
+
+export const herramientasExternas = [
+  {
+    nombre: "Desencriptar",
+    descripcion: "Herramienta web para desencriptar imágenes de forma rápida.",
+    url: "https://hat.vercel.app/",
+    icono: "fas fa-key" // Se usa FontAwesome
+  }
+  // Aquí agregar más herramientas en el futuro
+];
