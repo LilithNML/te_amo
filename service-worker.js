@@ -1,61 +1,32 @@
-const CACHE_NAME = "hazielith-cache-v2"; // Incrementé la versión para forzar actualización
-
-// Rutas relativas para evitar problemas de carpetas
+const CACHE_NAME = "secreto-cache-v3";
 const FILES_TO_CACHE = [
-  "./",
-  "./index.html",
-  "./manifest.json",
-  "./style.css",
-  "./main.js",
-  "./modules/utils.js",
-  "./modules/data.js",
-  "./modules/audioManager.js",
-  "./modules/uiManager.js",
-  "./modules/gameEngine.js",
-  
-  // Assets críticos (Asegúrate que existan)
-  "assets/images/moon.png",
-  "assets/audio/correct.mp3",
-  "assets/audio/incorrect.mp3"
+  "./", "./index.html", "./style.css", "./main.js", "./manifest.json",
+  "./modules/utils.js", "./modules/data.js", "./modules/uiManager.js", "./modules/audioManager.js", "./modules/gameEngine.js",
+  "assets/images/moon.png", "assets/audio/correct.mp3", "assets/audio/incorrect.mp3"
 ];
 
-self.addEventListener("install", event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(FILES_TO_CACHE))
-  );
+self.addEventListener("install", e => {
+  e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(FILES_TO_CACHE)));
   self.skipWaiting();
 });
 
-self.addEventListener("activate", event => {
-  event.waitUntil(
-    caches.keys().then(keys => Promise.all(
-      keys.map(key => {
-        if (key !== CACHE_NAME) return caches.delete(key);
-      })
-    ))
-  );
+self.addEventListener("activate", e => {
+  e.waitUntil(caches.keys().then(keys => Promise.all(keys.map(k => k !== CACHE_NAME ? caches.delete(k) : null))));
   self.clients.claim();
 });
 
-self.addEventListener("fetch", event => {
-  if (event.request.method !== "GET") return;
-
-  event.respondWith(
-    caches.match(event.request).then(cachedResponse => {
-      // Estrategia: Cache primero, luego red (y actualiza caché)
-      const fetchPromise = fetch(event.request).then(networkResponse => {
-        if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
-          const responseToCache = networkResponse.clone();
-          caches.open(CACHE_NAME).then(cache => {
-            cache.put(event.request, responseToCache);
-          });
+self.addEventListener("fetch", e => {
+  if (e.request.method !== "GET") return;
+  e.respondWith(
+    caches.match(e.request).then(cached => {
+      const fetchPromise = fetch(e.request).then(net => {
+        if (net && net.status === 200 && net.type === 'basic') {
+            const clone = net.clone();
+            caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
         }
-        return networkResponse;
-      }).catch(() => {
-        // Si falla fetch y no hay caché, podrías retornar una página offline aquí
-      });
-
-      return cachedResponse || fetchPromise;
+        return net;
+      }).catch(() => {});
+      return cached || fetchPromise;
     })
   );
 });
