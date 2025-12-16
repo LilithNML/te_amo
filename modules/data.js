@@ -20,7 +20,7 @@ export const mensajes = {
   "sofia": {
     type: "text",
     texto: "Mi amor:\n\nHoy estaba viendo a nuestras niñas jugar en la sala, con sus risas llenando toda la casa, y no pude evitar pensar en todo lo que hemos vivido para llegar hasta aquí. ¿Te acuerdas cuando solo éramos dos voces que se conocieron en un videojuego? Qué mágico fue que todo empezara allí, tan simple y tan nuestro.\n\nMiro a nuestras hijas y veo tanto de ti en ellas. La mayor tiene tu forma de mirar el mundo, con esa mezcla de curiosidad y ternura. La pequeña es puro caos y dulzura, como si hubiera heredado la parte más intensa de los dos. Me derrito cuando te llaman papá, con esa vocecita medio ronca de recién despertar. Y tú, tú las miras como si fueran constelaciones.\n\nGracias por ser el padre que soñé para ellas, y por seguir siendo mi amor en cada etapa. A veces me cuesta creer que este futuro que imaginábamos en susurros ahora es nuestra realidad. Que nuestras hijas duermen a unos pasos, y que tú sigues aquí, tomándome la mano como el primer día.\n\nMe haces sentir que todo valió la pena.\nTe amo. Por nosotros. Por ellas. Por siempre.\n\nCon todo mi corazón,\nTu Luna",
-    categoria: "Carta",
+    categoria: "Pensamiento",
     pista: "Nombre de quien me dio la vida… y tal vez, algún día, de quien la continúe."
   },
   "princesa": {
@@ -394,13 +394,13 @@ export const mensajes = {
   "mininoconsentido": {
     type: "text",
     texto: "«Amar no es mirarse el uno al otro; es mirar juntos en la misma dirección.»\n~ Antoine de Saint-Exupéry",
-    categoria: "Pensamiento",
+    categoria: "Cita",
     pista: ""
   },
   "cartas": {
     type: "text",
     texto: "«El verdadero amor no es sino el encuentro de dos almas que se reconocen en la eternidad.»\n~ Platón",
-    categoria: "Pensamiento",
+    categoria: "Cita",
     pista: ""
   },
   "peluche": {
