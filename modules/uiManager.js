@@ -1,9 +1,9 @@
 /**
  * modules/uiManager.js
  * ------------------------------------------------------------------
- * Gestor de Interfaz de Usuario.
- * Se encarga de manipular el DOM, mostrar modales, gestionar paneles,
- * renderizar listas y controlar la librería de Zoom.
+ * Gestor de Interfaz de Usuario (UI Manager).
+ * Se encarga de manipular el DOM, gestionar paneles laterales, modales,
+ * renderizar listas, controlar la librería Panzoom y el feedback visual.
  */
 
 import { normalizeText } from './utils.js';
@@ -11,7 +11,7 @@ import { herramientasExternas } from './data.js';
 
 export class UIManager {
     constructor() {
-        // Cacheo de elementos del DOM para mejorar rendimiento
+        // Cacheo de referencias al DOM para mejorar rendimiento
         this.elements = {
             // Entradas y Salidas principales
             input: document.getElementById("codeInput"),
@@ -60,11 +60,12 @@ export class UIManager {
     }
 
     /**
-     * Cierra el teclado virtual (útil en móviles tras enviar formulario)
+     * Cierra el teclado virtual quitando el foco del input.
+     * Esencial para mejorar la UX en móviles tras enviar un formulario.
      */
     dismissKeyboard() {
         if (this.elements.input) {
-            this.elements.input.blur(); // Quitar foco cierra el teclado
+            this.elements.input.blur();
         }
     }
 
@@ -86,7 +87,7 @@ export class UIManager {
     }
 
     // =================================================================
-    // MENÚS Y PANELES
+    // GESTIÓN DE MENÚS Y PANELES
     // =================================================================
 
     setupMenuListeners() {
@@ -96,7 +97,7 @@ export class UIManager {
             this.elements.dropdownMenu.classList.toggle("show");
         });
 
-        // Cerrar al hacer clic fuera
+        // Cerrar al hacer clic fuera del menú
         document.addEventListener("click", (e) => {
             if (!this.elements.menuButton.contains(e.target) && 
                 !this.elements.dropdownMenu.contains(e.target)) {
@@ -104,7 +105,7 @@ export class UIManager {
             }
         });
 
-        // --- Acciones del Menú ---
+        // --- Acciones de Navegación ---
         this.bindMenuAction("menuHome", () => {
             this.toggleUnlockedPanel(false);
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -119,25 +120,33 @@ export class UIManager {
             this.triggerListFilter();
         });
 
+        // --- Herramientas del Sistema ---
         this.bindMenuAction("menuDarkMode", () => this.toggleDarkMode());
 
-        // Paneles Laterales
+        // Panel de Audio
         this.bindMenuAction("menuAudio", () => this.openPanel(this.elements.audioPanel));
+
+        // Panel de Herramientas (Renderizado dinámico)
         this.bindMenuAction("menuTools", () => {
             this.renderTools();
             this.openPanel(this.elements.toolsPanel);
         });
 
-        // Importar / Exportar
+        // --- Gestión de Datos (Importar/Exportar) ---
         this.bindMenuAction("menuExport", () => this.exportProgress());
-        this.bindMenuAction("menuImport", () => this.elements.importInput.click());
-
-        this.elements.importInput.addEventListener("change", (e) => {
-            if (e.target.files.length > 0) this.handleImportFile(e.target.files[0]);
-            this.elements.importInput.value = "";
+        
+        this.bindMenuAction("menuImport", () => {
+            this.elements.importInput.click(); // Disparar input file oculto
         });
 
-        // Botones de cerrar paneles
+        this.elements.importInput.addEventListener("change", (e) => {
+            if (e.target.files.length > 0) {
+                this.handleImportFile(e.target.files[0]);
+            }
+            this.elements.importInput.value = ""; // Resetear para permitir cargar el mismo archivo
+        });
+
+        // Botones de cerrar paneles laterales
         if (this.elements.closeAudioPanel) {
             this.elements.closeAudioPanel.addEventListener("click", () => this.closePanel(this.elements.audioPanel));
         }
@@ -146,6 +155,9 @@ export class UIManager {
         }
     }
 
+    /**
+     * Vincula una acción a un ID de botón del menú y cierra el menú al hacer clic
+     */
     bindMenuAction(id, action) {
         const btn = document.getElementById(id);
         if (btn) {
@@ -171,9 +183,12 @@ export class UIManager {
     }
 
     // =================================================================
-    // HERRAMIENTAS
+    // PANEL DE HERRAMIENTAS
     // =================================================================
 
+    /**
+     * Genera la lista de herramientas basada en data.js
+     */
     renderTools() {
         const container = this.elements.toolsListContainer;
         if (!container) return;
@@ -210,18 +225,18 @@ export class UIManager {
             }
         });
 
-        // Doble Tap para Zoom Inteligente
+        // Lógica de Doble Tap para Zoom
         let lastTap = 0;
         this.elements.modalImg.addEventListener('touchend', (e) => {
             const currentTime = new Date().getTime();
             const tapLength = currentTime - lastTap;
             
-            // Detectar doble tap (<300ms)
+            // Detectar si es un doble tap (<300ms)
             if (tapLength < 300 && tapLength > 0) {
-                e.preventDefault();
+                e.preventDefault(); // Evitar zoom nativo del navegador
                 if (this.panzoomInstance) {
                     const currentScale = this.panzoomInstance.getScale();
-                    // Alternar entre Zoom 2.5x y 1x
+                    // Alternar entre Zoom 2.5x y 1x (Reset)
                     this.panzoomInstance.zoom(currentScale === 1 ? 2.5 : 1, { animate: true });
                 }
             }
@@ -229,29 +244,33 @@ export class UIManager {
         });
     }
 
+    /**
+     * Abre el modal e inicializa Panzoom de forma segura
+     */
     openModal(src) {
-        // 1. Mostrar contenedor (display flex)
+        // 1. Mostrar contenedor (display flex) primero
         this.elements.modal.style.display = "flex";
         
-        // 2. Asignar fuente
+        // 2. Asignar fuente de la imagen
         this.elements.modalImg.src = src;
 
-        // 3. Limpiar instancia previa de Panzoom si existe (evita conflictos)
+        // 3. Limpiar instancia previa si existe (evita conflictos de memoria)
         if (this.panzoomInstance) {
             this.panzoomInstance.dispose();
             this.panzoomInstance = null;
         }
 
-        // 4. FIX ZOOM: Esperar a que la imagen cargue completamente
+        // 4. FIX: Esperar a que la imagen cargue para calcular dimensiones
         this.elements.modalImg.onload = () => {
             // Inicializar Panzoom
             // @ts-ignore
             this.panzoomInstance = Panzoom(this.elements.modalImg, {
-                maxScale: 5,        // Zoom máximo
-                minScale: 1,        // No permitir reducir menos del tamaño original
-                contain: 'inside',  // CLAVE: La imagen respeta los bordes iniciales (no zoom invasivo)
-                startScale: 1,      // Empieza al 100% de su tamaño visual (ajustado al CSS)
-                animate: true       // Transiciones suaves
+                maxScale: 5,        // Zoom máximo 5x
+                minScale: 1,        // No permitir reducir más del original
+                contain: 'inside',  // IMPORTANTE: La imagen se ajusta dentro, sin zoom invasivo inicial
+                startScale: 1,      // Empieza al 100% del tamaño ajustado
+                touchAction: 'none', // IMPORTANTE: Permite gestos en móviles sin mover la página
+                animate: true
             });
 
             // Habilitar zoom con rueda del mouse
@@ -261,28 +280,33 @@ export class UIManager {
 
     closeModal() {
         this.elements.modal.style.display = "none";
-        this.elements.modalImg.src = ""; // Liberar memoria
+        this.elements.modalImg.src = ""; // Liberar memoria visual
 
         if (this.panzoomInstance) {
-            this.panzoomInstance.dispose();
+            this.panzoomInstance.dispose(); // Limpieza de listeners
             this.panzoomInstance = null;
         }
     }
 
     // =================================================================
-    // LISTAS Y FILTROS
+    // LISTAS Y FILTROS (Desbloqueados)
     // =================================================================
 
     setupListListeners() {
+        // Búsqueda
         this.elements.searchUnlocked.addEventListener("input", () => this.triggerListFilter());
+        
+        // Categoría
         this.elements.categoryFilter.addEventListener("change", () => this.triggerListFilter());
         
+        // Favoritos Toggle
         this.elements.filterFavBtn.addEventListener("click", () => {
             this.showingFavoritesOnly = !this.showingFavoritesOnly;
             this.updateFilterUI();
             this.triggerListFilter();
         });
 
+        // Cerrar panel
         this.elements.closeUnlockedBtn.addEventListener("click", () => this.toggleUnlockedPanel(false));
     }
 
@@ -330,23 +354,27 @@ export class UIManager {
     triggerListFilter() {
         if (!this.currentData) return;
         const { unlockedSet, favoritesSet, mensajesData } = this.currentData;
+        
         const searchTerm = normalizeText(this.elements.searchUnlocked.value);
         const catFilter = this.elements.categoryFilter.value;
 
         this.elements.unlockedList.innerHTML = "";
+        
         const sortedCodes = Array.from(unlockedSet).sort();
-        let count = 0;
+        let visibleCount = 0;
 
         sortedCodes.forEach(code => {
             const data = mensajesData[code];
             if (!data) return;
 
-            // Filtros
+            // Filtros Lógicos
             if (this.showingFavoritesOnly && !favoritesSet.has(code)) return;
             if (searchTerm && !normalizeText(code).includes(searchTerm)) return;
             if (catFilter && data.categoria !== catFilter) return;
 
-            count++;
+            visibleCount++;
+
+            // Crear Item
             const li = document.createElement("li");
             li.className = "lista-codigo-item";
             li.innerHTML = `
@@ -360,12 +388,13 @@ export class UIManager {
             const favBtn = document.createElement("button");
             favBtn.className = `favorite-toggle-btn ${favoritesSet.has(code) ? 'active' : ''}`;
             favBtn.innerHTML = `<i class="${favoritesSet.has(code) ? 'fas' : 'far'} fa-heart"></i>`;
+            
             favBtn.onclick = (e) => {
                 e.stopPropagation();
                 if (this.onToggleFavorite) this.onToggleFavorite(code);
             };
 
-            // Click en item -> Abrir
+            // Abrir contenido
             li.onclick = () => {
                 if (this.onCodeSelected) this.onCodeSelected(code);
                 this.elements.contentDiv.scrollIntoView({ behavior: 'smooth' });
@@ -375,13 +404,13 @@ export class UIManager {
             this.elements.unlockedList.appendChild(li);
         });
 
-        if (count === 0) {
+        if (visibleCount === 0) {
             this.elements.unlockedList.innerHTML = '<p style="text-align:center; width:100%; opacity:0.7">Sin resultados.</p>';
         }
     }
 
     // =================================================================
-    // RENDERIZADO DE CONTENIDO
+    // RENDERIZADO DE CONTENIDO (Main)
     // =================================================================
 
     renderContent(data, key) {
@@ -389,17 +418,20 @@ export class UIManager {
         container.hidden = false;
         container.innerHTML = "";
 
+        // Título
         const title = document.createElement("h2");
         title.textContent = key ? `Descubierto: ${key}` : "¡Sorpresa!";
         title.style.textTransform = "capitalize";
         container.appendChild(title);
 
+        // Texto descriptivo general
         if (data.texto && data.type !== 'text') {
             const p = document.createElement("p");
             p.textContent = data.texto;
             container.appendChild(p);
         }
 
+        // Switch por Tipo de Contenido
         switch (data.type) {
             case "text":
                 const pt = document.createElement("p");
@@ -407,14 +439,16 @@ export class UIManager {
                 pt.textContent = data.texto;
                 container.appendChild(pt);
                 break;
+
             case "image":
                 const img = document.createElement("img");
                 img.src = data.imagen;
                 img.alt = data.texto || "Imagen";
                 img.style.cursor = "pointer";
-                img.onclick = () => this.openModal(data.imagen);
+                img.onclick = () => this.openModal(data.imagen); // Abre el modal con zoom
                 container.appendChild(img);
                 break;
+
             case "video":
                 if (data.videoEmbed) {
                     const iframe = document.createElement("iframe");
@@ -425,6 +459,7 @@ export class UIManager {
                     container.appendChild(iframe);
                 }
                 break;
+
             case "link":
                 const a = document.createElement("a");
                 a.href = data.link;
@@ -433,6 +468,7 @@ export class UIManager {
                 a.innerHTML = 'Abrir Enlace <i class="fas fa-external-link-alt"></i>';
                 container.appendChild(a);
                 break;
+
             case "download":
                 const dl = document.createElement("a");
                 dl.href = data.descarga.url;
@@ -443,8 +479,9 @@ export class UIManager {
                 break;
         }
 
+        // Reiniciar animación Fade In
         container.classList.remove("fade-in");
-        void container.offsetWidth;
+        void container.offsetWidth; // Trigger reflow
         container.classList.add("fade-in");
     }
 
@@ -458,7 +495,7 @@ export class UIManager {
     }
 
     // =================================================================
-    // UTILIDADES VISUALES
+    // UI HELPERS
     // =================================================================
 
     showError() {
@@ -473,7 +510,7 @@ export class UIManager {
 
     clearInput() {
         this.elements.input.value = "";
-        // No hacemos focus() aquí para evitar que el teclado vuelva a saltar en móviles
+        // No hacemos focus() para no reabrir teclado en móviles
     }
 
     updateProgress(u, t) {
