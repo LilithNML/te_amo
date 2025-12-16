@@ -1,31 +1,50 @@
+/* =========================================
+   STYLE.CSS - Versión Final (Producción)
+   ========================================= */
+
+/* Importación de fuentes optimizada */
 @import url('https://fonts.googleapis.com/css2?family=Courgette&family=Montserrat:wght@300;400;500;600&display=swap');
 
 :root {
+  /* Fuentes */
   --title-font: 'Courgette', cursive;
   --body-font: 'Montserrat', sans-serif;
+
+  /* Paleta de Colores (Tema Claro - Default) */
   --text-light: #CDD8D5;
   --text-medium: #AEA5A5;
   --text-dark: #E0CFC1;
   --header-color: #BCBDB9;
+  
+  /* Fondos y Capas */
   --background-overlay: rgba(20, 18, 28, 0.75);
   --container-bg: rgba(32, 30, 43, 0.65);
   --content-bg: rgba(30, 32, 33, 0.8);
+  
+  /* Interacción */
   --border-color-input: #8E7383;
   --input-bg: rgba(107, 93, 116, 0.5);
   --button-bg-initial: #9A8C8B;
   --button-bg-hover: #3F3938;
+  
+  /* Estados */
   --progress-color: #A3C3BD;
   --highlight-pink: #ff7aa8;
   --highlight-pink-light: #ffaed0;
   --highlight-green: #7B9D8F;
   --highlight-red: #E74C3C;
+  
+  /* Componentes */
   --achievement-bg: #4A4A6A;
   --achievement-text: #E0CFC1;
-  --modal-bg: rgba(0, 0, 0, 0.92);
+  --modal-bg: rgba(0, 0, 0, 0.94); /* Fondo oscuro profundo para el modal */
+  
+  /* Iconos */
   --favorite-icon-default: #888;
   --favorite-icon-active: #FFD700;
 }
 
+/* Variables Modo Oscuro */
 body.dark-mode {
   --text-light: #f2e6df;
   --text-medium: #d8ccc3;
@@ -39,11 +58,12 @@ body.dark-mode {
   --highlight-pink: #A860A8;
 }
 
+/* Reset y Base */
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html { scroll-behavior: smooth; }
 body {
   font-family: var(--body-font);
-  background: url('assets/images/fondo-romantico.webp') no-repeat center center fixed;
+  background: url('assets/images/fondo-romantico.jpg') no-repeat center center fixed;
   background-size: cover;
   color: var(--text-light);
   display: flex; flex-direction: column; min-height: 100vh;
@@ -57,6 +77,7 @@ body {
   backdrop-filter: blur(4px); z-index: -1;
 }
 
+/* Contenedor Principal (Glassmorphism) */
 .container {
   background-color: var(--container-bg);
   padding: 2.5rem; border-radius: 16px;
@@ -69,6 +90,7 @@ body {
 }
 .container:hover { transform: translateY(-2px); }
 
+/* Tipografía */
 h1, h2, .section-title {
   font-family: var(--title-font); color: var(--header-color);
   font-weight: 400; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
@@ -77,6 +99,7 @@ h1 { margin-bottom: 1.5rem; font-size: 3em; }
 .intro-text { font-size: 1.1em; margin-bottom: 2rem; color: var(--text-medium); }
 .header-img { width: 140px; height: auto; margin-bottom: 1.5rem; animation: float 6s ease-in-out infinite; }
 
+/* Inputs y Botones */
 .input-container { display: flex; gap: 12px; margin-bottom: 2rem; justify-content: center; }
 #codeInput {
   flex-grow: 1; max-width: 350px; padding: 15px 20px;
@@ -100,14 +123,16 @@ h1 { margin-bottom: 1.5rem; font-size: 3em; }
 .button:hover { background-color: var(--button-bg-hover); transform: translateY(-2px); }
 .button.small-button { padding: 10px 18px; font-size: 0.9em; }
 
+/* Contenido Dinámico */
 .contenido-container {
   background-color: var(--content-bg); padding: 2rem; border-radius: 12px;
   margin-top: 2rem; text-align: left; line-height: 1.7; color: var(--text-medium);
 }
 .contenido-container img { max-width: 100%; border-radius: 8px; margin: 1em auto; display: block; }
-.video-frame { width: 100%; aspect-ratio: 16 / 9; border-radius: 12px; margin: 1em 0; }
+.video-frame { width: 100%; aspect-ratio: 16 / 9; border-radius: 12px; margin: 1em 0; background: #000; }
 .mensaje-texto { font-size: 1.2em; white-space: pre-wrap; color: var(--text-light); }
 
+/* Progreso */
 .achievements-section { margin-top: 3rem; padding-top: 2rem; border-top: 1px dashed rgba(255,255,255,0.2); }
 .progress-bar-container {
   width: 100%; max-width: 400px; background-color: rgba(255,255,255,0.1);
@@ -118,10 +143,10 @@ h1 { margin-bottom: 1.5rem; font-size: 3em; }
   transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Lista de Desbloqueados */
 .unlocked-codes-panel, .unlocked-codes-section { background-color: var(--content-bg); padding: 1.5rem; border-radius: 12px; margin-top: 1.5rem; }
 .filter-controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 1.5rem; justify-content: center; }
 .filter-controls input, .filter-controls select { padding: 10px; border-radius: 8px; border: 1px solid var(--border-color-input); background: var(--input-bg); color: var(--text-light); }
-
 .lista-codigos { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; list-style: none; }
 .lista-codigo-item {
   background: rgba(255,255,255,0.05); padding: 12px 15px; border-radius: 8px;
@@ -145,171 +170,89 @@ h1 { margin-bottom: 1.5rem; font-size: 3em; }
 }
 .dropdown-menu {
   position: fixed; top: 75px; left: 20px; background: var(--container-bg);
-  backdrop-filter: blur(15px); border-radius: 12px; padding: 10px; min-width: 220px;
+  backdrop-filter: blur(15px); border-radius: 12px; padding: 10px; min-width: 240px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.5); transform: translateX(-150%);
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1499; visibility: hidden;
 }
 .dropdown-menu.show { transform: translateX(0); visibility: visible; }
-.dropdown-menu button {
+.dropdown-menu button, .menu-link-button {
   display: flex; align-items: center; gap: 10px; width: 100%; padding: 12px;
   color: var(--text-light); background: none; border: none; text-align: left;
-  cursor: pointer; border-radius: 8px; font-family: var(--body-font); font-size: 1em;
+  cursor: pointer; border-radius: 8px; font-family: var(--body-font); font-size: 1em; text-decoration: none;
 }
-.dropdown-menu button:hover { background: rgba(255,255,255,0.1); color: var(--highlight-pink); }
+.dropdown-menu button:hover, .menu-link-button:hover { background: rgba(255,255,255,0.1); color: var(--highlight-pink); }
 .menu-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 8px 0; }
 .danger-text { color: var(--highlight-red) !important; }
 
-/* Panel de Audio */
-.audio-panel {
-  position: fixed; top: 0; right: 0; width: 280px; height: 100vh;
+/* Paneles Laterales (Audio & Herramientas) */
+.side-panel {
+  position: fixed; top: 0; right: 0; width: 300px; height: 100vh;
   background: var(--content-bg); backdrop-filter: blur(15px);
   box-shadow: -5px 0 20px rgba(0,0,0,0.5); padding: 25px;
   transform: translateX(100%); transition: transform 0.3s ease; z-index: 2500;
-  display: flex; flex-direction: column; align-items: center;
+  display: flex; flex-direction: column;
 }
-.audio-panel.show { transform: translateX(0); }
-.audio-header { width: 100%; display: flex; justify-content: space-between; margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
-.close-audio-btn { background: none; border: none; color: var(--text-light); font-size: 1.2em; cursor: pointer; }
-.audio-controls { display: flex; gap: 15px; margin: 20px 0; }
-.audio-btn {
-  background: var(--button-bg-initial); color: var(--text-light); border: none;
-  width: 50px; height: 50px; border-radius: 50%; font-size: 1.2em; cursor: pointer;
-}
+.side-panel.show { transform: translateX(0); }
+.panel-header { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+.close-panel-btn { background: none; border: none; color: var(--text-light); font-size: 1.2em; cursor: pointer; }
+
+/* Controles de Audio */
+.audio-controls { display: flex; gap: 15px; margin: 20px 0; justify-content: center; }
+.audio-btn { background: var(--button-bg-initial); color: var(--text-light); border: none; width: 50px; height: 50px; border-radius: 50%; font-size: 1.2em; cursor: pointer; }
 .audio-btn.small { width: 40px; height: 40px; font-size: 1em; background: rgba(255,255,255,0.1); }
-.audio-btn.active { color: var(--highlight-pink); background: white; }
-.volume-section { width: 100%; display: flex; gap: 10px; margin-bottom: 20px; align-items: center; }
+.volume-section { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
 input[type=range] { flex-grow: 1; accent-color: var(--highlight-pink); }
 
-/* Toast & Modals */
-#achievement-toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 2000; pointer-events: none; }
-.achievement-toast {
-  background: var(--achievement-bg); color: var(--achievement-text); padding: 12px 24px;
-  border-radius: 50px; margin-bottom: 10px; font-weight: 600; box-shadow: 0 5px 20px rgba(0,0,0,0.4);
-  animation: slideDown 0.5s ease-out, fadeOut 0.5s ease-in 3.5s forwards;
-}
+/* Herramientas (Cards) */
+.tools-container { overflow-y: auto; flex-grow: 1; }
+.tool-card { background: rgba(255,255,255,0.05); border-radius: 10px; padding: 15px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); }
+.tool-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; color: var(--highlight-pink); font-weight: 600; }
+.tool-desc { font-size: 0.9em; color: var(--text-medium); margin-bottom: 12px; }
+.tool-btn { display: block; text-align: center; background: var(--button-bg-initial); color: white; padding: 8px; border-radius: 6px; text-decoration: none; font-size: 0.9em; }
+
+/* MODAL DE IMAGEN (ZOOM) */
 .modal {
   display: none; position: fixed; z-index: 3000; left: 0; top: 0; width: 100%; height: 100%;
-  background-color: var(--modal-bg); justify-content: center; align-items: center; padding: 20px;
+  background-color: var(--modal-bg); justify-content: center; align-items: center;
+  overflow: hidden; /* IMPORTANTE: Evita scroll del body al hacer zoom */
 }
-.modal-content { max-width: 90%; max-height: 85vh; border-radius: 8px; animation: zoomIn 0.3s; }
-.close { position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; cursor: pointer; }
+.panzoom-wrapper {
+  width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; overflow: hidden;
+}
+.modal-content {
+  max-width: 100%; max-height: 100%;
+  object-fit: contain;
+  cursor: grab;
+  /* CRÍTICO: Permite gestos multitáctiles en móviles sin mover la pantalla */
+  touch-action: none; 
+}
+.modal-content:active { cursor: grabbing; }
+.close { position: absolute; top: 20px; right: 30px; color: white; font-size: 40px; cursor: pointer; z-index: 3001; text-shadow: 0 0 10px black; }
 
 /* Animaciones */
 @keyframes float { 0% {transform:translateY(0);} 50% {transform:translateY(-10px);} 100% {transform:translateY(0);} }
 @keyframes fadeIn { from {opacity:0; transform:translateY(10px);} to {opacity:1; transform:translateY(0);} }
 @keyframes shake { 0%,100%{transform:translateX(0);} 25%{transform:translateX(-5px);} 75%{transform:translateX(5px);} }
 .shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+
+/* Toast */
+#achievement-toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 2000; pointer-events: none; }
+.achievement-toast {
+  background: var(--achievement-bg); color: var(--achievement-text); padding: 12px 24px;
+  border-radius: 50px; margin-bottom: 10px; font-weight: 600; box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+  animation: slideDown 0.5s ease-out, fadeOut 0.5s ease-in 3.5s forwards;
+}
 @keyframes slideDown { from {transform:translateY(-100%); opacity:0;} to {transform:translateY(0); opacity:1;} }
 @keyframes fadeOut { to {opacity:0;} }
-@keyframes zoomIn { from {transform:scale(0.8); opacity:0;} to {transform:scale(1); opacity:1;} }
 
-/* =========================================
-   Responsive (Ajustes para móviles)
-   ========================================= */
+/* Media Queries (Móvil) */
 @media (max-width: 600px) {
-  h1 {
-    font-size: 2em; /* Título un poco más pequeño para que quepa */
-  }
-  
-  .container {
-    padding: 1.2rem; /* REDUCIDO: Antes era mucho padding, ahora damos más espacio al contenido */
-    width: 95%;
-    margin-top: 5rem;
-  }
-  
-  /* Ajuste crítico para el video */
-  .contenido-container {
-    padding: 1rem; /* Menos borde interno en móviles */
-  }
-
-  .video-frame {
-    width: 100%;
-    height: auto; /* Permitir que la altura se calcule sola */
-    aspect-ratio: 16 / 9; /* Forzar la proporción panorámica */
-    min-height: 200px; /* Seguridad: que nunca mida menos de 200px de alto */
-  }
-
-  /* Ajustes de controles para que sean fáciles de tocar */
+  h1 { font-size: 2em; }
+  .container { padding: 1.2rem; width: 95%; margin-top: 5rem; }
+  .contenido-container { padding: 1rem; }
+  .video-frame { min-height: 200px; }
   .input-container { flex-direction: column; }
   #codeInput { width: 100%; max-width: none; font-size: 1.1em; }
   .button { width: 100%; margin-top: 5px; }
-  
-  .filter-controls input, .filter-controls select {
-    width: 100%;
-  }
-  
-  .menu-button { top: 15px; left: 15px; }
-                                                                }
-
-/* =========================================
-   NUEVAS IMPLEMENTACIONES (Tools & Zoom)
-   ========================================= */
-
-/* Estilo para enlaces dentro del menú (Love Arcade) */
-.menu-link-button {
-  display: flex; align-items: center; gap: 10px; width: 100%; padding: 12px;
-  color: var(--text-light); background: none; border: none; text-align: left;
-  cursor: pointer; border-radius: 8px; font-family: var(--body-font); font-size: 1em;
-  text-decoration: none; /* Quitar subrayado de enlace */
+  .filter-controls input, .filter-controls select { width: 100%; }
 }
-.menu-link-button:hover { background: rgba(255,255,255,0.1); color: var(--highlight-pink); }
-
-/* Reutilizamos estilos de panel lateral para Herramientas */
-.side-panel {
-  position: fixed; top: 0; right: 0; width: 300px; height: 100vh;
-  background: var(--content-bg); backdrop-filter: blur(15px);
-  box-shadow: -5px 0 20px rgba(0,0,0,0.5); padding: 25px;
-  transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 2500; display: flex; flex-direction: column;
-}
-.side-panel.show { transform: translateX(0); }
-
-.panel-header {
-  width: 100%; display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;
-}
-.close-panel-btn { background: none; border: none; color: var(--text-light); font-size: 1.2em; cursor: pointer; }
-
-/* Lista de Herramientas */
-.tools-container { overflow-y: auto; flex-grow: 1; }
-.tool-card {
-  background: rgba(255,255,255,0.05); border-radius: 10px; padding: 15px;
-  margin-bottom: 15px; transition: transform 0.2s; border: 1px solid rgba(255,255,255,0.05);
-}
-.tool-card:hover { transform: translateY(-3px); background: rgba(255,255,255,0.08); }
-.tool-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; color: var(--highlight-pink); font-size: 1.1em; font-weight: 600; }
-.tool-desc { font-size: 0.9em; color: var(--text-medium); margin-bottom: 12px; line-height: 1.4; }
-.tool-btn {
-  display: block; text-align: center; background: var(--button-bg-initial);
-  color: white; padding: 8px; border-radius: 6px; text-decoration: none; font-size: 0.9em;
-}
-.tool-btn:hover { background: var(--highlight-pink); }
-
-/* AJUSTES DEL MODAL Y ZOOM */
-.modal {
-  /* Asegurar que el modal ocupe todo y oculte desbordes */
-  overflow: hidden; 
-}
-
-/* Wrapper que recorta la imagen si se hace zoom muy grande cerca de los bordes */
-.panzoom-wrapper {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden; 
-}
-
-.modal-content {
-  /* Reseteamos margenes y max-width para que Panzoom controle el tamaño */
-  max-width: 100%;
-  max-height: 90vh; /* Dejar espacio para botón cerrar */
-  object-fit: contain;
-  margin: 0;
-  cursor: grab; /* Cursor de manita para indicar que se puede arrastrar */
-}
-.modal-content:active { cursor: grabbing; }
-
-/* Botón cerrar modal más visible */
-.close { z-index: 3001; background: rgba(0,0,0,0.5); width: 40px; height: 40px; text-align: center; line-height: 40px; border-radius: 50%; }
