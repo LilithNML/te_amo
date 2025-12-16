@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
   <title>Un Secreto Para Ti</title>
-  <meta name="description" content="Descubre mensajes y regalos secretos con códigos especiales. Una experiencia interactiva." />
+  <meta name="description" content="Descubre mensajes y regalos secretos con códigos especiales." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,6 +20,7 @@
   <link rel="apple-touch-icon" href="icon-192.png">
 
   <script src="https://unpkg.com/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 
 <body>
@@ -28,7 +29,7 @@
 
   <header>
     <div class="menu-container">
-      <button id="menuButton" class="menu-button" aria-label="Abrir menú principal" aria-expanded="false">
+      <button id="menuButton" class="menu-button" aria-label="Abrir menú" aria-expanded="false">
         <i class="fas fa-bars"></i>
       </button>
 
@@ -37,7 +38,7 @@
         <button id="menuShowUnlocked"><i class="fas fa-lock-open"></i> Desbloqueados</button>
         <button id="menuFavorites"><i class="fas fa-heart"></i> Favoritos</button>
         
-        <a href="https://lilithnml.github.io/love_arcade/" target="_blank" rel="noopener noreferrer" class="menu-link-button">
+        <a href="https://www.wikipedia.org/" target="_blank" rel="noopener noreferrer" class="menu-link-button">
           <i class="fas fa-gamepad"></i> Love Arcade
         </a>
         <button id="menuTools"><i class="fas fa-toolbox"></i> Herramientas</button>
@@ -59,93 +60,70 @@
   </header>
 
   <main class="container">
-    <img src="assets/images/moon.webp" alt="Ilustración de Luna" class="header-img" />
+    <img src="assets/images/moon.png" alt="Luna" class="header-img" />
 
     <h1>Un Secreto Para Ti</h1>
 
     <p class="intro-text">
-      Bienvenido/a. Introduce un código secreto para descubrir mensajes, recuerdos y sorpresas especiales.
+      Bienvenido, mi amor. Introduce un código secreto para descubrir nuestras sorpresas.
     </p>
 
     <div class="input-container">
-      <input 
-        type="text" 
-        id="codeInput" 
-        placeholder="Escribe tu código aquí..." 
-        autocomplete="off" 
-        aria-label="Campo para introducir código secreto"
-      />
-      <button id="submitCodeBtn" class="button" aria-label="Enviar código">
-        <i class="fas fa-paper-plane"></i>
-      </button>
+      <input type="text" id="codeInput" placeholder="Escribe aquí..." autocomplete="off" />
+      <button id="submitCodeBtn" class="button"><i class="fas fa-paper-plane"></i></button>
     </div>
 
     <div id="contenido" class="contenido-container fade-in" hidden></div>
 
     <div class="achievements-section">
       <h2 class="section-title">Tu Progreso</h2>
-      <p id="progreso" class="progreso-text">Cargando estadísticas...</p>
-      <div class="progress-bar-container" role="progressbar" aria-label="Progreso de descubrimiento">
+      <p id="progreso" class="progreso-text">Cargando...</p>
+      <div class="progress-bar-container">
         <div class="progress-bar-fill" style="width: 0%;"></div>
       </div>
     </div>
 
     <div class="unlocked-codes-section" id="unlockedSection" hidden>
       <h2 class="section-title">Tus Descubrimientos</h2>
-      
       <div class="filter-controls">
-        <input type="text" id="searchUnlocked" placeholder="Buscar por nombre..." aria-label="Buscar código desbloqueado"/>
-        <select id="categoryFilter" aria-label="Filtrar por categoría">
-          <option value="">Todas las categorías</option>
+        <input type="text" id="searchUnlocked" placeholder="Buscar..." />
+        <select id="categoryFilter">
+          <option value="">Todas</option>
         </select>
-        <button id="filterFavBtn" class="button small-button">
-          <i class="far fa-heart"></i> Solo Favoritos
-        </button>
+        <button id="filterFavBtn" class="button small-button"><i class="far fa-heart"></i> Solo Favoritos</button>
       </div>
-
-      <ul id="unlockedList" class="lista-codigos">
-        </ul>
-      
-      <button id="closeUnlockedBtn" class="button small-button" style="margin-top: 20px;">
-        Ocultar Lista
-      </button>
+      <ul id="unlockedList" class="lista-codigos"></ul>
+      <button id="closeUnlockedBtn" class="button small-button" style="margin-top: 20px;">Ocultar Lista</button>
     </div>
   </main>
 
   <aside id="audioPanel" class="side-panel" aria-hidden="true">
     <div class="panel-header">
       <h3>Reproductor</h3>
-      <button id="closeAudioPanel" class="close-panel-btn" aria-label="Cerrar reproductor"><i class="fas fa-times"></i></button>
+      <button id="closeAudioPanel" class="close-panel-btn"><i class="fas fa-times"></i></button>
     </div>
-
-    <div class="audio-info">
-      <p id="trackName">Selecciona una pista</p>
-    </div>
-
+    <div class="audio-info"><p id="trackName">Selecciona música</p></div>
     <div class="audio-controls">
-      <button id="audioPrev" class="audio-btn" aria-label="Anterior"><i class="fas fa-backward"></i></button>
-      <button id="audioPlayPause" class="audio-btn" aria-label="Reproducir o Pausar"><i class="fas fa-play"></i></button>
-      <button id="audioNext" class="audio-btn" aria-label="Siguiente"><i class="fas fa-forward"></i></button>
+      <button id="audioPrev" class="audio-btn"><i class="fas fa-backward"></i></button>
+      <button id="audioPlayPause" class="audio-btn"><i class="fas fa-play"></i></button>
+      <button id="audioNext" class="audio-btn"><i class="fas fa-forward"></i></button>
     </div>
-
     <div class="volume-section">
       <label for="volumeSlider"><i class="fas fa-volume-up"></i></label>
-      <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="0.3" aria-label="Volumen">
+      <input type="range" id="volumeSlider" min="0" max="1" step="0.05" value="0.3">
     </div>
-
     <div class="audio-options">
-      <button id="audioMute" class="audio-btn small" aria-label="Silenciar"><i class="fas fa-volume-mute"></i></button>
-      <button id="audioShuffle" class="audio-btn small" aria-label="Aleatorio"><i class="fas fa-random"></i></button>
+      <button id="audioMute" class="audio-btn small"><i class="fas fa-volume-mute"></i></button>
+      <button id="audioShuffle" class="audio-btn small"><i class="fas fa-random"></i></button>
     </div>
   </aside>
 
   <aside id="toolsPanel" class="side-panel" aria-hidden="true">
     <div class="panel-header">
       <h3>Herramientas</h3>
-      <button id="closeToolsPanel" class="close-panel-btn" aria-label="Cerrar herramientas"><i class="fas fa-times"></i></button>
+      <button id="closeToolsPanel" class="close-panel-btn"><i class="fas fa-times"></i></button>
     </div>
-    <div id="toolsListContainer" class="tools-container">
-      </div>
+    <div id="toolsListContainer" class="tools-container"></div>
   </aside>
 
   <audio id="correctSound" src="assets/audio/correct.mp3" preload="auto"></audio>
@@ -153,21 +131,17 @@
   <audio id="bgMusic" preload="auto"></audio>
 
   <div id="imageModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
-    <span class="close" id="closeModalBtn" aria-label="Cerrar imagen">×</span>
-    
+    <span class="close" id="closeModalBtn">×</span>
     <div class="panzoom-wrapper">
-      <img id="modalImg" class="modal-content" alt="Contenido desbloqueado">
+      <img id="modalImg" class="modal-content" alt="Zoom Content">
     </div>
   </div>
 
   <script type="module" src="main.js"></script>
-  
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./service-worker.js")
-          .then(reg => console.log("SW registrado: ", reg.scope))
-          .catch(err => console.log("SW fallo: ", err));
+        navigator.serviceWorker.register("./service-worker.js").catch(e => console.log(e));
       });
     }
   </script>
