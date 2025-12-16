@@ -164,29 +164,53 @@ export class UIManager {
      * Escribe texto letra por letra (Máquina de escribir)
      */
     typeWriterEffect(element, text) {
-        if (this.typewriterTimeout) clearTimeout(this.typewriterTimeout);
-        
-        element.innerHTML = ""; // Limpiar
-        element.classList.add("typewriter-cursor"); // Añadir cursor
-        
-        let i = 0;
-        const speed = 70; // Velocidad en ms por letra
+    if (this.typewriterTimeout) clearTimeout(this.typewriterTimeout);
 
-        const type = () => {
-            if (i < text.length) {
-                // Manejo básico de saltos de línea
-                if (text.charAt(i) === '\n') {
-                    element.innerHTML += '<br>';
-                } else {
-                    element.textContent += text.charAt(i);
-                }
-                i++;
-                this.typewriterTimeout = setTimeout(type, speed);
-            } else {
-                element.classList.remove("typewriter-cursor"); // Quitar cursor al final
-            }
-        };
-        type();
+    element.innerHTML = "";
+    element.classList.add("typewriter-cursor");
+
+    let i = 0;
+
+    // Velocidades (ms)
+    const slowSpeed = 90;   // inicio
+    const fastSpeed = 55;   // después de acelerar
+    const accelerationChars = 120; // a partir de aquí acelera
+
+    const type = () => {
+        if (i >= text.length) {
+            element.classList.remove("typewriter-cursor");
+            return;
+        }
+
+        const char = text.charAt(i);
+
+        // Inserción de carácter
+        if (char === '\n') {
+            element.innerHTML += '<br>';
+        } else {
+            element.textContent += char;
+        }
+
+        // Velocidad base (acelera progresivamente)
+        let speed =
+            i < accelerationChars
+                ? slowSpeed
+                : fastSpeed;
+
+        // Pausas naturales
+        if (char === '.' || char === '!' || char === '?') {
+            speed += 300;
+        }
+
+        if (char === '\n') {
+            speed += 600; // pausa de párrafo
+        }
+
+        i++;
+        this.typewriterTimeout = setTimeout(type, speed);
+    };
+
+    type();
     }
 
     // =================================================================
