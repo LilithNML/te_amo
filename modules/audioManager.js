@@ -10,11 +10,11 @@ export class AudioManager {
         
         // Define aquí tus 10 canciones
         this.playlist = [
-             "assets/audio/playlist/music1.mp3",
-             "assets/audio/playlist/music2.mp3",
-             "assets/audio/playlist/music3.mp3",
-             "assets/audio/playlist/music4.mp3",
-             "assets/audio/playlist/music5.mp3"
+             "assets/audio/playlist/Olivia Newton-John - Hopelessly Devoted to You.mp3",
+             "assets/audio/playlist/Morten Harket - Cant Take My Eyes off You.mp3",
+             "assets/audio/playlist/Frank Sinatra - The World We Knew (Over and Over).mp3",
+             "assets/audio/playlist/Frank Sinatra - Strangers In The Night.mp3",
+             "assets/audio/playlist/Frank Sinatra - My Way Of Life.mp3"
         ];
         
         this.currentTrackIndex = parseInt(localStorage.getItem("currentTrack") || "0");
