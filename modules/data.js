@@ -8,7 +8,7 @@ export const mensajes = {
   "noviembre9": {
     type: "text",
     texto: "Mi amor:\n\nA veces me gusta cerrar los ojos y volver a ese primer momento en que coincidimos en Genshin. No fue casualidad, fue destino disfrazado de juego. Entre combates, misiones y risas, ahí estabas tú, al principio solo un amigo, pero con una energía que poco a poco me fue envolviendo.\n\nRecuerdo cómo nos ayudábamos en el juego, cómo sin darnos cuenta empezamos a hablar más allá de los objetivos del día. No sabía que, tras ese personaje, había alguien que se convertiría en alguien tan especial para mí. Que ese primer saludo se transformaría en tantas conversaciones, cariño, y complicidad.\n\nNunca imaginé que un juego de fantasía me llevaría al mejor encuentro de mi vida, tú. Y desde entonces, cada día contigo ha sido una aventura más hermosa que cualquier historia dentro del juego.\n\nGracias por aparecer en mi mundo como un regalo inesperado. Gracias por quedarte.\n\nCon todo mi amor,\nLilith",
-    categoria: "Carta",
+    categoria: "Pensamiento",
     pista: "El destino nos unió el día 9, en el mes donde el viento ya huele a invierno."
   },
   "luna": {
