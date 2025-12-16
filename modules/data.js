@@ -139,7 +139,7 @@ export const mensajes = {
     type: "text",
     texto: "Mi amor, cada vez que me hablas de tu casa, me imagino caminando por las calles, sintiendo la brisa que te acaricia y conociendo cada rincón que te ha visto crecer. Siento una necesidad tan profunda de estar allí, de vivir esos momentos contigo, de ver el mundo a través de tus ojos y de compartir contigo el lugar que tanto amas.\n\nMe muero por conocer el sitio que te forma, por entender las pequeñas cosas que te hacen ser quien eres. Quiero ver el paisaje que te inspira, las personas que te han acompañado y todo lo que te ha moldeado. Porque todo eso, amor, es parte de ti, y yo deseo estar allí, a tu lado, para vivirlo juntos.\n\nSé que algún día lo haré, y ese día será tan especial como nuestro amor, porque estaré donde tú estás, y ese será el lugar más bonito del mundo.\n\nTe amo, siempre esperando ese momento.",
     categoria: "Carta",
-    pista: "Estado de México fundado en 1824"
+    pista: "Estado mexicano fundado en 1824"
   },
   "obregon": {
     type: "text",
@@ -204,7 +204,7 @@ export const mensajes = {
   },
   "cafe": {
     type: "image",
-    imagen: "assets/unlocked_content/images/cafesito.webp",
+    imagen: "assets/unlocked_content/images/cafecito.webp",
     categoria: "Imagen",
     pista: "Nace de un grano viajero, despierta mundos y es tu refugio en un sorbo."
   },
@@ -356,7 +356,7 @@ export const mensajes = {
     type: "download",
     descarga: {
       url: "assets/unlocked_content/images/mapa_de_estrellas.jpg",
-      nombre: "mada_de_estrellas.jpg"
+      nombre: "mapa_de_estrellas.jpg"
     },
     categoria: "Descarga",
     pista: ""
@@ -393,13 +393,13 @@ export const mensajes = {
   },
   "mininoconsentido": {
     type: "text",
-    texto: "'Amar no es mirarse el uno al otro; es mirar juntos en la misma dirección.' — Antoine de Saint-Exupéry",
+    texto: "«Amar no es mirarse el uno al otro; es mirar juntos en la misma dirección.»\n~ Antoine de Saint-Exupéry",
     categoria: "Citas",
     pista: ""
   },
   "cartas": {
     type: "text",
-    texto: "'El verdadero amor no es sino el encuentro de dos almas que se reconocen en la eternidad.' — Platón",
+    texto: "«El verdadero amor no es sino el encuentro de dos almas que se reconocen en la eternidad.»\n~ Platón",
     categoria: "Citas",
     pista: ""
   },
@@ -473,7 +473,7 @@ export const mensajes = {
     type: "download",
     descarga: {
       url: "assets/unlocked_content/images/te_amo_05.jpg.enc",
-      nombre: "te_amo_06.jpg.enc"
+      nombre: "te_amo_05.jpg.enc"
     },
     categoria: "Cosplay",
     pista: ""
@@ -705,7 +705,7 @@ export const mensajes = {
       url: "assets/unlocked_content/images/soy_tuya.jpg.enc",
       nombre: "soy_tuya.jpg.enc"
     },
-    categoria: "Cosplaý",
+    categoria: "Cosplay",
     pista: ""
   },
   "star": {
