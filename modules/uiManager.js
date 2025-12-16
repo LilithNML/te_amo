@@ -170,7 +170,7 @@ export class UIManager {
         element.classList.add("typewriter-cursor"); // Añadir cursor
         
         let i = 0;
-        const speed = 80; // Velocidad en ms por letra
+        const speed = 100; // Velocidad en ms por letra
 
         const type = () => {
             if (i < text.length) {
