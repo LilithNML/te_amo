@@ -1,8 +1,6 @@
 /**
  * modules/uiManager.js
- * ------------------------------------------------------------------
- * Gestor de Interfaz de Usuario (UI Manager).
- * VERSIÓN DEFINITIVA: Implementación de Viewer.js para zoom perfecto.
+ * VERSIÓN FINAL: Galería de Bloqueados, Partículas y Placeholder Dinámico.
  */
 
 import { normalizeText } from './utils.js';
@@ -16,19 +14,14 @@ export class UIManager {
             progressBar: document.querySelector(".progress-bar-fill"),
             progressText: document.getElementById("progreso"),
             toastContainer: document.getElementById("achievement-toast-container"),
-            
-            // ELIMINADOS: Elementos del modal manual (ViewerJS no los necesita)
-            
             menuButton: document.getElementById("menuButton"),
             dropdownMenu: document.getElementById("dropdownMenu"),
             importInput: document.getElementById("importInput"),
-            
             audioPanel: document.getElementById("audioPanel"),
             closeAudioPanel: document.getElementById("closeAudioPanel"),
             toolsPanel: document.getElementById("toolsPanel"),
             closeToolsPanel: document.getElementById("closeToolsPanel"),
             toolsListContainer: document.getElementById("toolsListContainer"),
-            
             unlockedSection: document.getElementById("unlockedSection"),
             unlockedList: document.getElementById("unlockedList"),
             searchUnlocked: document.getElementById("searchUnlocked"),
@@ -43,7 +36,10 @@ export class UIManager {
         this.initTheme();
         this.setupMenuListeners();
         this.setupListListeners();
-        // setupModalListeners YA NO ES NECESARIO
+        
+        // NUEVAS INICIALIZACIONES
+        this.initParticles();
+        this.initDynamicPlaceholder();
     }
 
     dismissKeyboard() {
@@ -63,7 +59,51 @@ export class UIManager {
     }
 
     // =================================================================
-    // GESTIÓN DE MENÚS Y PANELES
+    // MEJORAS UX: PARTÍCULAS Y PLACEHOLDER
+    // =================================================================
+
+    initParticles() {
+        // @ts-ignore
+        if (typeof tsParticles === 'undefined') return;
+
+        // Configuración "Luciérnagas / Polvo de Estrellas"
+        // @ts-ignore
+        tsParticles.load('tsparticles', {
+            fullScreen: { enable: false }, // Se contiene en el div
+            particles: {
+                number: { value: 30, density: { enable: true, area: 800 } },
+                color: { value: ["#ffffff", "#ff7aa8", "#ffd700"] }, // Blanco, Rosa, Dorado
+                opacity: { value: 0.5, random: true, animation: { enable: true, speed: 1, minimumValue: 0.1, sync: false } },
+                size: { value: 3, random: true, animation: { enable: true, speed: 2, minimumValue: 0.1, sync: false } },
+                move: { enable: true, speed: 0.5, direction: "none", random: true, straight: false, outModes: "out" }
+            },
+            interactivity: {
+                events: { onHover: { enable: true, mode: "bubble" }, onClick: { enable: true, mode: "push" } },
+                modes: { bubble: { distance: 200, size: 4, duration: 2, opacity: 0.8 }, push: { quantity: 4 } }
+            },
+            detectRetina: true
+        });
+    }
+
+    initDynamicPlaceholder() {
+        const frases = [
+            "Escribe aquí...",
+            "Prueba con una fecha especial...",
+            "¿Recuerdas nuestro lugar?...",
+            "Intenta con un apodo cariñoso...",
+            "El nombre de nuestra canción...",
+            "¿Qué cenamos esa noche?..."
+        ];
+        let index = 0;
+        
+        setInterval(() => {
+            index = (index + 1) % frases.length;
+            this.elements.input.setAttribute("placeholder", frases[index]);
+        }, 3500); // Cambia cada 3.5 segundos
+    }
+
+    // =================================================================
+    // MENÚS
     // =================================================================
 
     setupMenuListeners() {
@@ -74,28 +114,24 @@ export class UIManager {
         this.bindMenuAction("menuShowUnlocked", () => this.toggleUnlockedPanel(true));
         this.bindMenuAction("menuFavorites", () => { this.toggleUnlockedPanel(true); this.showingFavoritesOnly = true; this.updateFilterUI(); this.triggerListFilter(); });
         this.bindMenuAction("menuDarkMode", () => this.toggleDarkMode());
-        
         this.bindMenuAction("menuAudio", () => this.openPanel(this.elements.audioPanel));
         this.bindMenuAction("menuTools", () => { this.renderTools(); this.openPanel(this.elements.toolsPanel); });
-        
         this.bindMenuAction("menuExport", () => this.exportProgress());
         this.bindMenuAction("menuImport", () => this.elements.importInput.click());
-
         this.elements.importInput.addEventListener("change", (e) => { if (e.target.files.length > 0) this.handleImportFile(e.target.files[0]); this.elements.importInput.value = ""; });
-
-        if (this.elements.closeAudioPanel) this.elements.closeAudioPanel.addEventListener("click", () => this.closePanel(this.elements.audioPanel));
-        if (this.elements.closeToolsPanel) this.elements.closeToolsPanel.addEventListener("click", () => this.closePanel(this.elements.toolsPanel));
+        if(this.elements.closeAudioPanel) this.elements.closeAudioPanel.addEventListener("click", () => this.closePanel(this.elements.audioPanel));
+        if(this.elements.closeToolsPanel) this.elements.closeToolsPanel.addEventListener("click", () => this.closePanel(this.elements.toolsPanel));
     }
 
-    bindMenuAction(id, fn) { const btn = document.getElementById(id); if (btn) btn.addEventListener("click", () => { fn(); this.elements.dropdownMenu.classList.remove("show"); }); }
-    openPanel(p) { if (p) { p.classList.add("show"); p.setAttribute("aria-hidden", "false"); } }
-    closePanel(p) { if (p) { p.classList.remove("show"); p.setAttribute("aria-hidden", "true"); } }
+    bindMenuAction(id, fn) { const el = document.getElementById(id); if(el) el.addEventListener("click", () => { fn(); this.elements.dropdownMenu.classList.remove("show"); }); }
+    openPanel(p) { if(p) { p.classList.add("show"); p.setAttribute("aria-hidden", "false"); } }
+    closePanel(p) { if(p) { p.classList.remove("show"); p.setAttribute("aria-hidden", "true"); } }
 
     renderTools() {
-        const c = this.elements.toolsListContainer; if (!c) return; c.innerHTML = "";
-        herramientasExternas.forEach(tool => {
+        const c = this.elements.toolsListContainer; if(!c) return; c.innerHTML = "";
+        herramientasExternas.forEach(t => {
             const div = document.createElement("div"); div.className = "tool-card";
-            div.innerHTML = `<div class="tool-header"><i class="${tool.icono}"></i> ${tool.nombre}</div><div class="tool-desc">${tool.descripcion}</div><a href="${tool.url}" target="_blank" rel="noopener noreferrer" class="tool-btn">Abrir <i class="fas fa-external-link-alt"></i></a>`;
+            div.innerHTML = `<div class="tool-header"><i class="${t.icono}"></i> ${t.nombre}</div><div class="tool-desc">${t.descripcion}</div><a href="${t.url}" target="_blank" rel="noopener noreferrer" class="tool-btn">Abrir <i class="fas fa-external-link-alt"></i></a>`;
             c.appendChild(div);
         });
     }
@@ -122,8 +158,7 @@ export class UIManager {
     typeWriterEffect(element, text) {
         if (this.typewriterTimeout) clearTimeout(this.typewriterTimeout);
         element.innerHTML = ""; element.classList.add("typewriter-cursor");
-        let i = 0;
-        const slowSpeed = 70; const fastSpeed = 40; const accelerationChars = 100;
+        let i = 0; const slowSpeed = 70; const fastSpeed = 40; const accelerationChars = 100;
         const type = () => {
             if (i >= text.length) { element.classList.remove("typewriter-cursor"); return; }
             const char = text.charAt(i);
@@ -138,101 +173,53 @@ export class UIManager {
     }
 
     // =================================================================
-    // RENDERIZADO DE CONTENIDO
+    // RENDERIZADO
     // =================================================================
 
     renderContent(data, key) {
         if (this.typewriterTimeout) clearTimeout(this.typewriterTimeout);
-        const container = this.elements.contentDiv; container.hidden = false; container.innerHTML = "";
-
-        const h2 = document.createElement("h2");
-        h2.textContent = key ? `Descubierto: ${key}` : "¡Sorpresa!";
-        h2.style.textTransform = "capitalize";
-        container.appendChild(h2);
-
-        if (data.texto && data.type !== 'text') {
-            const p = document.createElement("p"); p.textContent = data.texto; container.appendChild(p);
-        }
-
+        const c = this.elements.contentDiv; c.hidden = false; c.innerHTML = "";
+        const h2 = document.createElement("h2"); h2.textContent = key ? `Descubierto: ${key}` : "¡Sorpresa!"; h2.style.textTransform = "capitalize"; c.appendChild(h2);
+        if (data.texto && data.type !== 'text') { const p = document.createElement("p"); p.textContent = data.texto; c.appendChild(p); }
         switch (data.type) {
             case "text":
                 const pText = document.createElement("p"); pText.className = "mensaje-texto";
-                if (data.categoria && (data.categoria.toLowerCase() === 'pensamiento' || data.categoria.toLowerCase() === 'carta')) {
-                    this.typeWriterEffect(pText, data.texto);
-                } else {
-                    pText.textContent = data.texto;
-                }
-                container.appendChild(pText);
-                break;
-
+                if (data.categoria && (data.categoria.toLowerCase() === 'pensamiento' || data.categoria.toLowerCase() === 'carta')) { this.typeWriterEffect(pText, data.texto); } 
+                else { pText.innerText = data.texto; } c.appendChild(pText); break;
             case "image":
-                const img = document.createElement("img");
-                img.src = data.imagen;
-                img.alt = "Imagen secreta";
-                img.style.cursor = "zoom-in"; // Indicador visual
-                
-                // === AQUÍ ESTÁ LA SOLUCIÓN DEFINITIVA DE ZOOM ===
-                // ViewerJS maneja todo: modal, gestos, zoom, cierre.
+                const img = document.createElement("img"); img.src = data.imagen; img.alt = "Imagen secreta"; img.style.cursor = "zoom-in";
                 img.onclick = () => {
                     // @ts-ignore
-                    const viewer = new Viewer(img, {
-                        hidden() { viewer.destroy(); }, // Limpieza al cerrar
-                        toolbar: {
-                            zoomIn: 1, zoomOut: 1, oneToOne: 1, reset: 1,
-                            rotateLeft: 0, rotateRight: 0, flipHorizontal: 0, flipVertical: 0,
-                        },
-                        navbar: false,
-                        title: false,
-                        transition: true
-                    });
+                    const viewer = new Viewer(img, { hidden() { viewer.destroy(); }, toolbar: { zoomIn: 1, zoomOut: 1, oneToOne: 1, reset: 1, rotateLeft: 0, rotateRight: 0, flipHorizontal: 0, flipVertical: 0 }, navbar: false, title: false, transition: true });
                     viewer.show();
                 };
-                
-                container.appendChild(img);
-                break;
-
+                c.appendChild(img); break;
             case "video":
                 if (data.videoEmbed) {
                     const wrapper = document.createElement("div"); wrapper.className = "video-wrapper";
                     const loader = document.createElement("div"); loader.className = "video-loader";
-                    const iframe = document.createElement("iframe");
-                    iframe.src = data.videoEmbed; iframe.className = "video-frame";
-                    iframe.setAttribute("allow", "autoplay; encrypted-media; fullscreen");
+                    const iframe = document.createElement("iframe"); iframe.src = data.videoEmbed; iframe.className = "video-frame"; iframe.setAttribute("allow", "autoplay; encrypted-media; fullscreen");
                     iframe.onload = () => { loader.style.display = "none"; iframe.style.opacity = "1"; };
-                    wrapper.appendChild(loader); wrapper.appendChild(iframe); container.appendChild(wrapper);
-                }
-                break;
-
+                    wrapper.appendChild(loader); wrapper.appendChild(iframe); c.appendChild(wrapper);
+                } break;
             case "link":
-                const a = document.createElement("a"); a.href = data.link; a.target = "_blank"; a.rel = "noopener noreferrer"; a.className = "button";
-                a.innerHTML = 'Abrir Enlace <i class="fas fa-external-link-alt"></i>'; container.appendChild(a); break;
-
+                const a = document.createElement("a"); a.href = data.link; a.target = "_blank"; a.className = "button"; a.innerHTML = 'Abrir Enlace <i class="fas fa-external-link-alt"></i>'; c.appendChild(a); break;
             case "download":
-                const dl = document.createElement("a"); dl.href = data.descarga.url; dl.download = data.descarga.nombre; dl.className = "button";
-                dl.innerHTML = `<i class="fas fa-download"></i> Descargar ${data.descarga.nombre}`; container.appendChild(dl); break;
+                const dl = document.createElement("a"); dl.href = data.descarga.url; dl.download = data.descarga.nombre; dl.className = "button"; dl.innerHTML = `<i class="fas fa-download"></i> Descargar ${data.descarga.nombre}`; c.appendChild(dl); break;
         }
-
-        container.classList.remove("fade-in"); void container.offsetWidth; container.classList.add("fade-in");
-    }
-
-    renderMessage(titleText, bodyHTML) {
-        const c = this.elements.contentDiv; c.hidden = false; c.innerHTML = `<h2>${titleText}</h2><p>${bodyHTML}</p>`;
         c.classList.remove("fade-in"); void c.offsetWidth; c.classList.add("fade-in");
     }
 
-    // =================================================================
-    // UI HELPERS
-    // =================================================================
-
+    renderMessage(title, body) { const c = this.elements.contentDiv; c.hidden = false; c.innerHTML = `<h2>${title}</h2><p>${body}</p>`; c.classList.remove("fade-in"); void c.offsetWidth; c.classList.add("fade-in"); }
     showError() { this.elements.input.classList.add("shake", "error"); setTimeout(() => this.elements.input.classList.remove("shake"), 500); }
     showSuccess() { this.elements.input.classList.remove("error"); this.elements.input.classList.add("success"); }
     clearInput() { this.elements.input.value = ""; }
     updateProgress(u, t) { const p = t > 0 ? Math.round((u / t) * 100) : 0; this.elements.progressBar.style.width = `${p}%`; this.elements.progressText.textContent = `Descubiertos: ${u} / ${t}`; }
     showToast(msg) { const t = document.createElement("div"); t.className = "achievement-toast"; t.textContent = msg; this.elements.toastContainer.appendChild(t); setTimeout(() => t.remove(), 4000); }
-    updateAudioUI(p, n) { const btn = document.getElementById("audioPlayPause"); const txt = document.getElementById("trackName"); if (btn) btn.innerHTML = p ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>'; if (txt && n) txt.textContent = n.replace(/_/g, " ").replace(/\.[^/.]+$/, ""); }
-
+    updateAudioUI(p, n) { const b = document.getElementById("audioPlayPause"); const t = document.getElementById("trackName"); if (b) b.innerHTML = p ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>'; if (t && n) t.textContent = n.replace(/_/g, " ").replace(/\.[^/.]+$/, ""); }
+    
     // =================================================================
-    // LISTAS Y FILTROS
+    // GALERÍA Y LISTAS (MODIFICADO: MUESTRA BLOQUEADOS)
     // =================================================================
 
     setupListListeners() {
@@ -241,17 +228,23 @@ export class UIManager {
         this.elements.filterFavBtn.addEventListener("click", () => { this.showingFavoritesOnly = !this.showingFavoritesOnly; this.updateFilterUI(); this.triggerListFilter(); });
         this.elements.closeUnlockedBtn.addEventListener("click", () => this.toggleUnlockedPanel(false));
     }
-
     toggleUnlockedPanel(show) { this.elements.unlockedSection.hidden = !show; if (show) this.elements.unlockedSection.scrollIntoView({ behavior: 'smooth' }); }
     updateFilterUI() { const btn = this.elements.filterFavBtn; if (this.showingFavoritesOnly) { btn.classList.add("active"); btn.innerHTML = '<i class="fas fa-heart"></i> Mostrando Favoritos'; } else { btn.classList.remove("active"); btn.innerHTML = '<i class="far fa-heart"></i> Solo Favoritos'; } }
 
     renderUnlockedList(unlockedSet, favoritesSet, mensajesData) {
         this.currentData = { unlockedSet, favoritesSet, mensajesData };
+        
+        // Categorías: Basadas en TODO el contenido, no solo lo desbloqueado
         const categories = new Set();
-        unlockedSet.forEach(code => { if (mensajesData[code]) categories.add(mensajesData[code].categoria); });
+        Object.values(mensajesData).forEach(msg => { if (msg.categoria) categories.add(msg.categoria); });
+
         const currentCat = this.elements.categoryFilter.value;
-        this.elements.categoryFilter.innerHTML = '<option value="">Todas las categorías</option>';
-        categories.forEach(cat => { const opt = document.createElement("option"); opt.value = cat; opt.textContent = cat; if (cat === currentCat) opt.selected = true; this.elements.categoryFilter.appendChild(opt); });
+        this.elements.categoryFilter.innerHTML = '<option value="">Todas</option>';
+        categories.forEach(cat => {
+            const opt = document.createElement("option"); opt.value = cat; opt.textContent = cat;
+            if (cat === currentCat) opt.selected = true;
+            this.elements.categoryFilter.appendChild(opt);
+        });
         this.triggerListFilter();
     }
 
@@ -261,38 +254,56 @@ export class UIManager {
         const s = normalizeText(this.elements.searchUnlocked.value);
         const cat = this.elements.categoryFilter.value;
         this.elements.unlockedList.innerHTML = "";
-        let vc = 0;
-        Array.from(unlockedSet).sort().forEach(code => {
-            const d = mensajesData[code]; if (!d) return;
+        
+        // Iteramos sobre TODOS los mensajes (ordenados alfabéticamente)
+        const allCodes = Object.keys(mensajesData).sort();
+        let visibleCount = 0;
+
+        allCodes.forEach(code => {
+            const data = mensajesData[code];
+            const isUnlocked = unlockedSet.has(code);
+
+            // Filtro Favoritos (Solo si está desbloqueado)
             if (this.showingFavoritesOnly && !favoritesSet.has(code)) return;
-            if (s && !normalizeText(code).includes(s)) return;
-            if (cat && d.categoria !== cat) return;
-            vc++;
-            const li = document.createElement("li"); li.className = "lista-codigo-item";
-            li.innerHTML = `<div style="flex-grow:1"><span class="codigo-text">${code}</span><span class="category">${d.categoria}</span></div>`;
-            const favBtn = document.createElement("button"); favBtn.className = `favorite-toggle-btn ${favoritesSet.has(code) ? 'active' : ''}`;
-            favBtn.innerHTML = `<i class="${favoritesSet.has(code) ? 'fas' : 'far'} fa-heart"></i>`;
-            favBtn.onclick = (e) => { e.stopPropagation(); if (this.onToggleFavorite) this.onToggleFavorite(code); };
-            li.onclick = () => { if (this.onCodeSelected) this.onCodeSelected(code); this.elements.contentDiv.scrollIntoView({ behavior: 'smooth' }); };
-            li.appendChild(favBtn); this.elements.unlockedList.appendChild(li);
+            // Filtro Texto (Búsqueda) - Si está bloqueado, no se puede buscar por nombre
+            if (s && isUnlocked && !normalizeText(code).includes(s)) return;
+            // Filtro Categoría
+            if (cat && data.categoria !== cat) return;
+
+            visibleCount++;
+            const li = document.createElement("li");
+            
+            if (isUnlocked) {
+                // ITEM DESBLOQUEADO
+                li.className = "lista-codigo-item";
+                li.innerHTML = `<div style="flex-grow:1"><span class="codigo-text">${code}</span><span class="category">${data.categoria}</span></div>`;
+                const favBtn = document.createElement("button"); favBtn.className = `favorite-toggle-btn ${favoritesSet.has(code) ? 'active' : ''}`;
+                favBtn.innerHTML = `<i class="${favoritesSet.has(code) ? 'fas' : 'far'} fa-heart"></i>`;
+                favBtn.onclick = (e) => { e.stopPropagation(); if (this.onToggleFavorite) this.onToggleFavorite(code); };
+                li.onclick = () => { if (this.onCodeSelected) this.onCodeSelected(code); this.elements.contentDiv.scrollIntoView({ behavior: 'smooth' }); };
+                li.appendChild(favBtn);
+            } else {
+                // ITEM BLOQUEADO (GALERÍA GAMIFICADA)
+                li.className = "lista-codigo-item locked";
+                // Mostramos '???' o una pista sutil, y la categoría para motivar
+                li.innerHTML = `
+                    <div style="flex-grow:1; display:flex; align-items:center;">
+                        <i class="fas fa-lock lock-icon"></i>
+                        <div>
+                            <span class="codigo-text">??????</span>
+                            <span class="category" style="opacity:0.5">${data.categoria || 'Secreto'}</span>
+                        </div>
+                    </div>
+                `;
+                li.onclick = () => this.showToast("🔒 ¡Sigue buscando para desbloquear este secreto!");
+            }
+
+            this.elements.unlockedList.appendChild(li);
         });
-        if (vc === 0) this.elements.unlockedList.innerHTML = '<p style="text-align:center; width:100%; opacity:0.7">Sin resultados.</p>';
+
+        if (visibleCount === 0) this.elements.unlockedList.innerHTML = '<p style="text-align:center; width:100%; opacity:0.7">Sin resultados.</p>';
     }
 
-    // =================================================================
-    // IMPORT / EXPORT
-    // =================================================================
-
-    exportProgress() {
-        const d = { unlocked: JSON.parse(localStorage.getItem("desbloqueados")||"[]"), favorites: JSON.parse(localStorage.getItem("favoritos")||"[]"), achievements: JSON.parse(localStorage.getItem("logrosAlcanzados")||"[]"), timestamp: new Date().toISOString() };
-        const b = new Blob([JSON.stringify(d,null,2)],{type:"application/json"});
-        const u = URL.createObjectURL(b); const a = document.createElement("a"); a.href=u; a.download=`progreso_${new Date().toISOString().slice(0,10)}.json`;
-        a.click(); URL.revokeObjectURL(u); this.showToast("Progreso exportado correctamente");
-    }
-
-    handleImportFile(f) {
-        const r = new FileReader();
-        r.onload=(e)=>{ try { const d=JSON.parse(e.target.result); if(this.onImportData) this.onImportData(d); } catch(err) { this.showToast("Error: El archivo no es válido"); } };
-        r.readAsText(f);
-    }
+    exportProgress() { const d = { unlocked: JSON.parse(localStorage.getItem("desbloqueados")||"[]"), favorites: JSON.parse(localStorage.getItem("favoritos")||"[]"), achievements: JSON.parse(localStorage.getItem("logrosAlcanzados")||"[]"), timestamp: new Date().toISOString() }; const b = new Blob([JSON.stringify(d,null,2)],{type:"application/json"}); const u = URL.createObjectURL(b); const a = document.createElement("a"); a.href=u; a.download=`progreso_${new Date().toISOString().slice(0,10)}.json`; a.click(); URL.revokeObjectURL(u); this.showToast("Progreso exportado correctamente"); }
+    handleImportFile(f) { const r = new FileReader(); r.onload=(e)=>{try{const d=JSON.parse(e.target.result);if(this.onImportData)this.onImportData(d);}catch(err){this.showToast("Error: El archivo no es válido");}}; r.readAsText(f); }
 }
