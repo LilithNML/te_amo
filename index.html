@@ -115,5 +115,26 @@
       });
     }
   </script>
+  <button onclick="probarVibracion()" style="position:fixed; bottom:10px; left:10px; z-index:9999; padding:20px; background:red; color:white;">
+  TEST VIBRACIÓN
+</button>
+
+<script>
+  function probarVibracion() {
+    if (!navigator.vibrate) {
+      alert("Tu navegador NO soporta vibración (API no existe).");
+      return;
+    }
+    
+    // Intenta vibrar
+    const resultado = navigator.vibrate([200, 100, 200]);
+    
+    if (resultado) {
+      alert("Comando enviado: El celular debería estar vibrando.");
+    } else {
+      alert("Comando falló: El navegador bloqueó la vibración (revisa ajustes de sonido/batería).");
+    }
+  }
+</script>
 </body>
 </html>
