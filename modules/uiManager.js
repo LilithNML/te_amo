@@ -160,58 +160,66 @@ export class UIManager {
         fire(0.1, { spread: 120, startVelocity: 45 });
     }
 
+    
     /**
      * Escribe texto letra por letra (Máquina de escribir)
+     * VERSIÓN CORREGIDA: Soporte real para saltos de línea
      */
     typeWriterEffect(element, text) {
-    if (this.typewriterTimeout) clearTimeout(this.typewriterTimeout);
+        // Limpieza de timeouts previos
+        if (this.typewriterTimeout) clearTimeout(this.typewriterTimeout);
 
-    element.innerHTML = "";
-    element.classList.add("typewriter-cursor");
+        element.innerHTML = "";
+        element.classList.add("typewriter-cursor");
 
-    let i = 0;
+        let i = 0;
 
-    // Velocidades (ms)
-    const slowSpeed = 90;   // inicio
-    const fastSpeed = 55;   // después de acelerar
-    const accelerationChars = 120; // a partir de aquí acelera
+        // Configuración de velocidades (Tus ajustes)
+        const slowSpeed = 90;
+        const fastSpeed = 55;
+        const accelerationChars = 120;
 
-    const type = () => {
-        if (i >= text.length) {
-            element.classList.remove("typewriter-cursor");
-            return;
-        }
+        const type = () => {
+            if (i >= text.length) {
+                element.classList.remove("typewriter-cursor");
+                return;
+            }
 
-        const char = text.charAt(i);
+            const char = text.charAt(i);
 
-        // Inserción de carácter
-        if (char === '\n') {
-            element.innerHTML += '<br>';
-        } else {
-            element.textContent += char;
-        }
+            // --- CORRECCIÓN CRÍTICA ---
+            if (char === '\n') {
+                // Insertamos un elemento <br> real
+                element.appendChild(document.createElement('br'));
+                
+                // Opcional: Si quieres que el salto sea más visible (doble salto de párrafo)
+                // element.appendChild(document.createElement('br')); 
+            } else {
+                // Insertamos texto sin destruir el HTML existente
+                element.appendChild(document.createTextNode(char));
+            }
+            // --------------------------
 
-        // Velocidad base (acelera progresivamente)
-        let speed =
-            i < accelerationChars
-                ? slowSpeed
-                : fastSpeed;
+            // Cálculo de velocidad
+            let speed = i < accelerationChars ? slowSpeed : fastSpeed;
 
-        // Pausas naturales
-        if (char === '.' || char === '!' || char === '?') {
-            speed += 300;
-        }
+            // Pausas naturales (Puntuación)
+            if (char === '.' || char === '!' || char === '?') {
+                speed += 300;
+            }
 
-        if (char === '\n') {
-            speed += 600; // pausa de párrafo
-        }
+            // Pausa de párrafo (Salto de línea)
+            if (char === '\n') {
+                speed += 600;
+            }
 
-        i++;
-        this.typewriterTimeout = setTimeout(type, speed);
-    };
+            i++;
+            this.typewriterTimeout = setTimeout(type, speed);
+        };
 
-    type();
-    }
+        type();
+    }    
+        
 
     // =================================================================
     // RENDERIZADO CON MEJORAS
