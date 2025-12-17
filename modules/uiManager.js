@@ -3,11 +3,11 @@
  * ------------------------------------------------------------------
  * Gestor de Interfaz de Usuario (UI Manager).
  * * Responsabilidades:
- * - Manipulación del DOM.
+ * - Manipulación del DOM y eventos de interfaz.
  * - Gestión de paneles laterales (Audio, Herramientas).
- * - Modales y Zoom de imágenes (Panzoom).
- * - Efectos visuales (Confeti, Máquina de escribir).
- * - Listados dinámicos y filtros.
+ * - Modales y Zoom de imágenes (Panzoom 4.x).
+ * - Efectos visuales (Confeti, Máquina de escribir, Lazy Loading).
+ * - Renderizado de listas dinámicas y filtros.
  */
 
 import { normalizeText } from './utils.js';
@@ -15,9 +15,9 @@ import { herramientasExternas } from './data.js';
 
 export class UIManager {
     constructor() {
-        // Cacheo de referencias al DOM para mejorar rendimiento y evitar búsquedas repetitivas
+        // Cacheo de elementos del DOM para optimizar rendimiento
         this.elements = {
-            // Área de Juego Principal
+            // Área Principal
             input: document.getElementById("codeInput"),
             contentDiv: document.getElementById("contenido"),
             progressBar: document.querySelector(".progress-bar-fill"),
@@ -50,12 +50,12 @@ export class UIManager {
             closeUnlockedBtn: document.getElementById("closeUnlockedBtn")
         };
 
-        // Estado interno de la UI
+        // Estado interno
         this.showingFavoritesOnly = false;
-        this.panzoomInstance = null;     // Referencia a la instancia de Panzoom
-        this.typewriterTimeout = null;   // Referencia al timer de escritura
+        this.panzoomInstance = null;     // Instancia de la librería Panzoom
+        this.typewriterTimeout = null;   // Timer para efecto de escritura
 
-        // Inicialización de componentes
+        // Inicialización
         this.initTheme();
         this.setupMenuListeners();
         this.setupListListeners();
@@ -63,7 +63,8 @@ export class UIManager {
     }
 
     /**
-     * Cierra el teclado virtual en dispositivos móviles quitando el foco del input.
+     * Cierra el teclado virtual en móviles quitando el foco del input.
+     * Mejora la UX al enviar códigos.
      */
     dismissKeyboard() {
         if (this.elements.input) {
@@ -72,7 +73,7 @@ export class UIManager {
     }
 
     /**
-     * Inicializa el tema (Oscuro/Claro) según preferencia guardada en LocalStorage.
+     * Inicializa el tema (Oscuro/Claro) desde LocalStorage.
      */
     initTheme() {
         const savedTheme = localStorage.getItem("theme");
@@ -82,7 +83,7 @@ export class UIManager {
     }
 
     /**
-     * Alterna el tema y guarda la preferencia.
+     * Alterna entre temas y guarda la preferencia.
      */
     toggleDarkMode() {
         document.body.classList.toggle("dark-mode");
@@ -96,13 +97,13 @@ export class UIManager {
     // =================================================================
 
     setupMenuListeners() {
-        // Toggle del Menú Hamburguesa
+        // Abrir/Cerrar Menú Hamburguesa
         this.elements.menuButton.addEventListener("click", (e) => {
             e.stopPropagation();
             this.elements.dropdownMenu.classList.toggle("show");
         });
 
-        // Cerrar menú al hacer clic fuera
+        // Cerrar al hacer clic fuera
         document.addEventListener("click", (e) => {
             if (!this.elements.menuButton.contains(e.target) && 
                 !this.elements.dropdownMenu.contains(e.target)) {
@@ -112,7 +113,6 @@ export class UIManager {
 
         // --- Acciones del Menú ---
         
-        // Navegación
         this.bindMenuAction("menuHome", () => {
             this.toggleUnlockedPanel(false);
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -127,9 +127,9 @@ export class UIManager {
             this.triggerListFilter();
         });
 
-        // Herramientas y Ajustes
         this.bindMenuAction("menuDarkMode", () => this.toggleDarkMode());
         
+        // Abrir paneles laterales
         this.bindMenuAction("menuAudio", () => this.openPanel(this.elements.audioPanel));
         
         this.bindMenuAction("menuTools", () => {
@@ -137,22 +137,19 @@ export class UIManager {
             this.openPanel(this.elements.toolsPanel);
         });
 
-        // Importar / Exportar Datos
+        // Importar / Exportar
         this.bindMenuAction("menuExport", () => this.exportProgress());
-        
-        this.bindMenuAction("menuImport", () => {
-            this.elements.importInput.click(); // Simula clic en el input file oculto
-        });
+        this.bindMenuAction("menuImport", () => this.elements.importInput.click());
 
-        // Listener para cuando se selecciona un archivo
+        // Manejo de archivo importado
         this.elements.importInput.addEventListener("change", (e) => {
             if (e.target.files.length > 0) {
                 this.handleImportFile(e.target.files[0]);
             }
-            this.elements.importInput.value = ""; // Resetear para permitir recargar el mismo archivo
+            this.elements.importInput.value = "";
         });
 
-        // Botones de cerrar paneles laterales (X)
+        // Botones cerrar paneles (X)
         if (this.elements.closeAudioPanel) {
             this.elements.closeAudioPanel.addEventListener("click", () => this.closePanel(this.elements.audioPanel));
         }
@@ -161,9 +158,6 @@ export class UIManager {
         }
     }
 
-    /**
-     * Helper para vincular acción a botón del menú y cerrar el menú automáticamente.
-     */
     bindMenuAction(id, action) {
         const btn = document.getElementById(id);
         if (btn) {
@@ -189,21 +183,19 @@ export class UIManager {
     }
 
     // =================================================================
-    // PANEL DE HERRAMIENTAS
+    // HERRAMIENTAS
     // =================================================================
 
     renderTools() {
         const container = this.elements.toolsListContainer;
         if (!container) return;
-        container.innerHTML = ""; // Limpiar lista previa
+        container.innerHTML = "";
 
         herramientasExternas.forEach(tool => {
             const card = document.createElement("div");
             card.className = "tool-card";
             card.innerHTML = `
-                <div class="tool-header">
-                    <i class="${tool.icono}"></i> ${tool.nombre}
-                </div>
+                <div class="tool-header"><i class="${tool.icono}"></i> ${tool.nombre}</div>
                 <div class="tool-desc">${tool.descripcion}</div>
                 <a href="${tool.url}" target="_blank" rel="noopener noreferrer" class="tool-btn">
                     Abrir <i class="fas fa-external-link-alt"></i>
@@ -214,71 +206,49 @@ export class UIManager {
     }
 
     // =================================================================
-    // MODAL DE IMAGEN Y ZOOM (PANZOOM)
+    // MODAL DE IMAGEN (ZOOM - CORREGIDO)
     // =================================================================
 
     setupModalListeners() {
-        // Cerrar con botón X
         if (this.elements.closeModalBtn) {
             this.elements.closeModalBtn.addEventListener("click", () => this.closeModal());
         }
 
-        // Cerrar con tecla Escape
         document.addEventListener("keydown", (ev) => {
             if (ev.key === "Escape" && this.elements.modal.style.display === "flex") {
                 this.closeModal();
             }
         });
 
-        // Lógica de Doble Tap (para móviles)
-        let lastTap = 0;
-        this.elements.modalImg.addEventListener('touchend', (e) => {
-            const currentTime = new Date().getTime();
-            const tapLength = currentTime - lastTap;
-            
-            // Si el tiempo entre toques es menor a 300ms, es doble tap
-            if (tapLength < 300 && tapLength > 0) {
-                e.preventDefault(); // Prevenir zoom nativo del navegador
-                if (this.panzoomInstance) {
-                    const currentScale = this.panzoomInstance.getScale();
-                    // Alternar entre zoom 2.5x y 1x
-                    this.panzoomInstance.zoom(currentScale === 1 ? 2.5 : 1, { animate: true });
-                }
-            }
-            lastTap = currentTime;
-        });
+        // NOTA IMPORTANTE:
+        // No agregamos listeners manuales de 'touchstart' o 'touchend' aquí.
+        // Panzoom maneja los gestos táctiles nativamente. Si interferimos, rompemos el zoom.
     }
 
-    /**
-     * Abre el modal e inicializa Panzoom de forma segura.
-     * @param {string} src - URL de la imagen.
-     */
     openModal(src) {
-        // 1. Mostrar el modal (display: flex) para que ocupe espacio
         this.elements.modal.style.display = "flex";
         this.elements.modalImg.src = src;
 
-        // 2. Limpiar instancia previa si existe (CRÍTICO: usar destroy)
+        // Limpieza de instancia previa usando destroy() (Método correcto Panzoom 4.x)
         if (this.panzoomInstance) {
-            this.panzoomInstance.destroy(); 
+            this.panzoomInstance.destroy();
             this.panzoomInstance = null;
         }
 
-        // 3. Esperar a que la imagen cargue para calcular dimensiones correctas
         this.elements.modalImg.onload = () => {
             // Inicializar Panzoom
             // @ts-ignore
             this.panzoomInstance = Panzoom(this.elements.modalImg, {
                 maxScale: 5,
                 minScale: 1,
-                contain: 'inside',   // La imagen se ajusta dentro del contenedor sin desbordar
-                startScale: 1,       // Escala inicial 100%
-                touchAction: 'none', // Permite que JS controle los gestos táctiles
+                contain: 'inside', // Ajusta imagen a pantalla
+                startScale: 1,
                 animate: true
+                // touchAction no es necesario aquí si está en CSS, pero Panzoom lo gestiona
             });
 
-            // Habilitar zoom con rueda del mouse
-            // CRÍTICO: { passive: false } evita el warning de violación en consola
+            // CORRECCIÓN CRÍTICA:
+            // Usar { passive: false } para permitir que Panzoom prevenga el scroll del navegador al hacer zoom
             this.elements.modalImg.parentElement.addEventListener(
                 'wheel', 
                 this.panzoomInstance.zoomWithWheel, 
@@ -287,14 +257,10 @@ export class UIManager {
         };
     }
 
-    /**
-     * Cierra el modal y limpia la memoria.
-     */
     closeModal() {
         this.elements.modal.style.display = "none";
-        this.elements.modalImg.src = ""; // Liberar memoria visual
+        this.elements.modalImg.src = ""; // Liberar memoria
 
-        // Limpiar instancia Panzoom
         if (this.panzoomInstance) {
             this.panzoomInstance.destroy();
             this.panzoomInstance = null;
@@ -302,22 +268,18 @@ export class UIManager {
     }
 
     // =================================================================
-    // EFECTOS ESPECIALES
+    // EFECTOS VISUALES
     // =================================================================
 
     /**
-     * Dispara el efecto de confeti realista.
+     * Efecto Confeti Realista
      */
     triggerConfetti() {
-        // Verificar si la librería está cargada
         // @ts-ignore
         if (typeof confetti === 'undefined') return;
 
         var count = 200;
-        var defaults = {
-            origin: { y: 0.7 },
-            zIndex: 1500
-        };
+        var defaults = { origin: { y: 0.7 }, zIndex: 1500 };
 
         function fire(particleRatio, opts) {
             // @ts-ignore
@@ -326,7 +288,6 @@ export class UIManager {
             }));
         }
 
-        // Disparar en ráfagas para efecto natural
         fire(0.25, { spread: 26, startVelocity: 55 });
         fire(0.2, { spread: 60 });
         fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
@@ -335,49 +296,42 @@ export class UIManager {
     }
 
     /**
-     * Efecto Máquina de Escribir (Typewriter).
-     * @param {HTMLElement} element - Elemento donde escribir.
-     * @param {string} text - Texto a escribir.
+     * Efecto Máquina de Escribir (Typewriter)
+     * CORREGIDO: Usa nodos DOM para respetar saltos de línea sin borrar HTML.
      */
     typeWriterEffect(element, text) {
-        // Limpiar timeout anterior si el usuario cambia rápido
         if (this.typewriterTimeout) clearTimeout(this.typewriterTimeout);
 
-        element.innerHTML = ""; // Limpiar contenido
-        element.classList.add("typewriter-cursor"); // Añadir cursor CSS
+        element.innerHTML = "";
+        element.classList.add("typewriter-cursor");
 
         let i = 0;
-        
-        // Configuración de velocidad
+        // Velocidades configurables
         const slowSpeed = 70;
-        const fastSpeed = 40;
+        const fastSpeed = 40; 
         const accelerationChars = 100;
 
         const type = () => {
             if (i >= text.length) {
-                element.classList.remove("typewriter-cursor"); // Quitar cursor al terminar
+                element.classList.remove("typewriter-cursor");
                 return;
             }
 
             const char = text.charAt(i);
 
-            // MANEJO SEGURO DEL DOM PARA SALTOS DE LÍNEA
+            // CORRECCIÓN: Inserción segura de nodos
             if (char === '\n') {
                 element.appendChild(document.createElement('br'));
             } else {
                 element.appendChild(document.createTextNode(char));
             }
 
-            // Velocidad dinámica
+            // Cálculo de velocidad dinámica
             let speed = i < accelerationChars ? slowSpeed : fastSpeed;
 
-            // Pausas naturales en puntuación
-            if (char === '.' || char === '!' || char === '?') {
-                speed += 300;
-            }
-            if (char === '\n') {
-                speed += 500;
-            }
+            // Pausas en puntuación
+            if (char === '.' || char === '!' || char === '?') speed += 300;
+            if (char === '\n') speed += 500;
 
             i++;
             this.typewriterTimeout = setTimeout(type, speed);
@@ -391,7 +345,7 @@ export class UIManager {
     // =================================================================
 
     renderContent(data, key) {
-        // Detener máquina de escribir si estaba activa
+        // Limpiar timeout de escritura si existe
         if (this.typewriterTimeout) clearTimeout(this.typewriterTimeout);
 
         const container = this.elements.contentDiv;
@@ -399,12 +353,12 @@ export class UIManager {
         container.innerHTML = "";
 
         // Título
-        const title = document.createElement("h2");
-        title.textContent = key ? `Descubierto: ${key}` : "¡Sorpresa!";
-        title.style.textTransform = "capitalize";
-        container.appendChild(title);
+        const h2 = document.createElement("h2");
+        h2.textContent = key ? `Descubierto: ${key}` : "¡Sorpresa!";
+        h2.style.textTransform = "capitalize";
+        container.appendChild(h2);
 
-        // Texto descriptivo (usando Typewriter si es "pensamiento")
+        // Texto descriptivo adicional
         if (data.texto && data.type !== 'text') {
             const p = document.createElement("p");
             p.textContent = data.texto;
@@ -415,8 +369,7 @@ export class UIManager {
             case "text":
                 const pText = document.createElement("p");
                 pText.className = "mensaje-texto";
-                
-                // Activar efecto si la categoría lo requiere
+                // Activar Typewriter solo para categorías específicas
                 if (data.categoria && (data.categoria.toLowerCase() === 'pensamiento' || data.categoria.toLowerCase() === 'carta')) {
                     this.typeWriterEffect(pText, data.texto);
                 } else {
@@ -428,7 +381,7 @@ export class UIManager {
             case "image":
                 const img = document.createElement("img");
                 img.src = data.imagen;
-                img.alt = "Contenido secreto";
+                img.alt = "Imagen secreta";
                 img.style.cursor = "pointer";
                 img.onclick = () => this.openModal(data.imagen);
                 container.appendChild(img);
@@ -436,21 +389,18 @@ export class UIManager {
 
             case "video":
                 if (data.videoEmbed) {
-                    // Contenedor para Lazy Loading
+                    // Lazy Loading con Spinner
                     const wrapper = document.createElement("div");
                     wrapper.className = "video-wrapper";
 
-                    // Spinner de carga
                     const loader = document.createElement("div");
                     loader.className = "video-loader";
 
-                    // Iframe
                     const iframe = document.createElement("iframe");
                     iframe.src = data.videoEmbed;
                     iframe.className = "video-frame";
                     iframe.setAttribute("allow", "autoplay; encrypted-media; fullscreen");
                     
-                    // Evento: Ocultar spinner cuando cargue
                     iframe.onload = () => {
                         loader.style.display = "none";
                         iframe.style.opacity = "1";
@@ -464,27 +414,22 @@ export class UIManager {
 
             case "link":
                 const a = document.createElement("a");
-                a.href = data.link;
-                a.target = "_blank";
-                a.rel = "noopener noreferrer";
-                a.className = "button";
+                a.href = data.link; a.target = "_blank"; a.rel = "noopener noreferrer"; a.className = "button";
                 a.innerHTML = 'Abrir Enlace <i class="fas fa-external-link-alt"></i>';
                 container.appendChild(a);
                 break;
 
             case "download":
                 const dl = document.createElement("a");
-                dl.href = data.descarga.url;
-                dl.download = data.descarga.nombre;
-                dl.className = "button";
+                dl.href = data.descarga.url; dl.download = data.descarga.nombre; dl.className = "button";
                 dl.innerHTML = `<i class="fas fa-download"></i> Descargar ${data.descarga.nombre}`;
                 container.appendChild(dl);
                 break;
         }
 
-        // Animación Fade-in
+        // Reset animación CSS
         container.classList.remove("fade-in");
-        void container.offsetWidth; // Trigger reflow
+        void container.offsetWidth;
         container.classList.add("fade-in");
     }
 
@@ -498,7 +443,7 @@ export class UIManager {
     }
 
     // =================================================================
-    // UI HELPERS (Utilidades)
+    // UI HELPERS
     // =================================================================
 
     showError() {
@@ -513,33 +458,27 @@ export class UIManager {
 
     clearInput() {
         this.elements.input.value = "";
-        // No hacemos focus() para evitar abrir teclado en móvil
     }
 
-    updateProgress(unlockedCount, totalCount) {
-        const percent = totalCount > 0 ? Math.round((unlockedCount / totalCount) * 100) : 0;
-        this.elements.progressBar.style.width = `${percent}%`;
-        this.elements.progressText.textContent = `Descubiertos: ${unlockedCount} / ${totalCount}`;
+    updateProgress(u, t) {
+        const p = t > 0 ? Math.round((u / t) * 100) : 0;
+        this.elements.progressBar.style.width = `${p}%`;
+        this.elements.progressText.textContent = `Descubiertos: ${u} / ${t}`;
     }
 
-    showToast(message) {
-        const toast = document.createElement("div");
-        toast.className = "achievement-toast";
-        toast.textContent = message;
-        this.elements.toastContainer.appendChild(toast);
-        setTimeout(() => toast.remove(), 4000);
+    showToast(msg) {
+        const t = document.createElement("div");
+        t.className = "achievement-toast";
+        t.textContent = msg;
+        this.elements.toastContainer.appendChild(t);
+        setTimeout(() => t.remove(), 4000);
     }
 
-    updateAudioUI(isPlaying, trackName) {
+    updateAudioUI(p, n) {
         const btn = document.getElementById("audioPlayPause");
         const txt = document.getElementById("trackName");
-        
-        if (btn) {
-            btn.innerHTML = isPlaying ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>';
-        }
-        if (txt && trackName) {
-            txt.textContent = trackName.replace(/_/g, " ").replace(/\.[^/.]+$/, "");
-        }
+        if (btn) btn.innerHTML = p ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>';
+        if (txt && n) txt.textContent = n.replace(/_/g, " ").replace(/\.[^/.]+$/, "");
     }
 
     // =================================================================
@@ -549,21 +488,17 @@ export class UIManager {
     setupListListeners() {
         this.elements.searchUnlocked.addEventListener("input", () => this.triggerListFilter());
         this.elements.categoryFilter.addEventListener("change", () => this.triggerListFilter());
-        
         this.elements.filterFavBtn.addEventListener("click", () => {
             this.showingFavoritesOnly = !this.showingFavoritesOnly;
             this.updateFilterUI();
             this.triggerListFilter();
         });
-
         this.elements.closeUnlockedBtn.addEventListener("click", () => this.toggleUnlockedPanel(false));
     }
 
     toggleUnlockedPanel(show) {
         this.elements.unlockedSection.hidden = !show;
-        if (show) {
-            this.elements.unlockedSection.scrollIntoView({ behavior: 'smooth' });
-        }
+        if (show) this.elements.unlockedSection.scrollIntoView({ behavior: 'smooth' });
     }
 
     updateFilterUI() {
@@ -579,114 +514,75 @@ export class UIManager {
 
     renderUnlockedList(unlockedSet, favoritesSet, mensajesData) {
         this.currentData = { unlockedSet, favoritesSet, mensajesData };
-
-        // Actualizar Select de Categorías
         const categories = new Set();
-        unlockedSet.forEach(code => {
-            if (mensajesData[code]) categories.add(mensajesData[code].categoria);
-        });
+        unlockedSet.forEach(code => { if (mensajesData[code]) categories.add(mensajesData[code].categoria); });
 
         const currentCat = this.elements.categoryFilter.value;
         this.elements.categoryFilter.innerHTML = '<option value="">Todas las categorías</option>';
         
         categories.forEach(cat => {
-            const opt = document.createElement("option");
-            opt.value = cat;
-            opt.textContent = cat;
+            const opt = document.createElement("option"); opt.value = cat; opt.textContent = cat;
             if (cat === currentCat) opt.selected = true;
             this.elements.categoryFilter.appendChild(opt);
         });
-
         this.triggerListFilter();
     }
 
     triggerListFilter() {
         if (!this.currentData) return;
         const { unlockedSet, favoritesSet, mensajesData } = this.currentData;
-        const searchTerm = normalizeText(this.elements.searchUnlocked.value);
-        const catFilter = this.elements.categoryFilter.value;
-
+        const s = normalizeText(this.elements.searchUnlocked.value);
+        const cat = this.elements.categoryFilter.value;
         this.elements.unlockedList.innerHTML = "";
         
-        const sortedCodes = Array.from(unlockedSet).sort();
-        let visibleCount = 0;
-
-        sortedCodes.forEach(code => {
-            const data = mensajesData[code];
-            if (!data) return;
-
-            // Filtros
+        let vc = 0;
+        Array.from(unlockedSet).sort().forEach(code => {
+            const d = mensajesData[code]; if (!d) return;
             if (this.showingFavoritesOnly && !favoritesSet.has(code)) return;
-            if (searchTerm && !normalizeText(code).includes(searchTerm)) return;
-            if (catFilter && data.categoria !== catFilter) return;
+            if (s && !normalizeText(code).includes(s)) return;
+            if (cat && d.categoria !== cat) return;
+            vc++;
 
-            visibleCount++;
-
-            const li = document.createElement("li");
-            li.className = "lista-codigo-item";
-            li.innerHTML = `
-                <div style="flex-grow:1">
-                    <span class="codigo-text">${code}</span>
-                    <span class="category">${data.categoria}</span>
-                </div>
-            `;
-
-            // Botón Favorito
+            const li = document.createElement("li"); li.className = "lista-codigo-item";
+            li.innerHTML = `<div style="flex-grow:1"><span class="codigo-text">${code}</span><span class="category">${d.categoria}</span></div>`;
+            
             const favBtn = document.createElement("button");
             favBtn.className = `favorite-toggle-btn ${favoritesSet.has(code) ? 'active' : ''}`;
             favBtn.innerHTML = `<i class="${favoritesSet.has(code) ? 'fas' : 'far'} fa-heart"></i>`;
+            favBtn.onclick = (e) => { e.stopPropagation(); if (this.onToggleFavorite) this.onToggleFavorite(code); };
             
-            favBtn.onclick = (e) => {
-                e.stopPropagation();
-                if (this.onToggleFavorite) this.onToggleFavorite(code);
-            };
-
-            // Abrir contenido al hacer clic
-            li.onclick = () => {
-                if (this.onCodeSelected) this.onCodeSelected(code);
-                this.elements.contentDiv.scrollIntoView({ behavior: 'smooth' });
-            };
-
-            li.appendChild(favBtn);
-            this.elements.unlockedList.appendChild(li);
+            li.onclick = () => { if (this.onCodeSelected) this.onCodeSelected(code); this.elements.contentDiv.scrollIntoView({ behavior: 'smooth' }); };
+            li.appendChild(favBtn); this.elements.unlockedList.appendChild(li);
         });
 
-        if (visibleCount === 0) {
-            this.elements.unlockedList.innerHTML = '<p style="text-align:center; width:100%; opacity:0.7">Sin resultados.</p>';
-        }
+        if (vc === 0) this.elements.unlockedList.innerHTML = '<p style="text-align:center; width:100%; opacity:0.7">Sin resultados.</p>';
     }
 
     // =================================================================
-    // IMPORTAR / EXPORTAR
+    // IMPORT / EXPORT
     // =================================================================
 
     exportProgress() {
-        const data = {
-            unlocked: JSON.parse(localStorage.getItem("desbloqueados") || "[]"),
-            favorites: JSON.parse(localStorage.getItem("favoritos") || "[]"),
-            achievements: JSON.parse(localStorage.getItem("logrosAlcanzados") || "[]"),
+        const d = {
+            unlocked: JSON.parse(localStorage.getItem("desbloqueados")||"[]"),
+            favorites: JSON.parse(localStorage.getItem("favoritos")||"[]"),
+            achievements: JSON.parse(localStorage.getItem("logrosAlcanzados")||"[]"),
             timestamp: new Date().toISOString()
         };
-        const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+        const blob = new Blob([JSON.stringify(d,null,2)],{type:"application/json"});
         const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `progreso_${new Date().toISOString().slice(0, 10)}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
-        this.showToast("Progreso exportado correctamente");
+        const a = document.createElement("a"); a.href=url; a.download=`progreso_${new Date().toISOString().slice(0,10)}.json`;
+        a.click(); URL.revokeObjectURL(url); this.showToast("Progreso exportado correctamente");
     }
 
-    handleImportFile(file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
+    handleImportFile(f) {
+        const r = new FileReader();
+        r.onload=(e)=>{
             try {
-                const data = JSON.parse(e.target.result);
-                if (this.onImportData) this.onImportData(data);
-            } catch (err) {
-                this.showToast("Error: Archivo inválido");
-            }
+                const d=JSON.parse(e.target.result);
+                if(this.onImportData) this.onImportData(d);
+            } catch(err) { this.showToast("Error: El archivo no es válido"); }
         };
-        reader.readAsText(file);
+        r.readAsText(f);
     }
 }
