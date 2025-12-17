@@ -1,32 +1,62 @@
-const CACHE_NAME = "secreto-cache-v3";
+const CACHE_NAME = "hazielith-cache-v2"; // Subimos versión para forzar actualización
+
+// Usamos rutas relativas para que funcione en cualquier carpeta
 const FILES_TO_CACHE = [
-  "./", "./index.html", "./style.css", "./main.js", "./manifest.json",
-  "./modules/utils.js", "./modules/data.js", "./modules/uiManager.js", "./modules/audioManager.js", "./modules/gameEngine.js",
-  "assets/images/moon.png", "assets/audio/correct.mp3", "assets/audio/incorrect.mp3"
+  "./",
+  "./index.html",
+  "./manifest.json",
+  "./style.css",
+  "./main.js",
+  "./modules/utils.js",
+  "./modules/data.js",
+  "./modules/uiManager.js",
+  "./modules/audioManager.js",
+  "./modules/gameEngine.js",
+
+  // Audio (verifica que estas carpetas existan en relación al index.html)
+  "assets/audio/correct.mp3",
+  "assets/audio/incorrect.mp3",
+  // ... añade aquí el resto de tus archivos de música usando rutas relativas ...
+  
+  // Imágenes
+  "assets/images/moon.png"
+  // ... añade el resto de imágenes ...
 ];
 
-self.addEventListener("install", e => {
-  e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(FILES_TO_CACHE)));
+self.addEventListener("install", event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => cache.addAll(FILES_TO_CACHE))
+  );
   self.skipWaiting();
 });
 
-self.addEventListener("activate", e => {
-  e.waitUntil(caches.keys().then(keys => Promise.all(keys.map(k => k !== CACHE_NAME ? caches.delete(k) : null))));
+self.addEventListener("activate", event => {
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(
+        keys.map(key => {
+          if (key !== CACHE_NAME) return caches.delete(key);
+        })
+      )
+    )
+  );
   self.clients.claim();
 });
 
-self.addEventListener("fetch", e => {
-  if (e.request.method !== "GET") return;
-  e.respondWith(
-    caches.match(e.request).then(cached => {
-      const fetchPromise = fetch(e.request).then(net => {
-        if (net && net.status === 200 && net.type === 'basic') {
-            const clone = net.clone();
-            caches.open(CACHE_NAME).then(c => c.put(e.request, clone));
+self.addEventListener("fetch", event => {
+  if (event.request.method !== "GET") return;
+  event.respondWith(
+    caches.match(event.request).then(cachedResponse => {
+      const fetchPromise = fetch(event.request).then(networkResponse => {
+        if (networkResponse && networkResponse.status === 200) {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, responseToCache);
+          });
         }
-        return net;
+        return networkResponse;
       }).catch(() => {});
-      return cached || fetchPromise;
+      return cachedResponse || fetchPromise;
     })
   );
 });
