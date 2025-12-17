@@ -264,7 +264,7 @@ export const mensajes = {
   },
   "paimon": {
     type: "image",
-    imagen: "assets/unlocked_content/images/paimon_xd.jpg",
+    imagen: "assets/unlocked_content/images/paimon_xd.webp",
     categoria: "Imagen",
     pista: ""
   },
@@ -322,8 +322,8 @@ export const mensajes = {
   "nbujo85ft": {
     type: "download",
     descarga: {
-      url: "assets/unlocked_content/images/mi_mayor_sueno.png",
-      nombre: "mi_mayor_sueno.png"
+      url: "assets/unlocked_content/images/mi_mayor_sueno.webp",
+      nombre: "mi_mayor_sueno.webp"
     },
     categoria: "Descargas",
     pista: ""
@@ -355,8 +355,8 @@ export const mensajes = {
   "increíble": {
     type: "download",
     descarga: {
-      url: "assets/unlocked_content/images/mapa_de_estrellas.jpg",
-      nombre: "mapa_de_estrellas.jpg"
+      url: "assets/unlocked_content/images/mapa_de_estrellas.webp",
+      nombre: "mapa_de_estrellas.webp"
     },
     categoria: "Descarga",
     pista: ""
@@ -559,7 +559,7 @@ export const mensajes = {
   },
   "hatsunemiku": {
     type: "image",
-    imagen: "assets/unlocked_content/images/ramonxmiku.jpg",
+    imagen: "assets/unlocked_content/images/ramonxmiku.webp",
     categoria: "Imagen",
     pista: ""
   },
