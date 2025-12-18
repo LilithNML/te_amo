@@ -213,8 +213,8 @@ export class UIManager {
                 const internalFrame = document.createElement("iframe");
                 internalFrame.src = data.archivo;
                 internalFrame.className = "internal-frame";
-                internalFrame.style.border = "none";
-                internalFrame.style.backgroundColor = "#fff"; // Fondo blanco para documentos
+                internalFrame.style.border = "0";
+                internalFrame.style.backgroundColor = "transparent"; // Fondo transparente 
 
                 internalWrapper.appendChild(fullScreenBtn);
                 internalWrapper.appendChild(internalFrame);
