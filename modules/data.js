@@ -330,7 +330,7 @@ export const mensajes = {
   },
   "5.1": {
     type: "internal",
-    archivo: "https://lilithnml.github.io/tu_regalo/sub-paginas/corazon/",
+    archivo: "sub-paginas/corazon/index.html",
     categoria: "Cositas",
     pista: ""
   },
