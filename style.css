@@ -353,18 +353,25 @@ input[type=range] { flex-grow: 1; accent-color: var(--highlight-pink); }
   margin-top: 15px;
 }
 
+/* Estilo del Iframe (Ventana Interna) */
 .internal-frame {
   width: 100%;
-  height: 500px; /* Altura fija o puedes usar 70vh */
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  background: white; /* La mayoría de HTMLs locales necesitan fondo blanco */
-  box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
+  height: 600px;
+  /* Borde sutil semitransparente */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px; /* Bordes más redondeados */
+  
+  /* Sombra para que "flote" sobre el fondo */
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  
+  /* Transición suave al cargar */
+  transition: all 0.3s ease;
 }
 
-/* Ajuste para móviles */
+/* En móviles lo hacemos un poco más compacto */
 @media (max-width: 600px) {
   .internal-frame {
-    height: 400px;
+    height: 450px;
+    border-radius: 15px;
   }
 }
