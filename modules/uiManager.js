@@ -2,15 +2,16 @@
  * modules/uiManager.js
  * ------------------------------------------------------------------
  * Gestor de Interfaz de Usuario (UI Manager).
- * VERSIÓN FINAL CORREGIDA:
- * - Soporte para archivos locales (type: "internal")
- * - Viewer.js para imágenes
- * - Partículas y efectos visuales
- * - Variables unificadas para evitar errores
+ * VERSIÓN DEFINITIVA (Plan Estricto):
+ * - Descifrado local robusto (libsodium local)
+ * - Soporte para páginas internas (Iframes transparentes)
+ * - Galería de colección (Bloqueados/Desbloqueados)
+ * - Visual Haptics y Partículas
  */
 
 import { normalizeText } from './utils.js';
 import { herramientasExternas } from './data.js';
+// Importamos el descifrador robusto local
 import { descifrarHat } from './hatDecryptor.js';
 
 export class UIManager {
@@ -47,7 +48,9 @@ export class UIManager {
         this.setupMenuListeners();
         this.setupListListeners();
         
+        // Inicializaciones visuales
         this.initDynamicPlaceholder();
+        // Damos un pequeño respiro al navegador antes de cargar partículas
         setTimeout(() => this.initParticles(), 100); 
     }
 
@@ -68,20 +71,17 @@ export class UIManager {
     }
 
     // =================================================================
-    // PARTICULAS & EFECTOS
+    // EFECTOS VISUALES (Partículas, Placeholder, Confeti)
     // =================================================================
 
     async initParticles() {
         // @ts-ignore
-        if (typeof tsParticles === 'undefined') {
-            console.warn("Cargando partículas...");
-            setTimeout(() => this.initParticles(), 500);
-            return;
-        }
+        if (typeof tsParticles === 'undefined') return;
+
         // @ts-ignore
         await tsParticles.load('tsparticles', {
             fpsLimit: 60,
-            fullScreen: { enable: false },
+            fullScreen: { enable: false }, // Se contiene en el div #tsparticles
             particles: {
                 number: { value: 40, density: { enable: true, area: 800 } },
                 color: { value: ["#ffffff", "#ff7aa8", "#ffd700"] },
@@ -96,7 +96,13 @@ export class UIManager {
     }
 
     initDynamicPlaceholder() {
-        const frases = ["Escribe aquí...", "Prueba con una fecha especial...", "¿Recuerdas nuestro lugar?...", "Intenta con un apodo cariñoso...", "El nombre de nuestra canción..."];
+        const frases = [
+            "Escribe aquí...", 
+            "Prueba con una fecha especial...", 
+            "¿Recuerdas nuestro lugar?...", 
+            "Intenta con un apodo cariñoso...", 
+            "El nombre de nuestra canción..."
+        ];
         let index = 0;
         setInterval(() => {
             index = (index + 1) % frases.length;
@@ -137,15 +143,13 @@ export class UIManager {
     }
 
     // =================================================================
-    // RENDERIZADO DE CONTENIDO (Aquí estaba el error)
+    // RENDERIZADO DE CONTENIDO (Aquí ocurre la magia)
     // =================================================================
 
     renderContent(data, key) {
         if (this.typewriterTimeout) clearTimeout(this.typewriterTimeout);
         
-        // UNIFICACIÓN DE VARIABLE: Usaremos 'container' siempre
         const container = this.elements.contentDiv; 
-        
         container.hidden = false;
         container.innerHTML = "";
 
@@ -154,6 +158,7 @@ export class UIManager {
         h2.style.textTransform = "capitalize";
         container.appendChild(h2);
 
+        // Texto descriptivo general (si existe y no es el contenido principal)
         if (data.texto && data.type !== 'text' && data.type !== 'internal') {
             const p = document.createElement("p");
             p.textContent = data.texto;
@@ -197,41 +202,49 @@ export class UIManager {
                 }
                 break;
 
-            // --- NUEVO CASO: ARCHIVOS LOCALES ---
+            // --- CASO: PÁGINAS INTERNAS (Contador, Cartas HTML, etc.) ---
             case "internal":
                 const internalWrapper = document.createElement("div");
                 internalWrapper.className = "internal-wrapper";
                 
+                const urlDestino = data.archivo || data.link;
+
+                if (!urlDestino) {
+                    internalWrapper.innerHTML = `<p style="color:red; text-align:center;">Error: No se encontró la ruta del archivo.</p>`;
+                    container.appendChild(internalWrapper);
+                    break;
+                }
+
                 // Botón Pantalla Completa
                 const fullScreenBtn = document.createElement("a");
-                fullScreenBtn.href = data.archivo;
+                fullScreenBtn.href = urlDestino;
                 fullScreenBtn.target = "_blank";
                 fullScreenBtn.className = "button small-button";
                 fullScreenBtn.innerHTML = '<i class="fas fa-expand"></i> Pantalla Completa';
                 fullScreenBtn.style.marginBottom = "10px";
 
-                // Iframe Interno
+                // Iframe (Transparente para Glassmorphism)
                 const internalFrame = document.createElement("iframe");
-                internalFrame.src = data.archivo;
+                internalFrame.src = urlDestino;
                 internalFrame.className = "internal-frame";
-                internalFrame.style.border = "0";
-                internalFrame.style.backgroundColor = "transparent"; // Fondo transparente 
+                internalFrame.style.border = "none";
+                internalFrame.style.backgroundColor = "transparent"; // Importante para que se vea el fondo bonito
 
                 internalWrapper.appendChild(fullScreenBtn);
                 internalWrapper.appendChild(internalFrame);
-                
                 container.appendChild(internalWrapper);
                 break;
 
             case "link":
                 const a = document.createElement("a"); a.href = data.link; a.target = "_blank"; a.className = "button"; a.innerHTML = 'Abrir Enlace <i class="fas fa-external-link-alt"></i>'; container.appendChild(a); break;
 
+            // --- CASO: DESCARGA (Con descifrado local .ENC) ---
             case "download":
                 const dlBtn = document.createElement("button");
                 dlBtn.className = "button";
                 
-                // Texto dinámico dependiendo si es .enc
-                const esCifrado = data.encrypted || data.descarga.url.endsWith(".enc");
+                // Detectar si requiere descifrado
+                const esCifrado = data.encrypted || (data.descarga.url && data.descarga.url.endsWith(".enc"));
                 
                 dlBtn.innerHTML = esCifrado 
                     ? `<i class="fas fa-lock"></i> Desbloquear ${data.descarga.nombre}`
@@ -241,26 +254,35 @@ export class UIManager {
                     if (esCifrado) {
                         // 1. Pedir contraseña
                         const password = prompt(`Introduce la contraseña para descifrar "${data.descarga.nombre}":`);
-                        if (!password) return; // Cancelado
+                        if (!password) return;
 
-                        // 2. Feedback de carga
+                        // 2. Feedback visual
                         const originalHTML = dlBtn.innerHTML;
                         dlBtn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> Descifrando...`;
                         dlBtn.disabled = true;
 
-                        // 3. Ejecutar descifrado
-                        const exito = await descifrarHat(data.descarga.url, data.descarga.nombre, password);
+                        try {
+                            // 3. Llamar al descifrador robusto
+                            const exito = await descifrarHat(data.descarga.url, data.descarga.nombre, password);
 
-                        // 4. Restaurar botón
-                        dlBtn.innerHTML = originalHTML;
-                        dlBtn.disabled = false;
+                            dlBtn.innerHTML = originalHTML;
+                            dlBtn.disabled = false;
 
-                        if (exito) {
-                            this.showToast("¡Archivo descifrado con éxito!");
-                            this.triggerConfetti();
-                        } else {
-                            this.showError(); // Vibración/Shake
-                            alert("Error: Contraseña incorrecta o archivo incompatible.");
+                            if (exito) {
+                                this.showToast("¡Archivo descifrado con éxito!");
+                                this.triggerConfetti();
+                            } else {
+                                this.showError();
+                                alert("Contraseña incorrecta. Inténtalo de nuevo.");
+                            }
+                        } catch (err) {
+                            dlBtn.innerHTML = originalHTML;
+                            dlBtn.disabled = false;
+                            
+                            console.error(err);
+                            this.showError();
+                            // Mostramos el error exacto (ej: Memoria, WASM no soportado, etc.)
+                            alert(`Error del sistema: ${err.message}`);
                         }
                     } else {
                         // Descarga normal
@@ -280,7 +302,13 @@ export class UIManager {
     }
 
     renderMessage(title, body) { const c = this.elements.contentDiv; c.hidden = false; c.innerHTML = `<h2>${title}</h2><p>${body}</p>`; c.classList.remove("fade-in"); void c.offsetWidth; c.classList.add("fade-in"); }
-    showError() { this.elements.input.classList.add("shake", "error"); setTimeout(() => this.elements.input.classList.remove("shake"), 500); }
+    
+    // UI HELPERS (Feedback visual)
+    showError() { 
+        this.elements.input.classList.add("shake", "error"); 
+        setTimeout(() => this.elements.input.classList.remove("shake"), 500); 
+    }
+    
     showSuccess() { this.elements.input.classList.remove("error"); this.elements.input.classList.add("success"); }
     clearInput() { this.elements.input.value = ""; }
     updateProgress(u, t) { const p = t > 0 ? Math.round((u / t) * 100) : 0; this.elements.progressBar.style.width = `${p}%`; this.elements.progressText.textContent = `Descubiertos: ${u} / ${t}`; }
@@ -288,7 +316,7 @@ export class UIManager {
     updateAudioUI(p, n) { const b = document.getElementById("audioPlayPause"); const t = document.getElementById("trackName"); if (b) b.innerHTML = p ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>'; if (t && n) t.textContent = n.replace(/_/g, " ").replace(/\.[^/.]+$/, ""); }
 
     // =================================================================
-    // MENÚS Y LISTAS
+    // MENÚS Y PANELES
     // =================================================================
 
     setupMenuListeners() {
@@ -320,6 +348,10 @@ export class UIManager {
             c.appendChild(div);
         });
     }
+
+    // =================================================================
+    // LISTAS Y GALERÍA GAMIFICADA
+    // =================================================================
 
     setupListListeners() {
         this.elements.searchUnlocked.addEventListener("input", () => this.triggerListFilter());
@@ -362,6 +394,7 @@ export class UIManager {
             const li = document.createElement("li");
             
             if (isUnlocked) {
+                // Ítem Desbloqueado
                 li.className = "lista-codigo-item";
                 li.innerHTML = `<div style="flex-grow:1"><span class="codigo-text">${code}</span><span class="category">${data.categoria}</span></div>`;
                 const favBtn = document.createElement("button"); favBtn.className = `favorite-toggle-btn ${favoritesSet.has(code) ? 'active' : ''}`; favBtn.innerHTML = `<i class="${favoritesSet.has(code) ? 'fas' : 'far'} fa-heart"></i>`;
@@ -369,6 +402,7 @@ export class UIManager {
                 li.onclick = () => { if (this.onCodeSelected) this.onCodeSelected(code); this.elements.contentDiv.scrollIntoView({ behavior: 'smooth' }); };
                 li.appendChild(favBtn);
             } else {
+                // Ítem Bloqueado (Galería)
                 li.className = "lista-codigo-item locked";
                 li.innerHTML = `<div style="flex-grow:1; display:flex; align-items:center;"><i class="fas fa-lock lock-icon"></i><div><span class="codigo-text">??????</span><span class="category" style="opacity:0.5">${data.categoria || 'Secreto'}</span></div></div>`;
                 li.onclick = () => this.showToast("🔒 ¡Sigue buscando para desbloquear este secreto!");
