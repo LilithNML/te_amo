@@ -330,7 +330,7 @@ export const mensajes = {
   },
   "5.1": {
     type: "link",
-    link: "https://lilithnml.github.io/te_amo/corazon/",
+    link: "https://lilithnml.github.io/tu_regalo/sub-paginas/corazon/",
     categoria: "Cositas",
     pista: ""
   },
