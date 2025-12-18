@@ -705,6 +705,7 @@ export const mensajes = {
       url: "assets/unlocked_content/images/soy_tuya.jpg.enc",
       nombre: "soy_tuya.jpg.enc"
     },
+    encrypted: true,
     categoria: "Cosplay",
     pista: ""
   },
