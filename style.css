@@ -343,3 +343,28 @@ input[type=range] { flex-grow: 1; accent-color: var(--highlight-pink); }
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
+
+/* Contenedor de archivos internos */
+.internal-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.internal-frame {
+  width: 100%;
+  height: 500px; /* Altura fija o puedes usar 70vh */
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  background: white; /* La mayoría de HTMLs locales necesitan fondo blanco */
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.1);
+}
+
+/* Ajuste para móviles */
+@media (max-width: 600px) {
+  .internal-frame {
+    height: 400px;
+  }
+}
