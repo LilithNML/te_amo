@@ -314,8 +314,8 @@ export const mensajes = {
     pista: ""
   },
   "contador": {
-    type: "link",
-    link: "https://lilithnml.github.io/tu_regalo/sub-paginas/contador/",
+    type: "internal",
+    link: "sub-paginas/contador/index.html",
     categoria: "Cositas",
     pista: ""
   },
