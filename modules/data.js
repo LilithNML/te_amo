@@ -315,7 +315,7 @@ export const mensajes = {
   },
   "contador": {
     type: "internal",
-    link: ".sub-paginas/contador/index.html",
+    archivo: ".sub-paginas/contador/index.html",
     categoria: "Cositas",
     pista: ""
   },
@@ -330,7 +330,7 @@ export const mensajes = {
   },
   "5.1": {
     type: "internal",
-    link: "https://lilithnml.github.io/tu_regalo/sub-paginas/corazon/",
+    archivo: "https://lilithnml.github.io/tu_regalo/sub-paginas/corazon/",
     categoria: "Cositas",
     pista: ""
   },
