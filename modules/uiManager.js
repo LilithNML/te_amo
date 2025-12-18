@@ -206,6 +206,30 @@ export class UIManager {
                 const a = document.createElement("a"); a.href = data.link; a.target = "_blank"; a.className = "button"; a.innerHTML = 'Abrir Enlace <i class="fas fa-external-link-alt"></i>'; c.appendChild(a); break;
             case "download":
                 const dl = document.createElement("a"); dl.href = data.descarga.url; dl.download = data.descarga.nombre; dl.className = "button"; dl.innerHTML = `<i class="fas fa-download"></i> Descargar ${data.descarga.nombre}`; c.appendChild(dl); break;
+                
+                case "internal":
+                // Contenedor para el archivo local
+                const internalWrapper = document.createElement("div");
+                internalWrapper.className = "internal-wrapper";
+
+                // Botón para abrir en pantalla completa (opcional, por si se ve muy chico)
+                const fullScreenBtn = document.createElement("a");
+                fullScreenBtn.href = data.archivo;
+                fullScreenBtn.target = "_blank";
+                fullScreenBtn.className = "button small-button";
+                fullScreenBtn.innerHTML = '<i class="fas fa-expand"></i> Pantalla Completa';
+                fullScreenBtn.style.marginBottom = "10px";
+                
+                // El visor del archivo (Iframe)
+                const internalFrame = document.createElement("iframe");
+                internalFrame.src = data.archivo;
+                internalFrame.className = "internal-frame";
+                
+                // Añadimos todo al contenedor
+                internalWrapper.appendChild(fullScreenBtn);
+                internalWrapper.appendChild(internalFrame);
+                container.appendChild(internalWrapper);
+                break;
         }
         c.classList.remove("fade-in"); void c.offsetWidth; c.classList.add("fade-in");
     }
