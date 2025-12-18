@@ -313,9 +313,9 @@ export const mensajes = {
     categoria: "Carta",
     pista: ""
   },
-  "mbr7tr5i": {
+  "contador": {
     type: "link",
-    link: "https://lilithnml.github.io/te_amo/contador/",
+    link: "https://lilithnml.github.io/tu_regalo/sub-paginas/contador/",
     categoria: "Cositas",
     pista: ""
   },
