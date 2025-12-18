@@ -75,7 +75,7 @@ export async function descifrarHat(url, filename, password) {
         // esto fallará. Si usas tu herramienta admin, actualízala también.
         
         const OPS_LIMIT = 2; 
-        const MEM_LIMIT = 33554432; // 32MB (Más estable en Android/iOS)
+        const MEM_LIMIT = 67108864; // 64MB
         // const MEM_LIMIT = 67108864; // 64MB (Estándar Hat.sh)
 
         let key;
