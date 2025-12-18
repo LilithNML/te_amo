@@ -315,7 +315,7 @@ export const mensajes = {
   },
   "contador": {
     type: "internal",
-    archivo: ".sub-paginas/contador/index.html",
+    archivo: "sub-paginas/contador/index.html",
     categoria: "Cositas",
     pista: ""
   },
