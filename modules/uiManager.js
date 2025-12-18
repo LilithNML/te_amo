@@ -227,7 +227,51 @@ export class UIManager {
                 const a = document.createElement("a"); a.href = data.link; a.target = "_blank"; a.className = "button"; a.innerHTML = 'Abrir Enlace <i class="fas fa-external-link-alt"></i>'; container.appendChild(a); break;
 
             case "download":
-                const dl = document.createElement("a"); dl.href = data.descarga.url; dl.download = data.descarga.nombre; dl.className = "button"; dl.innerHTML = `<i class="fas fa-download"></i> Descargar ${data.descarga.nombre}`; container.appendChild(dl); break;
+                const dlBtn = document.createElement("button");
+                dlBtn.className = "button";
+                
+                // Texto dinámico dependiendo si es .enc
+                const esCifrado = data.encrypted || data.descarga.url.endsWith(".enc");
+                
+                dlBtn.innerHTML = esCifrado 
+                    ? `<i class="fas fa-lock"></i> Desbloquear ${data.descarga.nombre}`
+                    : `<i class="fas fa-download"></i> Descargar ${data.descarga.nombre}`;
+                
+                dlBtn.onclick = async () => {
+                    if (esCifrado) {
+                        // 1. Pedir contraseña
+                        const password = prompt(`Introduce la contraseña para descifrar "${data.descarga.nombre}":`);
+                        if (!password) return; // Cancelado
+
+                        // 2. Feedback de carga
+                        const originalHTML = dlBtn.innerHTML;
+                        dlBtn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> Descifrando...`;
+                        dlBtn.disabled = true;
+
+                        // 3. Ejecutar descifrado
+                        const exito = await descifrarHat(data.descarga.url, data.descarga.nombre, password);
+
+                        // 4. Restaurar botón
+                        dlBtn.innerHTML = originalHTML;
+                        dlBtn.disabled = false;
+
+                        if (exito) {
+                            this.showToast("¡Archivo descifrado con éxito!");
+                            this.triggerConfetti();
+                        } else {
+                            this.showError(); // Vibración/Shake
+                            alert("Error: Contraseña incorrecta o archivo incompatible.");
+                        }
+                    } else {
+                        // Descarga normal
+                        const a = document.createElement("a");
+                        a.href = data.descarga.url;
+                        a.download = data.descarga.nombre;
+                        a.click();
+                    }
+                };
+                container.appendChild(dlBtn);
+                break;
         }
 
         container.classList.remove("fade-in");
