@@ -1,6 +1,12 @@
 /**
  * modules/uiManager.js
- * VERSIÓN FINAL: Galería de Bloqueados, Partículas y Placeholder Dinámico.
+ * ------------------------------------------------------------------
+ * Gestor de Interfaz de Usuario (UI Manager).
+ * VERSIÓN FINAL CORREGIDA:
+ * - Soporte para archivos locales (type: "internal")
+ * - Viewer.js para imágenes
+ * - Partículas y efectos visuales
+ * - Variables unificadas para evitar errores
  */
 
 import { normalizeText } from './utils.js';
@@ -14,14 +20,17 @@ export class UIManager {
             progressBar: document.querySelector(".progress-bar-fill"),
             progressText: document.getElementById("progreso"),
             toastContainer: document.getElementById("achievement-toast-container"),
+            
             menuButton: document.getElementById("menuButton"),
             dropdownMenu: document.getElementById("dropdownMenu"),
             importInput: document.getElementById("importInput"),
+            
             audioPanel: document.getElementById("audioPanel"),
             closeAudioPanel: document.getElementById("closeAudioPanel"),
             toolsPanel: document.getElementById("toolsPanel"),
             closeToolsPanel: document.getElementById("closeToolsPanel"),
             toolsListContainer: document.getElementById("toolsListContainer"),
+            
             unlockedSection: document.getElementById("unlockedSection"),
             unlockedList: document.getElementById("unlockedList"),
             searchUnlocked: document.getElementById("searchUnlocked"),
@@ -37,9 +46,8 @@ export class UIManager {
         this.setupMenuListeners();
         this.setupListListeners();
         
-        // NUEVAS INICIALIZACIONES
-        this.initParticles();
         this.initDynamicPlaceholder();
+        setTimeout(() => this.initParticles(), 100); 
     }
 
     dismissKeyboard() {
@@ -59,86 +67,41 @@ export class UIManager {
     }
 
     // =================================================================
-    // MEJORAS UX: PARTÍCULAS Y PLACEHOLDER
+    // PARTICULAS & EFECTOS
     // =================================================================
 
-    initParticles() {
+    async initParticles() {
         // @ts-ignore
-        if (typeof tsParticles === 'undefined') return;
-
-        // Configuración "Luciérnagas / Polvo de Estrellas"
+        if (typeof tsParticles === 'undefined') {
+            console.warn("Cargando partículas...");
+            setTimeout(() => this.initParticles(), 500);
+            return;
+        }
         // @ts-ignore
-        tsParticles.load('tsparticles', {
-            fullScreen: { enable: false }, // Se contiene en el div
+        await tsParticles.load('tsparticles', {
+            fpsLimit: 60,
+            fullScreen: { enable: false },
             particles: {
-                number: { value: 30, density: { enable: true, area: 800 } },
-                color: { value: ["#ffffff", "#ff7aa8", "#ffd700"] }, // Blanco, Rosa, Dorado
-                opacity: { value: 0.5, random: true, animation: { enable: true, speed: 1, minimumValue: 0.1, sync: false } },
-                size: { value: 3, random: true, animation: { enable: true, speed: 2, minimumValue: 0.1, sync: false } },
-                move: { enable: true, speed: 0.5, direction: "none", random: true, straight: false, outModes: "out" }
+                number: { value: 40, density: { enable: true, area: 800 } },
+                color: { value: ["#ffffff", "#ff7aa8", "#ffd700"] },
+                shape: { type: "circle" },
+                opacity: { value: 0.7, random: true, animation: { enable: true, speed: 1, minimumValue: 0.3, sync: false } },
+                size: { value: 4, random: true, animation: { enable: true, speed: 3, minimumValue: 1, sync: false } },
+                move: { enable: true, speed: 0.8, direction: "none", random: true, straight: false, outModes: "out" }
             },
-            interactivity: {
-                events: { onHover: { enable: true, mode: "bubble" }, onClick: { enable: true, mode: "push" } },
-                modes: { bubble: { distance: 200, size: 4, duration: 2, opacity: 0.8 }, push: { quantity: 4 } }
-            },
+            interactivity: { events: { onHover: { enable: true, mode: "bubble" }, onClick: { enable: true, mode: "push" }, resize: true }, modes: { bubble: { distance: 200, size: 6, duration: 2, opacity: 1 }, push: { quantity: 4 } } },
             detectRetina: true
         });
     }
 
     initDynamicPlaceholder() {
-        const frases = [
-            "Escribe aquí...",
-            "Prueba con una fecha especial...",
-            "¿Recuerdas nuestro lugar?...",
-            "Intenta con un apodo cariñoso...",
-            "El nombre de nuestra canción...",
-            "¿Qué cenamos esa noche?..."
-        ];
+        const frases = ["Escribe aquí...", "Prueba con una fecha especial...", "¿Recuerdas nuestro lugar?...", "Intenta con un apodo cariñoso...", "El nombre de nuestra canción..."];
         let index = 0;
-        
         setInterval(() => {
             index = (index + 1) % frases.length;
             this.elements.input.setAttribute("placeholder", frases[index]);
-        }, 3500); // Cambia cada 3.5 segundos
+        }, 3500);
     }
-
-    // =================================================================
-    // MENÚS
-    // =================================================================
-
-    setupMenuListeners() {
-        this.elements.menuButton.addEventListener("click", (e) => { e.stopPropagation(); this.elements.dropdownMenu.classList.toggle("show"); });
-        document.addEventListener("click", (e) => { if (!this.elements.menuButton.contains(e.target) && !this.elements.dropdownMenu.contains(e.target)) this.elements.dropdownMenu.classList.remove("show"); });
-
-        this.bindMenuAction("menuHome", () => { this.toggleUnlockedPanel(false); window.scrollTo({ top: 0, behavior: 'smooth' }); });
-        this.bindMenuAction("menuShowUnlocked", () => this.toggleUnlockedPanel(true));
-        this.bindMenuAction("menuFavorites", () => { this.toggleUnlockedPanel(true); this.showingFavoritesOnly = true; this.updateFilterUI(); this.triggerListFilter(); });
-        this.bindMenuAction("menuDarkMode", () => this.toggleDarkMode());
-        this.bindMenuAction("menuAudio", () => this.openPanel(this.elements.audioPanel));
-        this.bindMenuAction("menuTools", () => { this.renderTools(); this.openPanel(this.elements.toolsPanel); });
-        this.bindMenuAction("menuExport", () => this.exportProgress());
-        this.bindMenuAction("menuImport", () => this.elements.importInput.click());
-        this.elements.importInput.addEventListener("change", (e) => { if (e.target.files.length > 0) this.handleImportFile(e.target.files[0]); this.elements.importInput.value = ""; });
-        if(this.elements.closeAudioPanel) this.elements.closeAudioPanel.addEventListener("click", () => this.closePanel(this.elements.audioPanel));
-        if(this.elements.closeToolsPanel) this.elements.closeToolsPanel.addEventListener("click", () => this.closePanel(this.elements.toolsPanel));
-    }
-
-    bindMenuAction(id, fn) { const el = document.getElementById(id); if(el) el.addEventListener("click", () => { fn(); this.elements.dropdownMenu.classList.remove("show"); }); }
-    openPanel(p) { if(p) { p.classList.add("show"); p.setAttribute("aria-hidden", "false"); } }
-    closePanel(p) { if(p) { p.classList.remove("show"); p.setAttribute("aria-hidden", "true"); } }
-
-    renderTools() {
-        const c = this.elements.toolsListContainer; if(!c) return; c.innerHTML = "";
-        herramientasExternas.forEach(t => {
-            const div = document.createElement("div"); div.className = "tool-card";
-            div.innerHTML = `<div class="tool-header"><i class="${t.icono}"></i> ${t.nombre}</div><div class="tool-desc">${t.descripcion}</div><a href="${t.url}" target="_blank" rel="noopener noreferrer" class="tool-btn">Abrir <i class="fas fa-external-link-alt"></i></a>`;
-            c.appendChild(div);
-        });
-    }
-
-    // =================================================================
-    // EFECTOS VISUALES
-    // =================================================================
 
     triggerConfetti() {
         // @ts-ignore
@@ -173,65 +136,102 @@ export class UIManager {
     }
 
     // =================================================================
-    // RENDERIZADO
+    // RENDERIZADO DE CONTENIDO (Aquí estaba el error)
     // =================================================================
 
     renderContent(data, key) {
         if (this.typewriterTimeout) clearTimeout(this.typewriterTimeout);
-        const c = this.elements.contentDiv; c.hidden = false; c.innerHTML = "";
-        const h2 = document.createElement("h2"); h2.textContent = key ? `Descubierto: ${key}` : "¡Sorpresa!"; h2.style.textTransform = "capitalize"; c.appendChild(h2);
-        if (data.texto && data.type !== 'text') { const p = document.createElement("p"); p.textContent = data.texto; c.appendChild(p); }
+        
+        // UNIFICACIÓN DE VARIABLE: Usaremos 'container' siempre
+        const container = this.elements.contentDiv; 
+        
+        container.hidden = false;
+        container.innerHTML = "";
+
+        const h2 = document.createElement("h2");
+        h2.textContent = key ? `Descubierto: ${key}` : "¡Sorpresa!";
+        h2.style.textTransform = "capitalize";
+        container.appendChild(h2);
+
+        if (data.texto && data.type !== 'text' && data.type !== 'internal') {
+            const p = document.createElement("p");
+            p.textContent = data.texto;
+            container.appendChild(p);
+        }
+
         switch (data.type) {
             case "text":
-                const pText = document.createElement("p"); pText.className = "mensaje-texto";
-                if (data.categoria && (data.categoria.toLowerCase() === 'pensamiento' || data.categoria.toLowerCase() === 'carta')) { this.typeWriterEffect(pText, data.texto); } 
-                else { pText.innerText = data.texto; } c.appendChild(pText); break;
+                const pText = document.createElement("p");
+                pText.className = "mensaje-texto";
+                if (data.categoria && (data.categoria.toLowerCase() === 'pensamiento' || data.categoria.toLowerCase() === 'carta')) {
+                    this.typeWriterEffect(pText, data.texto);
+                } else {
+                    pText.textContent = data.texto;
+                }
+                container.appendChild(pText);
+                break;
+
             case "image":
-                const img = document.createElement("img"); img.src = data.imagen; img.alt = "Imagen secreta"; img.style.cursor = "zoom-in";
+                const img = document.createElement("img");
+                img.src = data.imagen;
+                img.alt = "Imagen secreta";
+                img.style.cursor = "zoom-in";
                 img.onclick = () => {
                     // @ts-ignore
                     const viewer = new Viewer(img, { hidden() { viewer.destroy(); }, toolbar: { zoomIn: 1, zoomOut: 1, oneToOne: 1, reset: 1, rotateLeft: 0, rotateRight: 0, flipHorizontal: 0, flipVertical: 0 }, navbar: false, title: false, transition: true });
                     viewer.show();
                 };
-                c.appendChild(img); break;
+                container.appendChild(img);
+                break;
+
             case "video":
                 if (data.videoEmbed) {
                     const wrapper = document.createElement("div"); wrapper.className = "video-wrapper";
                     const loader = document.createElement("div"); loader.className = "video-loader";
-                    const iframe = document.createElement("iframe"); iframe.src = data.videoEmbed; iframe.className = "video-frame"; iframe.setAttribute("allow", "autoplay; encrypted-media; fullscreen");
+                    const iframe = document.createElement("iframe");
+                    iframe.src = data.videoEmbed; iframe.className = "video-frame";
+                    iframe.setAttribute("allow", "autoplay; encrypted-media; fullscreen");
                     iframe.onload = () => { loader.style.display = "none"; iframe.style.opacity = "1"; };
-                    wrapper.appendChild(loader); wrapper.appendChild(iframe); c.appendChild(wrapper);
-                } break;
-            case "link":
-                const a = document.createElement("a"); a.href = data.link; a.target = "_blank"; a.className = "button"; a.innerHTML = 'Abrir Enlace <i class="fas fa-external-link-alt"></i>'; c.appendChild(a); break;
-            case "download":
-                const dl = document.createElement("a"); dl.href = data.descarga.url; dl.download = data.descarga.nombre; dl.className = "button"; dl.innerHTML = `<i class="fas fa-download"></i> Descargar ${data.descarga.nombre}`; c.appendChild(dl); break;
-                
-                case "internal":
-                // Contenedor para el archivo local
+                    wrapper.appendChild(loader); wrapper.appendChild(iframe); container.appendChild(wrapper);
+                }
+                break;
+
+            // --- NUEVO CASO: ARCHIVOS LOCALES ---
+            case "internal":
                 const internalWrapper = document.createElement("div");
                 internalWrapper.className = "internal-wrapper";
-
-                // Botón para abrir en pantalla completa (opcional, por si se ve muy chico)
+                
+                // Botón Pantalla Completa
                 const fullScreenBtn = document.createElement("a");
                 fullScreenBtn.href = data.archivo;
                 fullScreenBtn.target = "_blank";
                 fullScreenBtn.className = "button small-button";
                 fullScreenBtn.innerHTML = '<i class="fas fa-expand"></i> Pantalla Completa';
                 fullScreenBtn.style.marginBottom = "10px";
-                
-                // El visor del archivo (Iframe)
+
+                // Iframe Interno
                 const internalFrame = document.createElement("iframe");
                 internalFrame.src = data.archivo;
                 internalFrame.className = "internal-frame";
-                
-                // Añadimos todo al contenedor
+                internalFrame.style.border = "none";
+                internalFrame.style.backgroundColor = "#fff"; // Fondo blanco para documentos
+
                 internalWrapper.appendChild(fullScreenBtn);
                 internalWrapper.appendChild(internalFrame);
+                
                 container.appendChild(internalWrapper);
                 break;
+
+            case "link":
+                const a = document.createElement("a"); a.href = data.link; a.target = "_blank"; a.className = "button"; a.innerHTML = 'Abrir Enlace <i class="fas fa-external-link-alt"></i>'; container.appendChild(a); break;
+
+            case "download":
+                const dl = document.createElement("a"); dl.href = data.descarga.url; dl.download = data.descarga.nombre; dl.className = "button"; dl.innerHTML = `<i class="fas fa-download"></i> Descargar ${data.descarga.nombre}`; container.appendChild(dl); break;
         }
-        c.classList.remove("fade-in"); void c.offsetWidth; c.classList.add("fade-in");
+
+        container.classList.remove("fade-in");
+        void container.offsetWidth;
+        container.classList.add("fade-in");
     }
 
     renderMessage(title, body) { const c = this.elements.contentDiv; c.hidden = false; c.innerHTML = `<h2>${title}</h2><p>${body}</p>`; c.classList.remove("fade-in"); void c.offsetWidth; c.classList.add("fade-in"); }
@@ -241,10 +241,40 @@ export class UIManager {
     updateProgress(u, t) { const p = t > 0 ? Math.round((u / t) * 100) : 0; this.elements.progressBar.style.width = `${p}%`; this.elements.progressText.textContent = `Descubiertos: ${u} / ${t}`; }
     showToast(msg) { const t = document.createElement("div"); t.className = "achievement-toast"; t.textContent = msg; this.elements.toastContainer.appendChild(t); setTimeout(() => t.remove(), 4000); }
     updateAudioUI(p, n) { const b = document.getElementById("audioPlayPause"); const t = document.getElementById("trackName"); if (b) b.innerHTML = p ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>'; if (t && n) t.textContent = n.replace(/_/g, " ").replace(/\.[^/.]+$/, ""); }
-    
+
     // =================================================================
-    // GALERÍA Y LISTAS (MODIFICADO: MUESTRA BLOQUEADOS)
+    // MENÚS Y LISTAS
     // =================================================================
+
+    setupMenuListeners() {
+        this.elements.menuButton.addEventListener("click", (e) => { e.stopPropagation(); this.elements.dropdownMenu.classList.toggle("show"); });
+        document.addEventListener("click", (e) => { if (!this.elements.menuButton.contains(e.target) && !this.elements.dropdownMenu.contains(e.target)) this.elements.dropdownMenu.classList.remove("show"); });
+
+        this.bindMenuAction("menuHome", () => { this.toggleUnlockedPanel(false); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+        this.bindMenuAction("menuShowUnlocked", () => this.toggleUnlockedPanel(true));
+        this.bindMenuAction("menuFavorites", () => { this.toggleUnlockedPanel(true); this.showingFavoritesOnly = true; this.updateFilterUI(); this.triggerListFilter(); });
+        this.bindMenuAction("menuDarkMode", () => this.toggleDarkMode());
+        this.bindMenuAction("menuAudio", () => this.openPanel(this.elements.audioPanel));
+        this.bindMenuAction("menuTools", () => { this.renderTools(); this.openPanel(this.elements.toolsPanel); });
+        this.bindMenuAction("menuExport", () => this.exportProgress());
+        this.bindMenuAction("menuImport", () => this.elements.importInput.click());
+        this.elements.importInput.addEventListener("change", (e) => { if (e.target.files.length > 0) this.handleImportFile(e.target.files[0]); this.elements.importInput.value = ""; });
+        if (this.elements.closeAudioPanel) this.elements.closeAudioPanel.addEventListener("click", () => this.closePanel(this.elements.audioPanel));
+        if (this.elements.closeToolsPanel) this.elements.closeToolsPanel.addEventListener("click", () => this.closePanel(this.elements.toolsPanel));
+    }
+
+    bindMenuAction(id, fn) { const btn = document.getElementById(id); if (btn) btn.addEventListener("click", () => { fn(); this.elements.dropdownMenu.classList.remove("show"); }); }
+    openPanel(p) { if (p) { p.classList.add("show"); p.setAttribute("aria-hidden", "false"); } }
+    closePanel(p) { if (p) { p.classList.remove("show"); p.setAttribute("aria-hidden", "true"); } }
+
+    renderTools() {
+        const c = this.elements.toolsListContainer; if (!c) return; c.innerHTML = "";
+        herramientasExternas.forEach(t => {
+            const div = document.createElement("div"); div.className = "tool-card";
+            div.innerHTML = `<div class="tool-header"><i class="${t.icono}"></i> ${t.nombre}</div><div class="tool-desc">${t.descripcion}</div><a href="${t.url}" target="_blank" rel="noopener noreferrer" class="tool-btn">Abrir <i class="fas fa-external-link-alt"></i></a>`;
+            c.appendChild(div);
+        });
+    }
 
     setupListListeners() {
         this.elements.searchUnlocked.addEventListener("input", () => this.triggerListFilter());
@@ -257,18 +287,11 @@ export class UIManager {
 
     renderUnlockedList(unlockedSet, favoritesSet, mensajesData) {
         this.currentData = { unlockedSet, favoritesSet, mensajesData };
-        
-        // Categorías: Basadas en TODO el contenido, no solo lo desbloqueado
         const categories = new Set();
         Object.values(mensajesData).forEach(msg => { if (msg.categoria) categories.add(msg.categoria); });
-
-        const currentCat = this.elements.categoryFilter.value;
+        const cur = this.elements.categoryFilter.value;
         this.elements.categoryFilter.innerHTML = '<option value="">Todas</option>';
-        categories.forEach(cat => {
-            const opt = document.createElement("option"); opt.value = cat; opt.textContent = cat;
-            if (cat === currentCat) opt.selected = true;
-            this.elements.categoryFilter.appendChild(opt);
-        });
+        categories.forEach(cat => { const o = document.createElement("option"); o.value = cat; o.textContent = cat; if (cat === cur) o.selected = true; this.elements.categoryFilter.appendChild(o); });
         this.triggerListFilter();
     }
 
@@ -279,7 +302,6 @@ export class UIManager {
         const cat = this.elements.categoryFilter.value;
         this.elements.unlockedList.innerHTML = "";
         
-        // Iteramos sobre TODOS los mensajes (ordenados alfabéticamente)
         const allCodes = Object.keys(mensajesData).sort();
         let visibleCount = 0;
 
@@ -287,44 +309,27 @@ export class UIManager {
             const data = mensajesData[code];
             const isUnlocked = unlockedSet.has(code);
 
-            // Filtro Favoritos (Solo si está desbloqueado)
             if (this.showingFavoritesOnly && !favoritesSet.has(code)) return;
-            // Filtro Texto (Búsqueda) - Si está bloqueado, no se puede buscar por nombre
             if (s && isUnlocked && !normalizeText(code).includes(s)) return;
-            // Filtro Categoría
             if (cat && data.categoria !== cat) return;
 
             visibleCount++;
             const li = document.createElement("li");
             
             if (isUnlocked) {
-                // ITEM DESBLOQUEADO
                 li.className = "lista-codigo-item";
                 li.innerHTML = `<div style="flex-grow:1"><span class="codigo-text">${code}</span><span class="category">${data.categoria}</span></div>`;
-                const favBtn = document.createElement("button"); favBtn.className = `favorite-toggle-btn ${favoritesSet.has(code) ? 'active' : ''}`;
-                favBtn.innerHTML = `<i class="${favoritesSet.has(code) ? 'fas' : 'far'} fa-heart"></i>`;
+                const favBtn = document.createElement("button"); favBtn.className = `favorite-toggle-btn ${favoritesSet.has(code) ? 'active' : ''}`; favBtn.innerHTML = `<i class="${favoritesSet.has(code) ? 'fas' : 'far'} fa-heart"></i>`;
                 favBtn.onclick = (e) => { e.stopPropagation(); if (this.onToggleFavorite) this.onToggleFavorite(code); };
                 li.onclick = () => { if (this.onCodeSelected) this.onCodeSelected(code); this.elements.contentDiv.scrollIntoView({ behavior: 'smooth' }); };
                 li.appendChild(favBtn);
             } else {
-                // ITEM BLOQUEADO (GALERÍA GAMIFICADA)
                 li.className = "lista-codigo-item locked";
-                // Mostramos '???' o una pista sutil, y la categoría para motivar
-                li.innerHTML = `
-                    <div style="flex-grow:1; display:flex; align-items:center;">
-                        <i class="fas fa-lock lock-icon"></i>
-                        <div>
-                            <span class="codigo-text">??????</span>
-                            <span class="category" style="opacity:0.5">${data.categoria || 'Secreto'}</span>
-                        </div>
-                    </div>
-                `;
+                li.innerHTML = `<div style="flex-grow:1; display:flex; align-items:center;"><i class="fas fa-lock lock-icon"></i><div><span class="codigo-text">??????</span><span class="category" style="opacity:0.5">${data.categoria || 'Secreto'}</span></div></div>`;
                 li.onclick = () => this.showToast("🔒 ¡Sigue buscando para desbloquear este secreto!");
             }
-
             this.elements.unlockedList.appendChild(li);
         });
-
         if (visibleCount === 0) this.elements.unlockedList.innerHTML = '<p style="text-align:center; width:100%; opacity:0.7">Sin resultados.</p>';
     }
 
