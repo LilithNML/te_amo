@@ -11,6 +11,7 @@
 
 import { normalizeText } from './utils.js';
 import { herramientasExternas } from './data.js';
+import { descifrarHat } from './hatDecryptor.js';
 
 export class UIManager {
     constructor() {
