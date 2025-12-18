@@ -1,21 +1,38 @@
 /**
  * modules/hatDecryptor.js
- * Descifrador compatible con hat.sh v2 (XChaCha20-Poly1305 + Argon2id)
- * CORREGIDO: Acceso seguro a window.sodium
+ * Descifrador Hat.sh v2 - VERSIÓN AUTO-CURABLE
+ * Si la librería no está en el HTML, este script la descarga al vuelo.
  */
+
+// Función auxiliar para inyectar scripts dinámicamente
+function cargarLibreria(url) {
+    return new Promise((resolve, reject) => {
+        if (window.sodium) { resolve(); return; } // Ya existe
+        console.log("Inyectando Libsodium dinámicamente...");
+        const script = document.createElement('script');
+        script.src = url;
+        script.onload = () => resolve();
+        script.onerror = () => reject(new Error(`No se pudo cargar ${url}`));
+        document.head.appendChild(script);
+    });
+}
 
 export async function descifrarHat(url, filename, password) {
     try {
-        // --- CORRECCIÓN AQUÍ ---
-        // 1. Verificar si la librería cargó en el navegador
+        // 1. AUTO-CURACIÓN: Verificar si sodium existe. Si no, descargarlo.
         if (typeof window.sodium === 'undefined') {
-            throw new Error("La librería Libsodium no está cargada. Revisa el index.html.");
+            try {
+                await cargarLibreria("https://cdn.jsdelivr.net/npm/libsodium-wrappers@0.7.13/dist/libsodium-wrappers.min.js");
+            } catch (e) {
+                throw new Error("Error crítico: No se pudo cargar el motor criptográfico (Internet requerido la primera vez).");
+            }
         }
 
         // 2. Esperar a que Libsodium esté listo
+        // @ts-ignore
         await window.sodium.ready;
-        const sod = window.sodium; // Usamos la referencia global explícita
-        // -----------------------
+        // @ts-ignore
+        const sod = window.sodium;
 
         // 3. Descargar el archivo cifrado
         const response = await fetch(url);
@@ -25,7 +42,6 @@ export async function descifrarHat(url, filename, password) {
 
         // --- CONSTANTES DE HAT.SH ---
         const SALT_LEN = 16;
-        // Usamos sod. (que es window.sodium) para acceder a las constantes
         const HEADER_LEN = sod.crypto_secretstream_xchacha20poly1305_HEADERBYTES; 
         const ABYTES = sod.crypto_secretstream_xchacha20poly1305_ABYTES; 
         const CHUNK_SIZE = 64 * 1024; 
@@ -104,6 +120,7 @@ export async function descifrarHat(url, filename, password) {
 
     } catch (error) {
         console.error("HatDecryptor Error:", error);
+        alert(error.message); // Mostrar alerta visible al usuario
         return false;
     }
 }
