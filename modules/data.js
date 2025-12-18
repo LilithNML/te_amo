@@ -233,9 +233,9 @@ export const mensajes = {
     pista: "Es el lugar dentro de Teyvat donde empezó nuestro mundo real."
   },
   "cofrelujoso": {
-    type: "link",
-    link: "https://lilithnml.github.io/te_amo/cofre/",
-    categoria: "Cositas",
+    type: "text",
+    texto: "Mi Amor Precioso,\n\nDesde el día que te conocí, mi mundo se iluminó de una manera que nunca imaginé.\nCada momento a tu lado es un regalo, una aventura que atesoro con todo mi ser.\n\nTu sonrisa, tu voz, la forma en que me miras…\ntodo de ti me enamora cada día más.\n\nGracias por ser mi compañero, mi mejor amigo, mi confidente y el amor de mi vida.\nContigo, cada desafío se siente más ligero y cada alegría se multiplica.\n\nEres la persona más maravillosa que he conocido,\ny estoy increíblemente agradecida por tenerte en mi vida.\n\nEspero que esta pequeña sorpresa te alegre el día\ny te recuerde cuánto te amo.\n\nSiempre estaré aquí para ti,\nen las buenas y en las no tan buenas.\n\nPrometo amarte, cuidarte\ny apoyarte incondicionalmente.\n\nCon todo mi amor, hoy y siempre,\nTu niña ❤️\n\nP.D.\nNo olvides que eres mi persona favorita en todo el universo.\nCada día contigo es una bendición\ny no puedo esperar a ver todo lo que el futuro nos depara.\n\nTe amo más de lo que las palabras pueden expresar.",
+    categoria: "Carta",
     pista: "En Genshin es el más valioso, el que brilla distinto, el que siempre vale la pena abrir… como tú en mi vida."
   },
   "primerteamo": {
