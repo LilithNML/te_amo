@@ -1,23 +1,36 @@
 /**
  * modules/webCryptoDecryptor.js
- * Descifrado Nativo usando WebCrypto API (Estándar del Navegador).
+ * Descifrador Nativo WebCrypto - Sincronizado con tu Herramienta
+ * Iteraciones: 150,000 | Algoritmo: AES-GCM + PBKDF2
  */
 
 export async function descifrarArchivo(url, filename, password) {
     try {
-        // 1. Descargar el archivo cifrado (.wenc o .enc)
-        const response = await fetch(url);
-        if (!response.ok) throw new Error("No se pudo descargar el archivo.");
+        // 1. Descarga Anti-Caché
+        // Agregamos timestamp para asegurar que no leemos una versión vieja dañada
+        const urlSinCache = url + (url.includes('?') ? '&' : '?') + 't=' + new Date().getTime();
+        
+        const response = await fetch(urlSinCache, { cache: "no-store" });
+        if (!response.ok) throw new Error(`Error de red: ${response.status}`);
         
         const fileBuffer = await response.arrayBuffer();
-        
-        // 2. Extraer partes (Salt + IV + Ciphertext)
-        // Según herramienta: Salt (16 bytes) | IV (12 bytes) | Contenido...
+
+        // ⚠️ VALIDACIÓN CRÍTICA:
+        // A veces el servidor devuelve una página HTML de error (404) en vez del archivo.
+        // Si intentamos descifrar ese HTML, fallará diciendo "Contraseña incorrecta".
+        // Verificamos si los primeros bytes parecen texto HTML.
+        const firstBytes = new Uint8Array(fileBuffer.slice(0, 5));
+        const headerString = String.fromCharCode(...firstBytes);
+        if (headerString.includes("<!DOC") || headerString.includes("<htm")) {
+            throw new Error("ERROR_404: El archivo no existe en la carpeta assets.");
+        }
+
+        // 2. Extraer partes (Tu herramienta usa: Salt 16 bytes | IV 12 bytes | Contenido)
         const salt = fileBuffer.slice(0, 16);
         const iv = fileBuffer.slice(16, 28);
         const ciphertext = fileBuffer.slice(28);
 
-        // 3. Preparar la clave maestra desde la contraseña
+        // 3. Importar contraseña
         const textEncoder = new TextEncoder();
         const passwordKey = await window.crypto.subtle.importKey(
             "raw",
@@ -27,13 +40,17 @@ export async function descifrarArchivo(url, filename, password) {
             ["deriveKey"]
         );
 
-        // 4. Derivar la clave AES-GCM (Igual que en la herramienta)
+        // 4. Derivar clave AES-GCM
+        // ⚠️ DEBE COINCIDIR CON TU HERRAMIENTA
+        const ITERATIONS = 150000; // Actualizado a lo que usa tu index-webcrypto.html
+        const HASH_ALGO = "SHA-256";
+
         const aesKey = await window.crypto.subtle.deriveKey(
             {
                 name: "PBKDF2",
                 salt: new Uint8Array(salt),
-                iterations: 150000, // Coincide con la herramienta 
-                hash: "SHA-256"
+                iterations: ITERATIONS, 
+                hash: HASH_ALGO
             },
             passwordKey,
             { name: "AES-GCM", length: 256 },
@@ -48,21 +65,20 @@ export async function descifrarArchivo(url, filename, password) {
             ciphertext
         );
 
-        // 6. Generar descarga del archivo limpio
+        // 6. Generar Descarga
         const blob = new Blob([decryptedContent], { type: "application/octet-stream" });
         const link = document.createElement("a");
         link.href = window.URL.createObjectURL(blob);
         
-        // Limpieza del nombre (quita extensiones extra si las hay)
-        let finalName = filename.replace(".enc", "").replace(".wenc", "");
-        // Si el archivo original no tenía extensión, intentamos adivinar o dejarlo así
+        // Limpiar nombre (.wenc, .enc)
+        let finalName = filename.replace(/\.(wenc|enc)$/i, "");
+        // Si quedó sin extensión, asumimos original o dejamos así
         if (!finalName.includes(".")) finalName = "descifrado_" + filename;
 
         link.download = finalName;
         document.body.appendChild(link);
         link.click();
         
-        // Limpieza de memoria
         setTimeout(() => {
             document.body.removeChild(link);
             window.URL.revokeObjectURL(link.href);
@@ -71,12 +87,11 @@ export async function descifrarArchivo(url, filename, password) {
         return true;
 
     } catch (error) {
-        // WebCrypto lanza 'OperationError' si la contraseña está mal (fallo de autenticación GCM)
+        // Error específico cuando la contraseña está mal (Fallo de integridad GCM)
         if (error.name === "OperationError") {
-            return false; // Contraseña incorrecta
+            return false; 
         }
-        
-        console.error("Error WebCrypto:", error);
-        throw new Error("Error técnico: " + error.message);
+        // Relanzar otros errores (404, Red, etc)
+        throw error;
     }
 }
