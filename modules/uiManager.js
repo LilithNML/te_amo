@@ -1,42 +1,28 @@
 /**
  * modules/uiManager.js
- * ------------------------------------------------------------------
- * Gestor de Interfaz de Usuario (UI Manager).
- * * CARACTERÍSTICAS:
- * - Integración con WebCrypto API (Nativo) para descifrado seguro.
- * - Manejo de interfaz reactiva (Toasts, Modales, Paneles).
- * - Efectos visuales (Confeti, Partículas, Efecto Máquina de Escribir).
- * - Soporte para contenido multimedia e Iframes transparentes.
+ * Versión Final: Integración WebCrypto + Modal de Contraseña Seguro
  */
 
 import { normalizeText } from './utils.js';
 import { herramientasExternas } from './data.js';
-// IMPORTANTE: Importamos el descifrador nativo WebCrypto
 import { descifrarArchivo } from './webCryptoDecryptor.js';
 
 export class UIManager {
     constructor() {
-        // Referencias a elementos del DOM (Caché de selectores)
         this.elements = {
             input: document.getElementById("codeInput"),
             contentDiv: document.getElementById("contenido"),
             progressBar: document.querySelector(".progress-bar-fill"),
             progressText: document.getElementById("progreso"),
             toastContainer: document.getElementById("achievement-toast-container"),
-            
-            // Menú
             menuButton: document.getElementById("menuButton"),
             dropdownMenu: document.getElementById("dropdownMenu"),
             importInput: document.getElementById("importInput"),
-            
-            // Paneles Laterales
             audioPanel: document.getElementById("audioPanel"),
             closeAudioPanel: document.getElementById("closeAudioPanel"),
             toolsPanel: document.getElementById("toolsPanel"),
             closeToolsPanel: document.getElementById("closeToolsPanel"),
             toolsListContainer: document.getElementById("toolsListContainer"),
-            
-            // Sección de Colección (Desbloqueados)
             unlockedSection: document.getElementById("unlockedSection"),
             unlockedList: document.getElementById("unlockedList"),
             searchUnlocked: document.getElementById("searchUnlocked"),
@@ -45,31 +31,18 @@ export class UIManager {
             closeUnlockedBtn: document.getElementById("closeUnlockedBtn")
         };
 
-        // Estado interno de la UI
         this.showingFavoritesOnly = false;
         this.typewriterTimeout = null;
 
-        // Inicialización
         this.initTheme();
         this.setupMenuListeners();
         this.setupListListeners();
-        
-        // Efectos Visuales
         this.initDynamicPlaceholder();
-        // Retrasamos partículas ligeramente para no bloquear el renderizado inicial
         setTimeout(() => this.initParticles(), 100); 
     }
 
-    /**
-     * Cierra el teclado virtual en móviles quitando el foco del input.
-     */
-    dismissKeyboard() {
-        if (this.elements.input) this.elements.input.blur();
-    }
+    dismissKeyboard() { if (this.elements.input) this.elements.input.blur(); }
 
-    /**
-     * Inicializa el tema (Oscuro/Claro) basado en localStorage.
-     */
     initTheme() {
         const savedTheme = localStorage.getItem("theme");
         if (savedTheme === "dark") document.body.classList.add("dark-mode");
@@ -82,42 +55,28 @@ export class UIManager {
         this.showToast(isDark ? "Modo Oscuro Activado" : "Modo Claro Activado");
     }
 
-    // =================================================================
-    // EFECTOS VISUALES
-    // =================================================================
-
+    // --- VISUALES ---
     async initParticles() {
-        // @ts-ignore (tsParticles cargado vía CDN global)
+        // @ts-ignore
         if (typeof tsParticles === 'undefined') return;
-
         // @ts-ignore
         await tsParticles.load('tsparticles', {
-            fpsLimit: 60,
-            fullScreen: { enable: false }, // Contenido en el div #tsparticles
+            fpsLimit: 60, fullScreen: { enable: false },
             particles: {
                 number: { value: 30, density: { enable: true, area: 800 } },
                 color: { value: ["#ffffff", "#ff7aa8", "#ffd700"] },
                 shape: { type: "circle" },
-                opacity: { value: 0.7, random: true, animation: { enable: true, speed: 1, minimumValue: 0.3, sync: false } },
-                size: { value: 3, random: true, animation: { enable: true, speed: 2, minimumValue: 1, sync: false } },
-                move: { enable: true, speed: 0.6, direction: "none", random: true, straight: false, outModes: "out" }
+                opacity: { value: 0.7, random: true, animation: { enable: true, speed: 1, minimumValue: 0.3 } },
+                size: { value: 3, random: true, animation: { enable: true, speed: 2 } },
+                move: { enable: true, speed: 0.6, direction: "none", random: true, outModes: "out" }
             },
-            interactivity: { 
-                events: { onHover: { enable: true, mode: "bubble" }, onClick: { enable: true, mode: "push" }, resize: true }, 
-                modes: { bubble: { distance: 200, size: 6, duration: 2, opacity: 1 }, push: { quantity: 4 } } 
-            },
+            interactivity: { events: { onHover: { enable: true, mode: "bubble" }, onClick: { enable: true, mode: "push" } } },
             detectRetina: true
         });
     }
 
     initDynamicPlaceholder() {
-        const frases = [
-            "Escribe aquí...", 
-            "Prueba con una fecha especial...", 
-            "¿Recuerdas nuestro lugar?...", 
-            "Intenta con un apodo cariñoso...", 
-            "El nombre de nuestra canción..."
-        ];
+        const frases = ["Escribe aquí...", "Una fecha especial...", "¿Nuestro lugar?", "Un apodo...", "Nombre de canción..."];
         let index = 0;
         setInterval(() => {
             index = (index + 1) % frases.length;
@@ -126,529 +85,291 @@ export class UIManager {
     }
 
     triggerConfetti() {
-        // @ts-ignore (Confetti cargado vía CDN global)
+        // @ts-ignore
         if (typeof confetti === 'undefined') return;
-        
-        const count = 200; 
-        const defaults = { origin: { y: 0.7 }, zIndex: 1500 };
-
-        function fire(particleRatio, opts) {
+        const count = 200; const defaults = { origin: { y: 0.7 }, zIndex: 1500 };
+        function fire(r, opts) { 
             // @ts-ignore
-            confetti(Object.assign({}, defaults, opts, { particleCount: Math.floor(count * particleRatio) }));
+            confetti(Object.assign({}, defaults, opts, { particleCount: Math.floor(count * r) })); 
         }
-
         fire(0.25, { spread: 26, startVelocity: 55 });
         fire(0.2, { spread: 60 });
         fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
-        fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
-        fire(0.1, { spread: 120, startVelocity: 45 });
     }
 
     typeWriterEffect(element, text) {
         if (this.typewriterTimeout) clearTimeout(this.typewriterTimeout);
-        element.innerHTML = ""; 
-        element.classList.add("typewriter-cursor");
-        
-        let i = 0; 
-        const slowSpeed = 60; 
-        const fastSpeed = 30; 
-        const accelerationChars = 50;
-
+        element.innerHTML = ""; element.classList.add("typewriter-cursor");
+        let i = 0; const slow=60; const fast=30; const accel=50;
         const type = () => {
-            if (i >= text.length) { 
-                element.classList.remove("typewriter-cursor"); 
-                return; 
-            }
-            
+            if (i >= text.length) { element.classList.remove("typewriter-cursor"); return; }
             const char = text.charAt(i);
-            if (char === '\n') { 
-                element.appendChild(document.createElement('br')); 
-            } else { 
-                element.appendChild(document.createTextNode(char)); 
-            }
-            
-            // Velocidad variable para efecto más natural
-            let speed = i < accelerationChars ? slowSpeed : fastSpeed;
-            if (char === '.' || char === '!' || char === '?') speed += 300; // Pausa en signos
-            if (char === '\n') speed += 400; // Pausa en saltos de línea
-            
-            i++; 
-            this.typewriterTimeout = setTimeout(type, speed);
+            if (char === '\n') element.appendChild(document.createElement('br'));
+            else element.appendChild(document.createTextNode(char));
+            let speed = i < accel ? slow : fast;
+            if (['.','!','?'].includes(char)) speed += 300;
+            if (char === '\n') speed += 400;
+            i++; this.typewriterTimeout = setTimeout(type, speed);
         };
         type();
     }
 
-    // =================================================================
-    // RENDERIZADO DE CONTENIDO PRINCIPAL
-    // =================================================================
-
+    // --- RENDERIZADO ---
     renderContent(data, key) {
-        // Limpiar efectos anteriores
         if (this.typewriterTimeout) clearTimeout(this.typewriterTimeout);
-        
         const container = this.elements.contentDiv; 
-        container.hidden = false;
-        container.innerHTML = ""; // Limpiar contenido previo
+        container.hidden = false; container.innerHTML = "";
 
-        // Título del contenido
         const h2 = document.createElement("h2");
         h2.textContent = key ? `Descubierto: ${key}` : "¡Sorpresa!";
         h2.style.textTransform = "capitalize";
         container.appendChild(h2);
 
-        // Texto descriptivo (si no es el contenido principal)
         if (data.texto && data.type !== 'text' && data.type !== 'internal') {
-            const p = document.createElement("p");
-            p.textContent = data.texto;
-            container.appendChild(p);
+            const p = document.createElement("p"); p.textContent = data.texto; container.appendChild(p);
         }
 
         switch (data.type) {
             case "text":
                 const pText = document.createElement("p");
                 pText.className = "mensaje-texto";
-                // Usar efecto máquina de escribir para cartas o pensamientos
-                if (data.categoria && (data.categoria.toLowerCase() === 'pensamiento' || data.categoria.toLowerCase() === 'carta')) {
+                if (data.categoria && ['pensamiento','carta'].includes(data.categoria.toLowerCase())) {
                     this.typeWriterEffect(pText, data.texto);
                 } else {
                     pText.textContent = data.texto;
                 }
                 container.appendChild(pText);
                 break;
-
             case "image":
                 const img = document.createElement("img");
-                img.src = data.imagen;
-                img.alt = "Imagen secreta";
-                img.style.cursor = "zoom-in";
-                // Integración con Viewer.js para zoom
+                img.src = data.imagen; img.alt = "Secreto"; img.style.cursor = "zoom-in";
                 img.onclick = () => {
                     // @ts-ignore
-                    const viewer = new Viewer(img, { 
-                        hidden() { viewer.destroy(); }, 
-                        toolbar: { zoomIn: 1, zoomOut: 1, oneToOne: 1, reset: 1, rotateLeft: 0, rotateRight: 0, flipHorizontal: 0, flipVertical: 0 }, 
-                        navbar: false, title: false, transition: true 
-                    });
-                    viewer.show();
+                    const v = new Viewer(img, { hidden(){v.destroy()}, navbar:0, title:0, toolbar: {zoomIn:1, zoomOut:1, reset:1, rotateLeft:1} });
+                    v.show();
                 };
                 container.appendChild(img);
                 break;
-
             case "video":
                 if (data.videoEmbed) {
-                    const wrapper = document.createElement("div"); wrapper.className = "video-wrapper";
-                    const loader = document.createElement("div"); loader.className = "video-loader";
-                    const iframe = document.createElement("iframe");
-                    iframe.src = data.videoEmbed; iframe.className = "video-frame";
-                    iframe.setAttribute("allow", "autoplay; encrypted-media; fullscreen");
-                    iframe.onload = () => { loader.style.display = "none"; iframe.style.opacity = "1"; };
-                    wrapper.appendChild(loader); wrapper.appendChild(iframe); container.appendChild(wrapper);
+                    const w = document.createElement("div"); w.className="video-wrapper";
+                    w.innerHTML = `<div class="video-loader"></div><iframe src="${data.videoEmbed}" class="video-frame" allow="autoplay; encrypted-media; fullscreen" onload="this.style.opacity=1;this.previousElementSibling.style.display='none'"></iframe>`;
+                    container.appendChild(w);
                 }
                 break;
-
             case "internal":
-                // Renderizado de páginas HTML internas (Minijuegos, contadores)
-                const internalWrapper = document.createElement("div");
-                internalWrapper.className = "internal-wrapper";
-                
-                const urlDestino = data.archivo || data.link;
-
-                if (!urlDestino) {
-                    internalWrapper.innerHTML = `<p style="color:red; text-align:center;">Error: No se definió la ruta del archivo.</p>`;
-                    container.appendChild(internalWrapper);
-                    break;
-                }
-
-                const fullScreenBtn = document.createElement("a");
-                fullScreenBtn.href = urlDestino;
-                fullScreenBtn.target = "_blank";
-                fullScreenBtn.className = "button small-button";
-                fullScreenBtn.innerHTML = '<i class="fas fa-expand"></i> Pantalla Completa';
-                fullScreenBtn.style.marginBottom = "10px";
-
-                const internalFrame = document.createElement("iframe");
-                internalFrame.src = urlDestino;
-                internalFrame.className = "internal-frame";
-                // Transparencia para efecto Glassmorphism
-                internalFrame.style.border = "none";
-                internalFrame.style.backgroundColor = "transparent"; 
-                internalFrame.setAttribute("allowtransparency", "true");
-
-                internalWrapper.appendChild(fullScreenBtn);
-                internalWrapper.appendChild(internalFrame);
-                container.appendChild(internalWrapper);
+                const dest = data.archivo || data.link;
+                if(!dest) { container.innerHTML += "<p style='color:red'>Error: Sin ruta.</p>"; break; }
+                const divInt = document.createElement("div"); divInt.className="internal-wrapper";
+                divInt.innerHTML = `<a href="${dest}" target="_blank" class="button small-button" style="margin-bottom:10px"><i class="fas fa-expand"></i> Pantalla Completa</a><iframe src="${dest}" class="internal-frame" style="border:none;background:transparent" allowtransparency="true"></iframe>`;
+                container.appendChild(divInt);
                 break;
-
             case "link":
-                const a = document.createElement("a"); 
-                a.href = data.link; 
-                a.target = "_blank"; 
-                a.className = "button"; 
-                a.innerHTML = 'Abrir Enlace <i class="fas fa-external-link-alt"></i>'; 
-                container.appendChild(a); 
+                const aLink = document.createElement("a"); aLink.href=data.link; aLink.target="_blank"; aLink.className="button"; aLink.innerHTML='Abrir Enlace <i class="fas fa-external-link-alt"></i>'; container.appendChild(aLink);
                 break;
-
-            // --- MANEJO DE DESCARGAS Y CIFRADO (WEBCRYPTO) ---
+            
+            // --- DESCARGA SEGURA CON MODAL PERSONALIZADO ---
             case "download":
                 const dlBtn = document.createElement("button");
                 dlBtn.className = "button";
-                
-                // Detectar si es cifrado (.enc o .wenc)
-                const urlFile = data.descarga.url || "";
-                const esCifrado = data.encrypted || urlFile.endsWith(".enc") || urlFile.endsWith(".wenc");
-                
+                const urlF = data.descarga.url||"";
+                const esCifrado = data.encrypted || urlF.endsWith(".enc") || urlF.endsWith(".wenc");
+
                 dlBtn.innerHTML = esCifrado 
                     ? `<i class="fas fa-lock"></i> Desbloquear ${data.descarga.nombre}`
                     : `<i class="fas fa-download"></i> Descargar ${data.descarga.nombre}`;
-                
-                dlBtn.onclick = async () => {
+
+                dlBtn.onclick = () => {
                     if (esCifrado) {
-                        // 1. Pedir contraseña
-                        const password = prompt(`Introduce la contraseña secreta para "${data.descarga.nombre}":`);
-                        if (!password) return; // Cancelado por el usuario
-
-                        // 2. Estado de carga visual
-                        const originalHTML = dlBtn.innerHTML;
-                        dlBtn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> Verificando...`;
-                        dlBtn.disabled = true;
-
-                        try {
-                            // 3. Ejecutar descifrado WebCrypto Nativo
-                            const exito = await descifrarArchivo(data.descarga.url, data.descarga.nombre, password);
-
-                            dlBtn.innerHTML = originalHTML;
-                            dlBtn.disabled = false;
-
-                            if (exito) {
-                                this.showToast("¡Acceso concedido! Descargando...");
-                                this.triggerConfetti();
-                            } else {
-                                this.showError();
-                                alert("Contraseña incorrecta. Inténtalo de nuevo.");
-                            }
-                        } catch (err) {
-                            dlBtn.innerHTML = originalHTML;
-                            dlBtn.disabled = false;
+                        // Usamos un modal propio en lugar de prompt()
+                        this.askPassword(data.descarga.nombre, async (password) => {
+                            const originalHTML = dlBtn.innerHTML;
+                            dlBtn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> Verificando...`;
+                            dlBtn.disabled = true;
                             
-                            console.error(err);
-                            this.showError();
-                            alert("Ocurrió un error técnico al procesar el archivo.");
-                        }
+                            try {
+                                const exito = await descifrarArchivo(data.descarga.url, data.descarga.nombre, password);
+                                dlBtn.innerHTML = originalHTML;
+                                dlBtn.disabled = false;
+                                
+                                if (exito) {
+                                    this.showToast("¡Acceso concedido!");
+                                    this.triggerConfetti();
+                                } else {
+                                    this.showError();
+                                    alert("Contraseña incorrecta.");
+                                }
+                            } catch (err) {
+                                dlBtn.innerHTML = originalHTML;
+                                dlBtn.disabled = false;
+                                console.error(err);
+                                if(err.message.includes("ERROR_404")) {
+                                    alert("Error: El archivo no se encuentra en el servidor (404). Verifica la carpeta assets.");
+                                } else {
+                                    alert("Error técnico: " + err.message);
+                                }
+                            }
+                        });
                     } else {
-                        // Descarga directa (sin cifrado)
-                        const aLink = document.createElement("a");
-                        aLink.href = data.descarga.url;
-                        aLink.download = data.descarga.nombre;
-                        document.body.appendChild(aLink);
-                        aLink.click();
-                        document.body.removeChild(aLink);
+                        const a = document.createElement("a"); a.href=data.descarga.url; a.download=data.descarga.nombre; a.click();
                     }
                 };
                 container.appendChild(dlBtn);
                 break;
         }
-
-        // Animación de entrada
-        container.classList.remove("fade-in");
-        void container.offsetWidth; // Forzar reflow
-        container.classList.add("fade-in");
+        container.classList.remove("fade-in"); void container.offsetWidth; container.classList.add("fade-in");
     }
 
-    renderMessage(title, body) { 
-        const c = this.elements.contentDiv; 
-        c.hidden = false; 
-        c.innerHTML = `<h2>${title}</h2><p>${body}</p>`; 
-        c.classList.remove("fade-in"); 
-        void c.offsetWidth; 
-        c.classList.add("fade-in"); 
-    }
-    
-    // UI HELPERS
-    showError() { 
-        this.elements.input.classList.add("shake", "error"); 
-        setTimeout(() => this.elements.input.classList.remove("shake"), 500); 
-    }
-    
-    showSuccess() { 
-        this.elements.input.classList.remove("error"); 
-        this.elements.input.classList.add("success"); 
-    }
-    
-    clearInput() { this.elements.input.value = ""; }
-    
-    updateProgress(unlocked, total) { 
-        const percentage = total > 0 ? Math.round((unlocked / total) * 100) : 0; 
-        this.elements.progressBar.style.width = `${percentage}%`; 
-        this.elements.progressText.textContent = `Descubiertos: ${unlocked} / ${total}`; 
-    }
-    
-    showToast(msg) { 
-        const t = document.createElement("div"); 
-        t.className = "achievement-toast"; 
-        t.textContent = msg; 
-        this.elements.toastContainer.appendChild(t); 
-        setTimeout(() => t.remove(), 4000); 
-    }
-    
-    updateAudioUI(isPlaying, trackName) { 
-        const playBtn = document.getElementById("audioPlayPause"); 
-        const trackLabel = document.getElementById("trackName"); 
+    /**
+     * Crea un modal temporal para pedir contraseña de forma segura.
+     * Evita mayúsculas automáticas y autocorrector del móvil.
+     */
+    askPassword(filename, callback) {
+        // Crear overlay
+        const overlay = document.createElement("div");
+        overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:2000;display:flex;justify-content:center;align-items:center;padding:20px;";
         
-        if (playBtn) playBtn.innerHTML = isPlaying ? '<i class="fas fa-pause"></i>' : '<i class="fas fa-play"></i>'; 
-        if (trackLabel && trackName) trackLabel.textContent = trackName.replace(/_/g, " ").replace(/\.[^/.]+$/, ""); 
-    }
+        // Crear caja del modal
+        const card = document.createElement("div");
+        card.style.cssText = "background:var(--card-bg, #fff);padding:25px;border-radius:15px;width:100%;max-width:320px;text-align:center;box-shadow:0 10px 25px rgba(0,0,0,0.5);";
+        card.innerHTML = `<h3 style="margin-top:0;color:var(--text-color,#333)">Desbloquear Archivo</h3><p style="font-size:0.9em;margin-bottom:15px">Introduce la contraseña para:<br><b>${filename}</b></p>`;
 
-    // =================================================================
-    // MENÚS Y PANELES LATERALES
-    // =================================================================
+        // Input PASSWORD (Clave para que no falle en móvil)
+        const input = document.createElement("input");
+        input.type = "password";
+        input.placeholder = "Contraseña...";
+        input.style.cssText = "width:100%;padding:12px;margin-bottom:15px;border:1px solid #ccc;border-radius:8px;font-size:16px;box-sizing:border-box;";
+        // Desactivar ayudas del teclado
+        input.setAttribute("autocomplete", "off");
+        input.setAttribute("autocorrect", "off");
+        input.setAttribute("autocapitalize", "off");
+        input.setAttribute("spellcheck", "false");
 
-    setupMenuListeners() {
-        // Toggle Menú Hamburguesa
-        this.elements.menuButton.addEventListener("click", (e) => { 
-            e.stopPropagation(); 
-            this.elements.dropdownMenu.classList.toggle("show"); 
-        });
+        // Botones
+        const btnContainer = document.createElement("div");
+        btnContainer.style.display = "flex";
+        btnContainer.style.gap = "10px";
 
-        // Cerrar menú al hacer click fuera
-        document.addEventListener("click", (e) => { 
-            if (!this.elements.menuButton.contains(e.target) && !this.elements.dropdownMenu.contains(e.target)) {
-                this.elements.dropdownMenu.classList.remove("show"); 
+        const btnCancel = document.createElement("button");
+        btnCancel.textContent = "Cancelar";
+        btnCancel.style.cssText = "flex:1;padding:10px;border:none;background:#ccc;border-radius:6px;cursor:pointer;";
+        
+        const btnConfirm = document.createElement("button");
+        btnConfirm.textContent = "Desbloquear";
+        btnConfirm.style.cssText = "flex:1;padding:10px;border:none;background:var(--primary-color, #ff4d6d);color:white;border-radius:6px;cursor:pointer;font-weight:bold;";
+
+        btnContainer.appendChild(btnCancel);
+        btnContainer.appendChild(btnConfirm);
+        card.appendChild(input);
+        card.appendChild(btnContainer);
+        overlay.appendChild(card);
+        document.body.appendChild(overlay);
+
+        input.focus();
+
+        // Lógica de cierre
+        const close = () => { document.body.removeChild(overlay); };
+        
+        btnCancel.onclick = close;
+        
+        const submit = () => {
+            const pass = input.value; // Sin trim() agresivo, tomamos lo que el usuario escribe, pero el input type="password" evita errores.
+            if(pass) {
+                close();
+                callback(pass);
+            } else {
+                input.style.borderColor = "red";
+                input.focus();
             }
-        });
+        };
 
-        // Enlaces del menú
-        this.bindMenuAction("menuHome", () => { 
-            this.toggleUnlockedPanel(false); 
-            window.scrollTo({ top: 0, behavior: 'smooth' }); 
-        });
-        
-        this.bindMenuAction("menuShowUnlocked", () => this.toggleUnlockedPanel(true));
-        
-        this.bindMenuAction("menuFavorites", () => { 
-            this.toggleUnlockedPanel(true); 
-            this.showingFavoritesOnly = true; 
-            this.updateFilterUI(); 
-            this.triggerListFilter(); 
-        });
-        
-        this.bindMenuAction("menuDarkMode", () => this.toggleDarkMode());
-        
-        this.bindMenuAction("menuAudio", () => this.openPanel(this.elements.audioPanel));
-        
-        this.bindMenuAction("menuTools", () => { 
-            this.renderTools(); 
-            this.openPanel(this.elements.toolsPanel); 
-        });
-        
-        this.bindMenuAction("menuExport", () => this.exportProgress());
-        
-        this.bindMenuAction("menuImport", () => this.elements.importInput.click());
-        
-        // Listener input de archivo (Importar)
-        this.elements.importInput.addEventListener("change", (e) => { 
-            if (e.target.files.length > 0) this.handleImportFile(e.target.files[0]); 
-            this.elements.importInput.value = ""; 
-        });
-
-        // Cerrar paneles
-        if (this.elements.closeAudioPanel) this.elements.closeAudioPanel.addEventListener("click", () => this.closePanel(this.elements.audioPanel));
-        if (this.elements.closeToolsPanel) this.elements.closeToolsPanel.addEventListener("click", () => this.closePanel(this.elements.toolsPanel));
+        btnConfirm.onclick = submit;
+        input.onkeydown = (e) => { if(e.key === 'Enter') submit(); };
     }
 
-    bindMenuAction(id, fn) { 
-        const btn = document.getElementById(id); 
-        if (btn) btn.addEventListener("click", () => { 
-            fn(); 
-            this.elements.dropdownMenu.classList.remove("show"); 
-        }); 
+    // --- UTILS UI ---
+    renderMessage(t,b){const c=this.elements.contentDiv;c.hidden=0;c.innerHTML=`<h2>${t}</h2><p>${b}</p>`;c.classList.remove("fade-in");void c.offsetWidth;c.classList.add("fade-in");}
+    showError(){this.elements.input.classList.add("shake","error");setTimeout(()=>this.elements.input.classList.remove("shake"),500);}
+    showSuccess(){this.elements.input.classList.remove("error");this.elements.input.classList.add("success");}
+    clearInput(){this.elements.input.value="";}
+    updateProgress(u,t){const p=t>0?Math.round((u/t)*100):0;this.elements.progressBar.style.width=`${p}%`;this.elements.progressText.textContent=`Descubiertos: ${u} / ${t}`;}
+    showToast(m){const t=document.createElement("div");t.className="achievement-toast";t.textContent=m;this.elements.toastContainer.appendChild(t);setTimeout(()=>t.remove(),4000);}
+    updateAudioUI(play,name){
+        const b=document.getElementById("audioPlayPause"); const l=document.getElementById("trackName");
+        if(b)b.innerHTML=play?'<i class="fas fa-pause"></i>':'<i class="fas fa-play"></i>';
+        if(l&&name)l.textContent=name.replace(/_/g," ").replace(/\.[^/.]+$/,"");
     }
 
-    openPanel(panel) { 
-        if (panel) { 
-            panel.classList.add("show"); 
-            panel.setAttribute("aria-hidden", "false"); 
-        } 
+    // --- MENUS ---
+    setupMenuListeners(){
+        this.elements.menuButton.addEventListener("click",(e)=>{e.stopPropagation();this.elements.dropdownMenu.classList.toggle("show");});
+        document.addEventListener("click",(e)=>{if(!this.elements.menuButton.contains(e.target)&&!this.elements.dropdownMenu.contains(e.target))this.elements.dropdownMenu.classList.remove("show");});
+        this.bindMenuAction("menuHome",()=>{this.toggleUnlockedPanel(0);window.scrollTo({top:0,behavior:'smooth'});});
+        this.bindMenuAction("menuShowUnlocked",()=>this.toggleUnlockedPanel(1));
+        this.bindMenuAction("menuFavorites",()=>{this.toggleUnlockedPanel(1);this.showingFavoritesOnly=1;this.updateFilterUI();this.triggerListFilter();});
+        this.bindMenuAction("menuDarkMode",()=>this.toggleDarkMode());
+        this.bindMenuAction("menuAudio",()=>this.openPanel(this.elements.audioPanel));
+        this.bindMenuAction("menuTools",()=>{this.renderTools();this.openPanel(this.elements.toolsPanel);});
+        this.bindMenuAction("menuExport",()=>this.exportProgress());
+        this.bindMenuAction("menuImport",()=>this.elements.importInput.click());
+        this.elements.importInput.addEventListener("change",(e)=>{if(e.target.files.length)this.handleImportFile(e.target.files[0]);this.elements.importInput.value="";});
+        if(this.elements.closeAudioPanel)this.elements.closeAudioPanel.addEventListener("click",()=>this.closePanel(this.elements.audioPanel));
+        if(this.elements.closeToolsPanel)this.elements.closeToolsPanel.addEventListener("click",()=>this.closePanel(this.elements.toolsPanel));
     }
-    
-    closePanel(panel) { 
-        if (panel) { 
-            panel.classList.remove("show"); 
-            panel.setAttribute("aria-hidden", "true"); 
-        } 
-    }
-
-    renderTools() {
-        const c = this.elements.toolsListContainer; 
-        if (!c) return; 
-        c.innerHTML = "";
-        
-        herramientasExternas.forEach(t => {
-            const div = document.createElement("div"); 
-            div.className = "tool-card";
-            div.innerHTML = `
-                <div class="tool-header"><i class="${t.icono}"></i> ${t.nombre}</div>
-                <div class="tool-desc">${t.descripcion}</div>
-                <a href="${t.url}" target="_blank" rel="noopener noreferrer" class="tool-btn">Abrir <i class="fas fa-external-link-alt"></i></a>
-            `;
-            c.appendChild(div);
+    bindMenuAction(id,fn){const b=document.getElementById(id);if(b)b.addEventListener("click",()=>{fn();this.elements.dropdownMenu.classList.remove("show");});}
+    openPanel(p){if(p){p.classList.add("show");p.setAttribute("aria-hidden","false");}}
+    closePanel(p){if(p){p.classList.remove("show");p.setAttribute("aria-hidden","true");}}
+    renderTools(){
+        const c=this.elements.toolsListContainer;if(!c)return;c.innerHTML="";
+        herramientasExternas.forEach(t=>{
+            const d=document.createElement("div");d.className="tool-card";
+            d.innerHTML=`<div class="tool-header"><i class="${t.icono}"></i> ${t.nombre}</div><div class="tool-desc">${t.descripcion}</div><a href="${t.url}" target="_blank" class="tool-btn">Abrir <i class="fas fa-external-link-alt"></i></a>`;
+            c.appendChild(d);
         });
     }
 
-    // =================================================================
-    // LISTAS Y GALERÍA GAMIFICADA
-    // =================================================================
-
-    setupListListeners() {
-        this.elements.searchUnlocked.addEventListener("input", () => this.triggerListFilter());
-        this.elements.categoryFilter.addEventListener("change", () => this.triggerListFilter());
-        
-        this.elements.filterFavBtn.addEventListener("click", () => { 
-            this.showingFavoritesOnly = !this.showingFavoritesOnly; 
-            this.updateFilterUI(); 
-            this.triggerListFilter(); 
-        });
-        
-        this.elements.closeUnlockedBtn.addEventListener("click", () => this.toggleUnlockedPanel(false));
+    // --- LISTAS ---
+    setupListListeners(){
+        this.elements.searchUnlocked.addEventListener("input",()=>this.triggerListFilter());
+        this.elements.categoryFilter.addEventListener("change",()=>this.triggerListFilter());
+        this.elements.filterFavBtn.addEventListener("click",()=>{this.showingFavoritesOnly=!this.showingFavoritesOnly;this.updateFilterUI();this.triggerListFilter();});
+        this.elements.closeUnlockedBtn.addEventListener("click",()=>this.toggleUnlockedPanel(0));
     }
-
-    toggleUnlockedPanel(show) { 
-        this.elements.unlockedSection.hidden = !show; 
-        if (show) this.elements.unlockedSection.scrollIntoView({ behavior: 'smooth' }); 
-    }
-
-    updateFilterUI() { 
-        const btn = this.elements.filterFavBtn; 
-        if (this.showingFavoritesOnly) { 
-            btn.classList.add("active"); 
-            btn.innerHTML = '<i class="fas fa-heart"></i> Mostrando Favoritos'; 
-        } else { 
-            btn.classList.remove("active"); 
-            btn.innerHTML = '<i class="far fa-heart"></i> Solo Favoritos'; 
-        } 
-    }
-
-    renderUnlockedList(unlockedSet, favoritesSet, mensajesData) {
-        this.currentData = { unlockedSet, favoritesSet, mensajesData };
-        
-        // Poblar filtro de categorías dinámicamente
-        const categories = new Set();
-        Object.values(mensajesData).forEach(msg => { if (msg.categoria) categories.add(msg.categoria); });
-        
-        const cur = this.elements.categoryFilter.value;
-        this.elements.categoryFilter.innerHTML = '<option value="">Todas</option>';
-        
-        categories.forEach(cat => { 
-            const o = document.createElement("option"); 
-            o.value = cat; 
-            o.textContent = cat; 
-            if (cat === cur) o.selected = true; 
-            this.elements.categoryFilter.appendChild(o); 
-        });
-        
+    toggleUnlockedPanel(s){this.elements.unlockedSection.hidden=!s;if(s)this.elements.unlockedSection.scrollIntoView({behavior:'smooth'});}
+    updateFilterUI(){const b=this.elements.filterFavBtn;b.classList.toggle("active",this.showingFavoritesOnly);b.innerHTML=this.showingFavoritesOnly?'<i class="fas fa-heart"></i> Favoritos':'<i class="far fa-heart"></i> Favoritos';}
+    renderUnlockedList(u,f,m){
+        this.currentData={u,f,m}; const cats=new Set();Object.values(m).forEach(v=>{if(v.categoria)cats.add(v.categoria)});
+        const cur=this.elements.categoryFilter.value; this.elements.categoryFilter.innerHTML='<option value="">Todas</option>';
+        cats.forEach(c=>{const o=document.createElement("option");o.value=c;o.textContent=c;if(c===cur)o.selected=1;this.elements.categoryFilter.appendChild(o)});
         this.triggerListFilter();
     }
-
-    triggerListFilter() {
-        if (!this.currentData) return;
-        const { unlockedSet, favoritesSet, mensajesData } = this.currentData;
-        
-        const s = normalizeText(this.elements.searchUnlocked.value);
-        const cat = this.elements.categoryFilter.value;
-        this.elements.unlockedList.innerHTML = "";
-        
-        const allCodes = Object.keys(mensajesData).sort();
-        let visibleCount = 0;
-
-        allCodes.forEach(code => {
-            const data = mensajesData[code];
-            const isUnlocked = unlockedSet.has(code);
-
-            // Filtros
-            if (this.showingFavoritesOnly && !favoritesSet.has(code)) return;
-            if (s && isUnlocked && !normalizeText(code).includes(s)) return;
-            if (cat && data.categoria !== cat) return;
-
-            visibleCount++;
-            const li = document.createElement("li");
-            
-            if (isUnlocked) {
-                // Estado: DESBLOQUEADO
-                li.className = "lista-codigo-item";
-                li.innerHTML = `
-                    <div style="flex-grow:1">
-                        <span class="codigo-text">${code}</span>
-                        <span class="category">${data.categoria}</span>
-                    </div>`;
-                
-                const favBtn = document.createElement("button"); 
-                favBtn.className = `favorite-toggle-btn ${favoritesSet.has(code) ? 'active' : ''}`; 
-                favBtn.innerHTML = `<i class="${favoritesSet.has(code) ? 'fas' : 'far'} fa-heart"></i>`;
-                
-                favBtn.onclick = (e) => { 
-                    e.stopPropagation(); 
-                    if (this.onToggleFavorite) this.onToggleFavorite(code); 
-                };
-                
-                li.onclick = () => { 
-                    if (this.onCodeSelected) this.onCodeSelected(code); 
-                    this.elements.contentDiv.scrollIntoView({ behavior: 'smooth' }); 
-                };
-                
-                li.appendChild(favBtn);
-            } else {
-                // Estado: BLOQUEADO (Candado)
-                li.className = "lista-codigo-item locked";
-                li.innerHTML = `
-                    <div style="flex-grow:1; display:flex; align-items:center;">
-                        <i class="fas fa-lock lock-icon"></i>
-                        <div>
-                            <span class="codigo-text">??????</span>
-                            <span class="category" style="opacity:0.5">${data.categoria || 'Secreto'}</span>
-                        </div>
-                    </div>`;
-                
-                li.onclick = () => this.showToast("🔒 ¡Sigue buscando para desbloquear este secreto!");
+    triggerListFilter(){
+        if(!this.currentData)return; const {u,f,m}=this.currentData;
+        const s=normalizeText(this.elements.searchUnlocked.value); const cat=this.elements.categoryFilter.value;
+        this.elements.unlockedList.innerHTML=""; let vc=0;
+        Object.keys(m).sort().forEach(code=>{
+            const d=m[code]; const isU=u.has(code);
+            if(this.showingFavoritesOnly&&!f.has(code))return;
+            if(s&&isU&&!normalizeText(code).includes(s))return;
+            if(cat&&d.categoria!==cat)return;
+            vc++; const li=document.createElement("li");
+            if(isU){
+                li.className="lista-codigo-item"; li.innerHTML=`<div style="flex-grow:1"><span class="codigo-text">${code}</span><span class="category">${d.categoria}</span></div>`;
+                const fb=document.createElement("button");fb.className=`favorite-toggle-btn ${f.has(code)?'active':''}`;fb.innerHTML=`<i class="${f.has(code)?'fas':'far'} fa-heart"></i>`;
+                fb.onclick=(e)=>{e.stopPropagation();if(this.onToggleFavorite)this.onToggleFavorite(code);};
+                li.onclick=()=>{if(this.onCodeSelected)this.onCodeSelected(code);this.elements.contentDiv.scrollIntoView({behavior:'smooth'});}; li.appendChild(fb);
+            }else{
+                li.className="lista-codigo-item locked"; li.innerHTML=`<div style="flex-grow:1;display:flex;align-items:center;"><i class="fas fa-lock lock-icon"></i><div><span class="codigo-text">??????</span><span class="category" style="opacity:0.5">${d.categoria||'Secreto'}</span></div></div>`;
+                li.onclick=()=>this.showToast("🔒 ¡Sigue buscando!");
             }
             this.elements.unlockedList.appendChild(li);
         });
-
-        if (visibleCount === 0) {
-            this.elements.unlockedList.innerHTML = '<p style="text-align:center; width:100%; opacity:0.7">Sin resultados.</p>';
-        }
+        if(vc===0)this.elements.unlockedList.innerHTML='<p style="text-align:center;width:100%;opacity:0.7">Sin resultados.</p>';
     }
 
-    // =================================================================
-    // IMPORTAR / EXPORTAR
-    // =================================================================
-
-    exportProgress() { 
-        const d = { 
-            unlocked: JSON.parse(localStorage.getItem("desbloqueados")||"[]"), 
-            favorites: JSON.parse(localStorage.getItem("favoritos")||"[]"), 
-            achievements: JSON.parse(localStorage.getItem("logrosAlcanzados")||"[]"), 
-            timestamp: new Date().toISOString() 
-        }; 
-        
-        const b = new Blob([JSON.stringify(d,null,2)],{type:"application/json"}); 
-        const u = URL.createObjectURL(b); 
-        const a = document.createElement("a"); 
-        a.href = u; 
-        a.download = `progreso_${new Date().toISOString().slice(0,10)}.json`; 
-        a.click(); 
-        URL.revokeObjectURL(u); 
-        this.showToast("Progreso exportado correctamente"); 
+    exportProgress(){
+        const d={unlocked:JSON.parse(localStorage.getItem("desbloqueados")||"[]"),favorites:JSON.parse(localStorage.getItem("favoritos")||"[]"),achievements:JSON.parse(localStorage.getItem("logrosAlcanzados")||"[]"),timestamp:new Date().toISOString()};
+        const b=new Blob([JSON.stringify(d,null,2)],{type:"application/json"});const u=URL.createObjectURL(b);const a=document.createElement("a");a.href=u;a.download=`progreso_${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(u);this.showToast("Progreso exportado");
     }
-
-    handleImportFile(f) { 
-        const r = new FileReader(); 
-        r.onload = (e) => {
-            try {
-                const d = JSON.parse(e.target.result);
-                if (this.onImportData) this.onImportData(d);
-            } catch (err) {
-                this.showToast("Error: El archivo no es válido");
-            }
-        }; 
-        r.readAsText(f); 
-    }
+    handleImportFile(f){const r=new FileReader();r.onload=(e)=>{try{const d=JSON.parse(e.target.result);if(this.onImportData)this.onImportData(d);}catch(z){this.showToast("Archivo inválido");}};r.readAsText(f);}
 }
