@@ -32,7 +32,7 @@ export async function descifrarArchivo(url, filename, password) {
             {
                 name: "PBKDF2",
                 salt: new Uint8Array(salt),
-                iterations: 100000, // Coincide con la herramienta 
+                iterations: 150000, // Coincide con la herramienta 
                 hash: "SHA-256"
             },
             passwordKey,
