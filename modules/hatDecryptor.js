@@ -6,7 +6,7 @@
  */
 
 // Enlace al módulo ES oficial (Este archivo SÍ existe)
-const LIBSODIUM_URL = "https://unpkg.com/libsodium-wrappers@0.7.15/dist/modules/libsodium-wrappers.js";
+const LIBSODIUM_URL = "https://cdn.jsdelivr.net/npm/libsodium-wrappers@0.7.15/dist/modules/libsodium-wrappers.js";
 
 let sodiumInstance = null;
 
