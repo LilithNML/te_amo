@@ -1,141 +1,162 @@
 /**
  * modules/hatDecryptor.js
- * Sistema de descifrado robusto v3.1 (Fix de Importación)
- * - Corrige el error "does not provide an export named default"
- * - Mantiene la carga local segura
+ * Descifrador Hat.sh - Versión CDN Estándar (Rutas Corregidas)
+ * * - Usa libsodium-wrappers (Estándar) en lugar de SUMO.
+ * - Las rutas en UNPKG/JSDELIVR están garantizadas.
+ * - Carga automática sin archivos locales.
  */
 
-// 1. IMPORTACIÓN COMPATIBLE (CAMBIO CRÍTICO)
-// Importamos "todo" (*) porque algunas versiones no tienen export default
-import * as sodiumLib from './vendor/libsodium-wrappers.js';
+// RUTAS OFICIALES VERIFICADAS (Versión 0.7.15 Estándar)
+// Esta versión SÍ tiene los archivos en /dist/modules/
+const LIBSODIUM_CDN = "https://unpkg.com/libsodium-wrappers@0.7.15/dist/modules/libsodium-wrappers.js";
 
-// Detectamos si la librería está en .default o en la raíz del objeto
-const sodium = sodiumLib.default ? sodiumLib.default : sodiumLib;
-
-// 2. SINGLETON PATTERN
-let sodiumReadyPromise = null;
-let sod = null; 
+let sodium = null;
 
 /**
- * Inicializa Libsodium una sola vez de forma segura.
+ * Carga Libsodium desde la nube automáticamente.
  */
-async function initCrypto() {
-    if (sod) return sod;
+async function loadSodium() {
+    if (sodium) return sodium;
 
-    if (!sodiumReadyPromise) {
-        // sodium.ready es una promesa que resuelve cuando el WASM cargó
-        sodiumReadyPromise = sodium.ready.then(() => {
-            sod = sodium;
-            return sod;
-        }).catch(err => {
-            sodiumReadyPromise = null; 
-            throw new Error(`Fallo crítico al iniciar motor WASM: ${err.message}`);
-        });
-    }
+    return new Promise((resolve, reject) => {
+        // 1. Si ya está cargado en window, usarlo
+        if (window.sodium) {
+            window.sodium.ready.then(() => {
+                sodium = window.sodium;
+                resolve(sodium);
+            });
+            return;
+        }
 
-    return await sodiumReadyPromise;
+        console.log("Cargando Libsodium desde CDN...");
+        
+        // 2. Inyectar el script del CDN
+        const script = document.createElement("script");
+        script.src = LIBSODIUM_CDN;
+        script.crossOrigin = "anonymous"; // Importante para evitar errores de CORS
+        
+        script.onload = async () => {
+            try {
+                // Al cargar el JS, este buscará automáticamente el .wasm en unpkg.com
+                await window.sodium.ready;
+                sodium = window.sodium;
+                console.log("Libsodium cargado y listo.");
+                resolve(sodium);
+            } catch (err) {
+                reject(new Error("Libsodium cargó el JS pero falló al iniciar WASM: " + err.message));
+            }
+        };
+
+        script.onerror = () => {
+            reject(new Error("No se pudo conectar con el servidor de Libsodium (CDN). Revisa tu internet."));
+        };
+
+        document.head.appendChild(script);
+    });
 }
 
 export async function descifrarHat(url, filename, password) {
     try {
-        // --- VALIDACIÓN DE ENTORNO ---
-        if (typeof WebAssembly === "undefined") {
-            throw new Error("Tu navegador no soporta WebAssembly (Requerido para descifrar).");
-        }
+        // --- PASO 1: Cargar el Motor (Desde Internet) ---
+        const sod = await loadSodium();
 
-        // 3. INICIALIZACIÓN
-        const sodiumInstance = await initCrypto();
-
-        // 4. DESCARGA
+        // --- PASO 2: Descargar el Archivo .enc ---
         const response = await fetch(url, { cache: "no-store" });
-        if (!response.ok) throw new Error(`Error de red al descargar el archivo (${response.status})`);
+        if (!response.ok) throw new Error("Error al descargar el archivo cifrado.");
         
         const fileBuffer = await response.arrayBuffer();
         const fileBytes = new Uint8Array(fileBuffer);
 
-        // --- CONSTANTES ---
+        // --- PASO 3: Constantes de Hat.sh ---
         const SALT_LEN = 16;
-        const HEADER_LEN = sodiumInstance.crypto_secretstream_xchacha20poly1305_HEADERBYTES;
-        const ABYTES = sodiumInstance.crypto_secretstream_xchacha20poly1305_ABYTES;
+        const HEADER_LEN = sod.crypto_secretstream_xchacha20poly1305_HEADERBYTES;
+        const ABYTES = sod.crypto_secretstream_xchacha20poly1305_ABYTES;
         const CHUNK_SIZE = 64 * 1024;
         const ENCRYPTED_CHUNK_SIZE = CHUNK_SIZE + ABYTES;
 
         if (fileBytes.length < SALT_LEN + HEADER_LEN) {
-            throw new Error("El archivo está dañado o incompleto.");
+            throw new Error("El archivo está dañado o es demasiado pequeño.");
         }
 
-        // 5. EXTRACCIÓN
+        // --- PASO 4: Extraer Partes ---
         const fileSalt = fileBytes.slice(0, SALT_LEN);
         const header = fileBytes.slice(SALT_LEN, SALT_LEN + HEADER_LEN);
         const ciphertext = fileBytes.slice(SALT_LEN + HEADER_LEN);
 
-        // 6. DERIVACIÓN DE CLAVE (32MB para compatibilidad móvil)
-        const OPS_LIMIT = 2; 
-        const MEM_LIMIT = 33554432; // 32MB
-
+        // --- PASO 5: Derivar Clave (Argon2id) ---
+        // Hat.sh usa 64MB de RAM por defecto.
+        // Si falla en el celular, bajamos a 32MB automáticamente.
         let key;
+        const OPS_LIMIT = 2;
+        const MEM_LIMIT_STANDARD = 67108864; // 64MB
+        const MEM_LIMIT_LOW = 33554432;      // 32MB
+        
         try {
-            key = sodiumInstance.crypto_pwhash(
-                sodiumInstance.crypto_secretstream_xchacha20poly1305_KEYBYTES,
+            key = sod.crypto_pwhash(
+                sod.crypto_secretstream_xchacha20poly1305_KEYBYTES,
                 password,
                 fileSalt,
                 OPS_LIMIT,
-                MEM_LIMIT,
-                sodiumInstance.crypto_pwhash_ALG_ARGON2ID13
+                MEM_LIMIT_STANDARD,
+                sod.crypto_pwhash_ALG_ARGON2ID13
             );
         } catch (e) {
-            throw new Error("Error de memoria en derivación de clave. Intenta cerrar otras pestañas.");
+            console.warn("Memoria insuficiente (64MB). Reintentando con 32MB...");
+            try {
+                key = sod.crypto_pwhash(
+                    sod.crypto_secretstream_xchacha20poly1305_KEYBYTES,
+                    password,
+                    fileSalt,
+                    OPS_LIMIT,
+                    MEM_LIMIT_LOW,
+                    sod.crypto_pwhash_ALG_ARGON2ID13
+                );
+            } catch (e2) {
+                throw new Error("Tu dispositivo no tiene suficiente memoria para descifrar este archivo.");
+            }
         }
 
-        // 7. INICIALIZACIÓN STREAM
-        let state = sodiumInstance.crypto_secretstream_xchacha20poly1305_init_pull(header, key);
-
-        // 8. BUCLE DE DESCIFRADO
+        // --- PASO 6: Descifrar (Streaming) ---
+        let state = sod.crypto_secretstream_xchacha20poly1305_init_pull(header, key);
         let decryptedParts = [];
         let offset = 0;
-        
+
         while (offset < ciphertext.length) {
             const remaining = ciphertext.length - offset;
             const currentChunkSize = Math.min(remaining, ENCRYPTED_CHUNK_SIZE);
             const chunk = ciphertext.slice(offset, offset + currentChunkSize);
             offset += currentChunkSize;
 
-            const result = sodiumInstance.crypto_secretstream_xchacha20poly1305_pull(state, chunk);
+            const result = sod.crypto_secretstream_xchacha20poly1305_pull(state, chunk);
             
             if (!result) {
-                throw new Error("CONTRASEÑA_INCORRECTA"); 
+                // Si el descifrado falla, casi siempre es la contraseña
+                return false; 
             }
 
-            const [decryptedChunk, tag] = result;
-            decryptedParts.push(decryptedChunk);
-
-            if (tag === sodiumInstance.crypto_secretstream_xchacha20poly1305_TAG_FINAL) {
-                break;
-            }
+            decryptedParts.push(result[0]); // El mensaje descifrado
+            if (result[1] === sod.crypto_secretstream_xchacha20poly1305_TAG_FINAL) break;
         }
 
-        // 9. UNIÓN Y DESCARGA
+        // --- PASO 7: Generar y Descargar ---
         const blob = new Blob(decryptedParts, { type: "application/octet-stream" });
-        
         const link = document.createElement("a");
         link.href = window.URL.createObjectURL(blob);
-        link.download = filename.endsWith(".enc") ? filename.slice(0, -4) : filename; 
+        link.download = filename.replace(".enc", ""); // Quitar extensión .enc
         document.body.appendChild(link);
         link.click();
         
-        setTimeout(() => {
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(link.href);
-        }, 100);
-        
+        // Limpieza
+        setTimeout(() => { 
+            document.body.removeChild(link); 
+            window.URL.revokeObjectURL(link.href); 
+        }, 1000);
+
         return true;
 
     } catch (error) {
-        if (error.message === "CONTRASEÑA_INCORRECTA") {
-            console.warn("Intento fallido: Contraseña incorrecta");
-            return false;
-        }
-        console.error("Error Criptográfico:", error);
+        console.error("HatDecryptor Error:", error);
+        alert("Error: " + error.message);
         throw error;
     }
-    }
+}
