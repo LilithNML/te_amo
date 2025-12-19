@@ -1,36 +1,66 @@
 /**
  * modules/webCryptoDecryptor.js
- * Descifrador Nativo WebCrypto - Sincronizado con tu Herramienta
- * Iteraciones: 150,000 | Algoritmo: AES-GCM + PBKDF2
+ * Descifrador Nativo WebCrypto - CORREGIDO (Soporte Magic Bytes WC01)
+ * ------------------------------------------------------------------
+ * Sincronizado con 'index-webcrypto.html':
+ * - Estructura: [Magic(4)] + [Salt(16)] + [IV(12)] + [Ciphertext]
+ * - Iteraciones: 150,000
  */
 
 export async function descifrarArchivo(url, filename, password) {
     try {
         // 1. Descarga Anti-Caché
-        // Agregamos timestamp para asegurar que no leemos una versión vieja dañada
         const urlSinCache = url + (url.includes('?') ? '&' : '?') + 't=' + new Date().getTime();
         
         const response = await fetch(urlSinCache, { cache: "no-store" });
         if (!response.ok) throw new Error(`Error de red: ${response.status}`);
         
         const fileBuffer = await response.arrayBuffer();
+        const dataView = new Uint8Array(fileBuffer);
 
-        // ⚠️ VALIDACIÓN CRÍTICA:
-        // A veces el servidor devuelve una página HTML de error (404) en vez del archivo.
-        // Si intentamos descifrar ese HTML, fallará diciendo "Contraseña incorrecta".
-        // Verificamos si los primeros bytes parecen texto HTML.
-        const firstBytes = new Uint8Array(fileBuffer.slice(0, 5));
-        const headerString = String.fromCharCode(...firstBytes);
+        // --- CONSTANTES DE TU HERRAMIENTA ---
+        const MAGIC_BYTES = [0x57, 0x43, 0x30, 0x31]; // "WC01"
+        const MAGIC_LEN = 4;
+        const SALT_LEN = 16;
+        const IV_LEN = 12;
+        const ITERATIONS = 150000; // Vital que coincida
+
+        // 2. VALIDACIONES DE INTEGRIDAD
+        
+        // A) Validar si es un error HTML (404 disfrazado)
+        const headerString = String.fromCharCode(...dataView.slice(0, 5));
         if (headerString.includes("<!DOC") || headerString.includes("<htm")) {
             throw new Error("ERROR_404: El archivo no existe en la carpeta assets.");
         }
 
-        // 2. Extraer partes (Tu herramienta usa: Salt 16 bytes | IV 12 bytes | Contenido)
-        const salt = fileBuffer.slice(0, 16);
-        const iv = fileBuffer.slice(16, 28);
-        const ciphertext = fileBuffer.slice(28);
+        // B) Validar tamaño mínimo
+        if (fileBuffer.byteLength < MAGIC_LEN + SALT_LEN + IV_LEN) {
+            throw new Error("Archivo corrupto: Tamaño insuficiente.");
+        }
 
-        // 3. Importar contraseña
+        // C) Validar Magic Bytes (WC01)
+        // Esto confirma si el archivo fue creado con tu herramienta o no
+        for (let i = 0; i < MAGIC_LEN; i++) {
+            if (dataView[i] !== MAGIC_BYTES[i]) {
+                // Si no coincide, puede que sea un archivo viejo sin firma.
+                // Lanzamos error para no intentar descifrar basura.
+                console.warn(`Byte ${i} esperado ${MAGIC_BYTES[i]} pero es ${dataView[i]}`);
+                throw new Error("Formato inválido: Falta la firma 'WC01'. Vuelve a cifrar el archivo.");
+            }
+        }
+
+        // 3. EXTRAER PARTES (Con el offset correcto)
+        let offset = MAGIC_LEN; // Empezamos DESPUÉS de "WC01"
+
+        const salt = fileBuffer.slice(offset, offset + SALT_LEN);
+        offset += SALT_LEN;
+
+        const iv = fileBuffer.slice(offset, offset + IV_LEN);
+        offset += IV_LEN;
+
+        const ciphertext = fileBuffer.slice(offset);
+
+        // 4. IMPORTAR CLAVE (PBKDF2)
         const textEncoder = new TextEncoder();
         const passwordKey = await window.crypto.subtle.importKey(
             "raw",
@@ -40,17 +70,13 @@ export async function descifrarArchivo(url, filename, password) {
             ["deriveKey"]
         );
 
-        // 4. Derivar clave AES-GCM
-        // ⚠️ DEBE COINCIDIR CON TU HERRAMIENTA
-        const ITERATIONS = 150000; // Actualizado a lo que usa tu index-webcrypto.html
-        const HASH_ALGO = "SHA-256";
-
+        // 5. DERIVAR CLAVE AES
         const aesKey = await window.crypto.subtle.deriveKey(
             {
                 name: "PBKDF2",
                 salt: new Uint8Array(salt),
                 iterations: ITERATIONS, 
-                hash: HASH_ALGO
+                hash: "SHA-256"
             },
             passwordKey,
             { name: "AES-GCM", length: 256 },
@@ -58,21 +84,20 @@ export async function descifrarArchivo(url, filename, password) {
             ["decrypt"]
         );
 
-        // 5. Descifrar
+        // 6. DESCIFRAR
         const decryptedContent = await window.crypto.subtle.decrypt(
             { name: "AES-GCM", iv: new Uint8Array(iv) },
             aesKey,
             ciphertext
         );
 
-        // 6. Generar Descarga
+        // 7. DESCARGAR
         const blob = new Blob([decryptedContent], { type: "application/octet-stream" });
         const link = document.createElement("a");
         link.href = window.URL.createObjectURL(blob);
         
-        // Limpiar nombre (.wenc, .enc)
+        // Limpiar extensión
         let finalName = filename.replace(/\.(wenc|enc)$/i, "");
-        // Si quedó sin extensión, asumimos original o dejamos así
         if (!finalName.includes(".")) finalName = "descifrado_" + filename;
 
         link.download = finalName;
@@ -87,11 +112,10 @@ export async function descifrarArchivo(url, filename, password) {
         return true;
 
     } catch (error) {
-        // Error específico cuando la contraseña está mal (Fallo de integridad GCM)
+        // OperationError = Contraseña incorrecta (o Salt incorrecta)
         if (error.name === "OperationError") {
             return false; 
         }
-        // Relanzar otros errores (404, Red, etc)
         throw error;
     }
 }
