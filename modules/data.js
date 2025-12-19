@@ -719,8 +719,8 @@ export const mensajes = {
     type: "download",
     texto: "Usa tu contraseña de siempre seguida de dos a minúsculas",
     descarga: {
-      url: "assets/unlocked_content/images/a01.jpg.enc",
-      nombre: "a01.jpg.enc"
+      url: "assets/unlocked_content/images/shibari_01.jpg.wenc",
+      nombre: "a01.jpg.wenc"
     },
     categoria: "Cosplay",
     pista: ""
