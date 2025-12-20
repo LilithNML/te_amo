@@ -1,0 +1,422 @@
+/* =========================================
+   STYLE.CSS - Versión Final (Producción)
+   ========================================= */
+
+/* Importación de fuentes optimizada */
+@import url('https://fonts.googleapis.com/css2?family=Courgette&family=Montserrat:wght@300;400;500;600&display=swap');
+
+:root {
+  /* Fuentes */
+  --title-font: 'Courgette', cursive;
+  --body-font: 'Montserrat', sans-serif;
+
+  /* Paleta de Colores (Tema Claro - Default) */
+  --text-light: #CDD8D5;
+  --text-medium: #AEA5A5;
+  --text-dark: #E0CFC1;
+  --header-color: #BCBDB9;
+  
+  /* Fondos y Capas */
+  --background-overlay: rgba(20, 18, 28, 0.75);
+  --container-bg: rgba(32, 30, 43, 0.65);
+  --content-bg: rgba(30, 32, 33, 0.8);
+  
+  /* Interacción */
+  --border-color-input: #8E7383;
+  --input-bg: rgba(107, 93, 116, 0.5);
+  --button-bg-initial: #9A8C8B;
+  --button-bg-hover: #3F3938;
+  
+  /* Estados */
+  --progress-color: #A3C3BD;
+  --highlight-pink: #ff7aa8;
+  --highlight-pink-light: #ffaed0;
+  --highlight-green: #7B9D8F;
+  --highlight-red: #E74C3C;
+  
+  /* Componentes */
+  --achievement-bg: #4A4A6A;
+  --achievement-text: #E0CFC1;
+  --modal-bg: rgba(0, 0, 0, 0.94); /* Fondo oscuro profundo para el modal */
+  
+  /* Iconos */
+  --favorite-icon-default: #888;
+  --favorite-icon-active: #FFD700;
+}
+
+/* Variables Modo Oscuro */
+body.dark-mode {
+  --text-light: #f2e6df;
+  --text-medium: #d8ccc3;
+  --background-overlay: rgba(5, 5, 5, 0.85);
+  --container-bg: rgba(20, 20, 20, 0.7);
+  --content-bg: rgba(17, 17, 17, 0.9);
+  --input-bg: rgba(44, 44, 44, 0.6);
+  --button-bg-initial: #4A4A4A;
+  --button-bg-hover: #606060;
+  --progress-color: #8C82B5;
+  --highlight-pink: #A860A8;
+}
+
+/* Reset y Base */
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--body-font);
+  background: url('assets/images/fondo-romantico.webp') no-repeat center center fixed;
+  background-size: cover;
+  color: var(--text-light);
+  display: flex; flex-direction: column; min-height: 100vh;
+  align-items: center; justify-content: center;
+  position: relative; overflow-x: hidden;
+}
+
+.background-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background-color: var(--background-overlay);
+  backdrop-filter: blur(4px); z-index: -1;
+}
+
+/* Contenedor Principal (Glassmorphism) */
+.container {
+  background-color: var(--container-bg);
+  padding: 2.5rem; border-radius: 16px;
+  text-align: center; max-width: 900px; width: 90%;
+  margin: 4rem auto 2rem auto; position: relative;
+  backdrop-filter: blur(12px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  transition: transform 0.4s ease;
+}
+.container:hover { transform: translateY(-2px); }
+
+/* Tipografía */
+h1, h2, .section-title {
+  font-family: var(--title-font); color: var(--header-color);
+  font-weight: 400; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+}
+h1 { margin-bottom: 1.5rem; font-size: 3em; }
+.intro-text { font-size: 1.1em; margin-bottom: 2rem; color: var(--text-medium); }
+.header-img { width: 140px; height: auto; margin-bottom: 1.5rem; animation: float 6s ease-in-out infinite; }
+
+/* Inputs y Botones */
+.input-container { display: flex; gap: 12px; margin-bottom: 2rem; justify-content: center; }
+#codeInput {
+  flex-grow: 1; max-width: 350px; padding: 15px 20px;
+  border: 2px solid var(--border-color-input); border-radius: 12px;
+  background-color: var(--input-bg); color: var(--text-light);
+  font-family: var(--body-font); font-size: 1.1em; text-align: center;
+  transition: all 0.3s ease;
+}
+#codeInput:focus { border-color: var(--highlight-pink); outline: none; box-shadow: 0 0 15px rgba(255, 122, 168, 0.3); }
+#codeInput.success { border-color: var(--highlight-green); }
+#codeInput.error { border-color: var(--highlight-red); }
+
+.button {
+  background-color: var(--button-bg-initial); color: var(--text-light);
+  border: none; border-radius: 12px; padding: 15px 25px;
+  font-family: var(--body-font); font-weight: 600; font-size: 1em;
+  cursor: pointer; transition: all 0.3s ease;
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  text-decoration: none;
+}
+.button:hover { background-color: var(--button-bg-hover); transform: translateY(-2px); }
+.button.small-button { padding: 10px 18px; font-size: 0.9em; }
+
+/* Contenido Dinámico */
+.contenido-container {
+  background-color: var(--content-bg); padding: 2rem; border-radius: 12px;
+  margin-top: 2rem; text-align: left; line-height: 1.7; color: var(--text-medium);
+}
+.contenido-container img { max-width: 100%; border-radius: 8px; margin: 1em auto; display: block; }
+.video-frame { width: 100%; aspect-ratio: 16 / 9; border-radius: 12px; margin: 1em 0; background: #000; }
+.mensaje-texto { font-size: 1.2em; white-space: pre-wrap; color: var(--text-light); }
+
+/* Progreso */
+.achievements-section { margin-top: 3rem; padding-top: 2rem; border-top: 1px dashed rgba(255,255,255,0.2); }
+.progress-bar-container {
+  width: 100%; max-width: 400px; background-color: rgba(255,255,255,0.1);
+  border-radius: 20px; height: 16px; margin: 0 auto; overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%; background: linear-gradient(90deg, var(--progress-color), var(--highlight-pink-light));
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Lista de Desbloqueados */
+.unlocked-codes-panel, .unlocked-codes-section { background-color: var(--content-bg); padding: 1.5rem; border-radius: 12px; margin-top: 1.5rem; }
+.filter-controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 1.5rem; justify-content: center; }
+.filter-controls input, .filter-controls select { padding: 10px; border-radius: 8px; border: 1px solid var(--border-color-input); background: var(--input-bg); color: var(--text-light); }
+.lista-codigos { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; list-style: none; }
+.lista-codigo-item {
+  background: rgba(255,255,255,0.05); padding: 12px 15px; border-radius: 8px;
+  display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: background 0.2s;
+}
+.lista-codigo-item:hover { background: rgba(255,255,255,0.1); }
+.codigo-text { font-weight: 500; color: var(--text-dark); text-transform: capitalize; }
+.category { font-size: 0.75em; background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px; margin-left: 8px; }
+
+.favorite-toggle-btn { background: none; border: none; cursor: pointer; font-size: 1.1em; padding: 5px; transition: transform 0.2s; }
+.favorite-toggle-btn:hover { transform: scale(1.2); }
+.favorite-toggle-btn i { color: var(--favorite-icon-default); }
+.lista-codigo-item .favorite-toggle-btn.active i { color: var(--favorite-icon-active); filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.4)); }
+#filterFavBtn.active { background-color: var(--highlight-pink); color: white; }
+
+/* Menú Hamburguesa */
+.menu-button {
+  position: fixed; top: 20px; left: 20px; z-index: 1500;
+  background: var(--highlight-pink); color: white; border: none; border-radius: 50%;
+  width: 45px; height: 45px; font-size: 1.2em; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+.dropdown-menu {
+  position: fixed; top: 75px; left: 20px; background: var(--container-bg);
+  backdrop-filter: blur(15px); border-radius: 12px; padding: 10px; min-width: 240px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5); transform: translateX(-150%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1499; visibility: hidden;
+}
+.dropdown-menu.show { transform: translateX(0); visibility: visible; }
+.dropdown-menu button, .menu-link-button {
+  display: flex; align-items: center; gap: 10px; width: 100%; padding: 12px;
+  color: var(--text-light); background: none; border: none; text-align: left;
+  cursor: pointer; border-radius: 8px; font-family: var(--body-font); font-size: 1em; text-decoration: none;
+}
+.dropdown-menu button:hover, .menu-link-button:hover { background: rgba(255,255,255,0.1); color: var(--highlight-pink); }
+.menu-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 8px 0; }
+.danger-text { color: var(--highlight-red) !important; }
+
+/* Paneles Laterales (Audio & Herramientas) */
+.side-panel {
+  position: fixed; top: 0; right: 0; width: 300px; height: 100vh;
+  background: var(--content-bg); backdrop-filter: blur(15px);
+  box-shadow: -5px 0 20px rgba(0,0,0,0.5); padding: 25px;
+  transform: translateX(100%); transition: transform 0.3s ease; z-index: 2500;
+  display: flex; flex-direction: column;
+}
+.side-panel.show { transform: translateX(0); }
+.panel-header { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+.close-panel-btn { background: none; border: none; color: var(--text-light); font-size: 1.2em; cursor: pointer; }
+
+/* Controles de Audio */
+.audio-controls { display: flex; gap: 15px; margin: 20px 0; justify-content: center; }
+.audio-btn { background: var(--button-bg-initial); color: var(--text-light); border: none; width: 50px; height: 50px; border-radius: 50%; font-size: 1.2em; cursor: pointer; }
+.audio-btn.small { width: 40px; height: 40px; font-size: 1em; background: rgba(255,255,255,0.1); }
+.volume-section { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+input[type=range] { flex-grow: 1; accent-color: var(--highlight-pink); }
+
+/* Herramientas (Cards) */
+.tools-container { overflow-y: auto; flex-grow: 1; }
+.tool-card { background: rgba(255,255,255,0.05); border-radius: 10px; padding: 15px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); }
+.tool-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; color: var(--highlight-pink); font-weight: 600; }
+.tool-desc { font-size: 0.9em; color: var(--text-medium); margin-bottom: 12px; }
+.tool-btn { display: block; text-align: center; background: var(--button-bg-initial); color: white; padding: 8px; border-radius: 6px; text-decoration: none; font-size: 0.9em; }
+
+
+/* Animaciones */
+@keyframes float { 0% {transform:translateY(0);} 50% {transform:translateY(-10px);} 100% {transform:translateY(0);} }
+@keyframes fadeIn { from {opacity:0; transform:translateY(10px);} to {opacity:1; transform:translateY(0);} }
+@keyframes shake { 0%,100%{transform:translateX(0);} 25%{transform:translateX(-5px);} 75%{transform:translateX(5px);} }
+.shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+
+/* Toast */
+#achievement-toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 2000; pointer-events: none; }
+.achievement-toast {
+  background: var(--achievement-bg); color: var(--achievement-text); padding: 12px 24px;
+  border-radius: 50px; margin-bottom: 10px; font-weight: 600; box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+  animation: slideDown 0.5s ease-out, fadeOut 0.5s ease-in 3.5s forwards;
+}
+@keyframes slideDown { from {transform:translateY(-100%); opacity:0;} to {transform:translateY(0); opacity:1;} }
+@keyframes fadeOut { to {opacity:0;} }
+
+/* Media Queries (Móvil) */
+@media (max-width: 600px) {
+  h1 { font-size: 2em; }
+  .container { padding: 1.2rem; width: 95%; margin-top: 5rem; }
+  .contenido-container { padding: 1rem; }
+  .video-frame { min-height: 200px; }
+  .input-container { flex-direction: column; }
+  #codeInput { width: 100%; max-width: none; font-size: 1.1em; }
+  .button { width: 100%; margin-top: 5px; }
+  .filter-controls input, .filter-controls select { width: 100%; }
+}
+
+/* =========================================
+   NUEVAS IMPLEMENTACIONES: ANIMACIONES & CARGA
+   ========================================= */
+
+/* Cursor para efecto Máquina de Escribir */
+.typewriter-cursor::after {
+  content: '|';
+  animation: blink 1s step-start infinite;
+  color: var(--highlight-pink);
+  margin-left: 2px;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* Contenedor de Video con Lazy Loading */
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  overflow: hidden;
+  background: black;
+  margin: 1em 0;
+}
+
+/* Spinner de Carga */
+.video-loader {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px; height: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top-color: var(--highlight-pink);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  z-index: 1; /* Detrás del iframe cuando cargue, pero visible antes */
+}
+
+/* Iframe (oculto inicialmente para fade-in) */
+.video-frame {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 2;
+  opacity: 0; /* Se muestra vía JS al cargar */
+  transition: opacity 0.6s ease-in;
+  border: none;
+}
+
+/* Animación Spin */
+@keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+/* Ajustes Responsive previos */
+@media (max-width: 600px) {
+  /* ... (mantener ajustes móviles previos) ... */
+  .video-wrapper { min-height: 200px; }
+}
+
+
+/* AGREGAR AL FINAL: */
+
+/* Partículas de Fondo */
+#tsparticles {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  z-index: -2; /* Detrás del overlay */
+  pointer-events: none;
+}
+
+/* Estilos de Galería (Bloqueados vs Desbloqueados) */
+.lista-codigo-item {
+  position: relative;
+  background: rgba(255,255,255,0.08); /* Un poco más visible */
+  border: 1px solid rgba(255,255,255,0.05);
+  /* ... resto de propiedades previas ... */
+}
+
+/* Estado Bloqueado */
+.lista-codigo-item.locked {
+  background: rgba(0,0,0,0.2);
+  border: 1px dashed rgba(255,255,255,0.1);
+  color: var(--text-medium);
+  cursor: default;
+  opacity: 0.7;
+}
+
+.lista-codigo-item.locked .codigo-text {
+  font-family: monospace;
+  letter-spacing: 2px;
+}
+
+.lock-icon {
+  font-size: 1.2em;
+  color: var(--text-medium);
+  margin-right: 10px;
+}
+
+/* Hover solo en desbloqueados */
+.lista-codigo-item:not(.locked):hover {
+  background: rgba(255,255,255,0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Contenedor de archivos internos */
+.internal-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 15px;
+}
+
+/* Estilo del Iframe (Ventana Interna) */
+.internal-frame {
+  width: 100%;
+  height: 600px;
+  /* Borde sutil semitransparente */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px; /* Bordes más redondeados */
+  
+  /* Sombra para que "flote" sobre el fondo */
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  
+  /* Transición suave al cargar */
+  transition: all 0.3s ease;
+}
+
+/* En móviles lo hacemos un poco más compacto */
+@media (max-width: 600px) {
+  .internal-frame {
+    height: 450px;
+    border-radius: 15px;
+  }
+}
+
+/* --- Estilos para el Visor Multimedia Seguro --- */
+.media-modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.9); z-index: 3000;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    backdrop-filter: blur(5px);
+}
+
+.media-content-container {
+    max-width: 90%; max-height: 80vh;
+    display: flex; justify-content: center; align-items: center;
+    box-shadow: 0 0 50px rgba(0,0,0,0.5);
+}
+
+.secure-media {
+    max-width: 100%; max-height: 80vh;
+    border-radius: 8px;
+}
+
+.media-controls {
+    margin-top: 20px;
+    display: flex; gap: 15px;
+    background: rgba(255,255,255,0.1);
+    padding: 10px 20px; border-radius: 30px;
+}
+
+.media-btn {
+    background: transparent; border: 1px solid rgba(255,255,255,0.5);
+    color: white; padding: 8px 15px; border-radius: 20px; cursor: pointer;
+    font-size: 0.9em; transition: all 0.3s; display: flex; align-items: center; gap: 5px;
+}
+
+.media-btn:hover { background: rgba(255,255,255,0.2); border-color: white; }
+.media-btn.close { border-color: #ff4d6d; color: #ff4d6d; }
+.media-btn.close:hover { background: #ff4d6d; color: white; }
+
+/* Barra de progreso en el botón */
+.progress-btn-bg {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.1); /* Sombra de progreso */
+    width: 0%; transition: width 0.1s linear;
+    z-index: 0;
+}
+.btn-text-layer { position: relative; z-index: 1; }
