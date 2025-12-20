@@ -375,3 +375,29 @@ body.dark-mode .glass-card {
   .media-content-container { max-width: 100%; }
   .media-controls { flex-wrap: wrap; justify-content: center; }
 }
+
+/* --- BOTÓN DE PISTAS --- */
+#hintBtn {
+    background-color: #f1c40f; /* Amarillo Pista */
+    color: #fff;
+    width: 50px; /* Cuadrado perfecto */
+    padding: 0; /* Centrar icono */
+    font-size: 1.2rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#hintBtn:hover {
+    background-color: #f39c12; /* Naranja al pasar mouse */
+    box-shadow: 0 0 15px rgba(241, 196, 15, 0.6); /* Resplandor */
+    transform: translateY(-2px) scale(1.05);
+}
+
+#hintBtn:active {
+    transform: scale(0.95);
+}
+
+/* Modo Oscuro: Ajuste de brillo */
+body.dark-mode #hintBtn {
+    background-color: #d4ac0d;
+    color: #1a1a1a; /* Icono oscuro para contraste */
+}
