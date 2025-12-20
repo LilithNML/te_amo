@@ -1,6 +1,6 @@
 /**
  * modules/uiManager.js
- * Versión Limpia: Streaming Seguro + Glassmorphism + Sin Easter Eggs
+ * Versión Final Producción: Streaming Seguro + Glassmorphism (Sin Easter Eggs)
  */
 
 import { normalizeText } from './utils.js';
@@ -9,7 +9,6 @@ import { descifrarArchivo } from './webCryptoDecryptor.js';
 
 export class UIManager {
     constructor() {
-        // Cache de elementos del DOM
         this.elements = {
             input: document.getElementById("codeInput"),
             contentDiv: document.getElementById("contenido"),
@@ -32,20 +31,14 @@ export class UIManager {
             closeUnlockedBtn: document.getElementById("closeUnlockedBtn")
         };
 
-        // Estado de Sesión (RAM)
         this.cachedPassword = null; 
-        
-        // Estado UI
         this.showingFavoritesOnly = false;
         this.typewriterTimeout = null;
 
-        // Inicialización
         this.initTheme();
         this.setupMenuListeners();
         this.setupListListeners();
         this.initDynamicPlaceholder();
-        
-        // Retraso leve para no bloquear carga inicial de partículas
         setTimeout(() => this.initParticles(), 100); 
     }
 
@@ -63,9 +56,7 @@ export class UIManager {
         this.showToast(isDark ? "Modo Oscuro Activado" : "Modo Claro Activado");
     }
 
-    // =================================================================
-    // VISUALES GENERALES (DEFAULT)
-    // =================================================================
+    // --- VISUALES ---
     async initParticles() {
         // @ts-ignore
         if (typeof tsParticles === 'undefined') return;
@@ -124,9 +115,7 @@ export class UIManager {
         type();
     }
 
-    // =================================================================
-    // RENDERIZADO DE CONTENIDO
-    // =================================================================
+    // --- RENDERIZADO ---
     renderContent(data, key) {
         if (this.typewriterTimeout) clearTimeout(this.typewriterTimeout);
         const container = this.elements.contentDiv; 
@@ -180,7 +169,7 @@ export class UIManager {
                 const aLink = document.createElement("a"); aLink.href=data.link; aLink.target="_blank"; aLink.className="button"; aLink.innerHTML='Abrir Enlace <i class="fas fa-external-link-alt"></i>'; container.appendChild(aLink);
                 break;
             
-            // --- MANEJO AVANZADO DE ARCHIVOS CIFRADOS (Streaming + Progreso) ---
+            // --- MANEJO DE DESCARGAS Y STREAMING ---
             case "download":
                 const dlBtn = document.createElement("button");
                 dlBtn.className = "button";
@@ -190,7 +179,7 @@ export class UIManager {
                 const urlF = data.descarga.url||"";
                 const esCifrado = data.encrypted || urlF.endsWith(".enc") || urlF.endsWith(".wenc");
                 
-                // Limpieza visual del nombre
+                // Limpiar nombre visualmente
                 const nombreLimpio = data.descarga.nombre.replace(/\.(wenc|enc)$/i, "");
 
                 const btnContent = esCifrado 
@@ -225,7 +214,6 @@ export class UIManager {
                                     }
                                 );
 
-                                // Restaurar UI
                                 dlBtn.disabled = false;
                                 progressBg.remove();
                                 textLayer.innerHTML = originalText;
@@ -235,7 +223,7 @@ export class UIManager {
                                     this.showToast("¡Acceso concedido!");
                                     this.triggerConfetti();
                                     
-                                    // Pasamos el nombre LIMPIO al visor (sin .wenc) para que detecte el tipo
+                                    // Abrir Visor Multimedia (con nombre limpio)
                                     const nombreFinal = data.descarga.nombre.replace(/\.(wenc|enc)$/i, "");
                                     this.renderMediaModal(blobDescifrado, nombreFinal);
                                 } else {
@@ -259,11 +247,10 @@ export class UIManager {
                         if (this.cachedPassword) {
                             iniciarProceso(this.cachedPassword);
                         } else {
-                            // Usar nombre limpio en el modal
                             this.askPassword(nombreLimpio, (pass) => iniciarProceso(pass));
                         }
                     } else {
-                        // Descarga normal
+                        // Descarga directa
                         const a = document.createElement("a"); a.href=data.descarga.url; a.download=data.descarga.nombre; a.click();
                     }
                 };
@@ -274,10 +261,9 @@ export class UIManager {
     }
 
     /**
-     * VISOR MULTIMEDIA SEGURO (CORREGIDO Y ALINEADO)
+     * VISOR MULTIMEDIA SEGURO (Alineado)
      */
     renderMediaModal(blob, filename) {
-        // Detectar tipo de archivo
         const ext = filename.split('.').pop().toLowerCase();
         let mimeType = "application/octet-stream";
         let type = "unknown";
@@ -286,7 +272,6 @@ export class UIManager {
         else if (['mp4','webm','mov'].includes(ext)) { mimeType = `video/${ext === 'mov' ? 'mp4' : ext}`; type = "video"; }
         else if (['mp3','wav','ogg'].includes(ext)) { mimeType = `audio/${ext}`; type = "audio"; }
 
-        // Si no es multimedia soportado, descargar
         if (type === "unknown") {
             const url = URL.createObjectURL(blob);
             const a = document.createElement("a"); a.href = url; a.download = filename; a.click();
@@ -297,12 +282,10 @@ export class UIManager {
         const safeBlob = new Blob([blob], { type: mimeType });
         const objectUrl = URL.createObjectURL(safeBlob);
 
-        // --- CONSTRUCCIÓN DEL DOM ---
-        // Overlay (Flex Column)
+        // --- DOM ---
         const overlay = document.createElement("div");
         overlay.className = "media-modal-overlay"; 
         
-        // Contenedor Contenido
         const contentContainer = document.createElement("div");
         contentContainer.className = "media-content-container";
 
@@ -330,7 +313,6 @@ export class UIManager {
         mediaElement.src = objectUrl;
         contentContainer.appendChild(mediaElement);
 
-        // Contenedor Controles
         const controls = document.createElement("div");
         controls.className = "media-controls";
 
@@ -357,7 +339,7 @@ export class UIManager {
         controls.appendChild(btnDownload);
         controls.appendChild(btnClose);
 
-        // ORDEN EN EL DOM (Arriba imagen, Abajo controles)
+        // Orden: Imagen arriba, Botones abajo
         overlay.appendChild(contentContainer);
         overlay.appendChild(controls);
         
@@ -369,10 +351,10 @@ export class UIManager {
      */
     askPassword(filename, callback) {
         const overlay = document.createElement("div");
-        overlay.className = "glass-overlay"; // Clase CSS Glass
+        overlay.className = "glass-overlay";
         
         const card = document.createElement("div");
-        card.className = "glass-card"; // Clase CSS Glass
+        card.className = "glass-card";
         card.innerHTML = `<h3 style="margin-top:0;">Desbloquear Archivo</h3><p style="font-size:0.9em;margin-bottom:15px;opacity:0.8">Introduce la contraseña para:<br><b>${filename}</b></p>`;
 
         const input = document.createElement("input");
@@ -402,7 +384,7 @@ export class UIManager {
         btnConfirm.onclick = submit; input.onkeydown = (e) => { if(e.key === 'Enter') submit(); };
     }
 
-    // --- UTILS MENU Y PANELES (Sin cambios mayores) ---
+    // --- HELPERS (Toast, Menú, Audio) ---
     renderMessage(t,b){const c=this.elements.contentDiv;c.hidden=0;c.innerHTML=`<h2>${t}</h2><p>${b}</p>`;c.classList.remove("fade-in");void c.offsetWidth;c.classList.add("fade-in");}
     showError(){this.elements.input.classList.add("shake","error");setTimeout(()=>this.elements.input.classList.remove("shake"),500);}
     showSuccess(){this.elements.input.classList.remove("error");this.elements.input.classList.add("success");}
