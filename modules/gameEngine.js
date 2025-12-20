@@ -130,4 +130,42 @@ export class GameEngine {
     resetFailedAttempts() { this.failedAttempts = 0; localStorage.setItem("failedAttempts", "0"); }
     importProgress(data) { if (!data.unlocked || !Array.isArray(data.unlocked)) { this.ui.showToast("Error: Archivo incompatible"); return; } this.unlocked = new Set(data.unlocked); this.favorites = new Set(data.favorites || []); this.achievedLogros = new Set(data.achievements || []); this.saveProgress(); this.ui.renderUnlockedList(this.unlocked, this.favorites, mensajes); this.ui.showToast("¡Progreso recuperado!"); }
     resetProgress() { if (confirm("¿Borrar todo?")) { localStorage.clear(); location.reload(); } }
+
+    /**
+     * Busca un código bloqueado al azar y muestra su pista.
+     */
+    giveHint() {
+        // 1. Obtener todos los códigos posibles de la data
+        const allCodes = Object.keys(this.mensajes);
+        
+        // 2. Filtrar solo los que NO han sido descubiertos
+        // (this.unlockedSet debe ser el Set donde guardas los descubiertos)
+        const lockedCodes = allCodes.filter(code => !this.unlockedSet.has(code));
+
+        if (lockedCodes.length === 0) {
+            this.ui.showToast("🎉 ¡Eres increíble! Ya has descubierto todos los secretos.");
+            this.ui.triggerConfetti();
+            return;
+        }
+
+        // 3. Elegir uno al azar
+        const randomCode = lockedCodes[Math.floor(Math.random() * lockedCodes.length)];
+        const data = this.mensajes[randomCode];
+
+        // 4. Obtener la pista (o un mensaje por defecto si no tiene)
+        const pistaTexto = data.pista && data.pista.trim() !== "" 
+            ? data.pista 
+            : "Sigue buscando... este secreto es muy misterioso.";
+
+        // 5. Mostrar la pista en pantalla
+        // Usamos showToast para que sea sutil, o puedes usar renderMessage si quieres un modal
+        this.ui.renderMessage(`💡 Pista: ${pistaTexto}`);
+        
+        // Opcional: Agrega una pequeña animación al input para llamar la atención
+        const input = this.ui.elements.input;
+        input.focus();
+        input.classList.add("shake");
+        setTimeout(() => input.classList.remove("shake"), 500);
+    }
+    
 }
