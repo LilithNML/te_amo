@@ -436,8 +436,8 @@ export const mensajes = {
   "colette": {
     type: "download",
     descarga: {
-      url: "assets/unlocked_content/images/te_amo_01.jpg.enc",
-      nombre: "te_amo_01.jpg.enc"
+      url: "assets/unlocked_content/encrypted/MR-YV-JY-020.jpg.wenc",
+      nombre: "MR-YV-JY-020.jpg.wenc"
     },
     categoria: "Cosplay",
     pista: ""
@@ -445,8 +445,8 @@ export const mensajes = {
   "vegetto": {
     type: "download",
     descarga: {
-      url: "assets/unlocked_content/images/te_amo_02.jpg.enc",
-      nombre: "te_amo_02.jpg.enc"
+      url: "assets/unlocked_content/encrypted/MR-YV-JY-019.jpg.wenc",
+      nombre: "MR-YV-JY-019.jpg.wenc"
     },
     categoria: "Cosplay",
     pista: ""
@@ -454,8 +454,8 @@ export const mensajes = {
   "ellenjoe": {
     type: "download",
     descarga: {
-      url: "assets/unlocked_content/images/te_amo_03.jpg.enc",
-      nombre: "te_amo_03.jpg.enc"
+      url: "assets/unlocked_content/encrypted/MR-YV-JY-018.jpg.wenc",
+      nombre: "MR-YV-JY-018.jpg.wenc"
     },
     categoria: "Cosplay",
     pista: ""
@@ -463,8 +463,8 @@ export const mensajes = {
   "himikotoga": {
     type: "download",
     descarga: {
-      url: "assets/unlocked_content/images/te_amo_04.jpg.enc",
-      nombre: "te_amo_04.jpg.enc"
+      url: "assets/unlocked_content/encrypted/MR-YV-JY-017.jpg.wenc",
+      nombre: "MR-YV-JY-017.jpg.wenc"
     },
     categoria: "Cosplay",
     pista: ""
@@ -472,8 +472,8 @@ export const mensajes = {
   "elmejorpadredelmundo": {
     type: "download",
     descarga: {
-      url: "assets/unlocked_content/images/te_amo_05.jpg.enc",
-      nombre: "te_amo_05.jpg.enc"
+      url: "assets/unlocked_content/encrypted/MR-YV-JY-016.jpg.wenc",
+      nombre: "MR-YV-JY-016.jpg.wenc"
     },
     categoria: "Cosplay",
     pista: ""
@@ -523,8 +523,8 @@ export const mensajes = {
   "primerhola": {
     type: "download",
     descarga: {
-      url: "assets/unlocked_content/images/te_amo_06.jpg.enc",
-      nombre: "te_amo_06.jpg.enc"
+      url: "assets/unlocked_content/encrypted/MR-YV-JY-015.jpg.wenc",
+      nombre: "MR-YV-JY-015.jpg.wenc"
     },
     categoria: "Cosplay",
     pista: ""
@@ -590,8 +590,8 @@ export const mensajes = {
   "suegra": {
     type: "download",
     descarga: {
-      url: "assets/unlocked_content/images/te_amo_07.jpg.enc",
-      nombre: "te_amo_07.jpg.enc"
+      url: "assets/unlocked_content/encrypted/MR-YV-JY-014.jpg.wenc",
+      nombre: "MR-YV-JY-014.jpg.wenc"
     },
     categoria: "Cosplay",
     pista: ""
@@ -599,8 +599,8 @@ export const mensajes = {
   "mami": {
     type: "download",
     descarga: {
-      url: "assets/unlocked_content/images/te_amo_08.jpg.enc",
-      nombre: "te_amo_08.jpg.enc"
+      url: "assets/unlocked_content/encrypted/MR-YV-JY-013.jpg.wenc",
+      nombre: "MR-YV-JY-013.jpg.wenc"
     },
     categoria: "Cosplay",
     pista: ""
@@ -608,8 +608,8 @@ export const mensajes = {
   "suegrita": {
     type: "download",
     descarga: {
-      url: "assets/unlocked_content/images/te_amo_09.jpg.enc",
-      nombre: "te_amo_09.jpg.enc"
+      url: "assets/unlocked_content/encrypted/MR-YV-JY-012.jpg.wenc",
+      nombre: "MR-YV-JY-012.jpg.wenc"
     },
     categoria: "Cosplay",
     pista: ""
@@ -617,8 +617,8 @@ export const mensajes = {
   "sexo": {
     type: "download",
     descarga: {
-      url: "assets/unlocked_content/images/te_amo_10.jpg.enc",
-      nombre: "te_amo_10.jpg.enc"
+      url: "assets/unlocked_content/encrypted/MR-YV-JY-011.jpg.wenc",
+      nombre: "MR-YV-JY-011.jpg.wenc"
     },
     categoria: "Cosplay",
     pista: ""
@@ -626,8 +626,8 @@ export const mensajes = {
   "ojosverdes": {
     type: "download",
     descarga: {
-      url: "assets/unlocked_content/images/te_amo_11.jpg.enc",
-      nombre: "te_amo_11.jpg.enc"
+      url: "assets/unlocked_content/encrypted/MR-YV-JY-010.jpg.wenc",
+      nombre: "MR-YV-JY-010.jpg.wenc"
     },
     categoria: "Cosplay",
     pista: ""
@@ -635,8 +635,8 @@ export const mensajes = {
   "cielo": {
     type: "download",
     descarga: {
-      url: "assets/unlocked_content/images/te_amo_12.jpg.enc",
-      nombre: "te_amo_12.jpg.enc"
+      url: "assets/unlocked_content/encrypted/MR-YV-JY-009.jpg.wenc",
+      nombre: "MR-YV-JY-009.jpg.wenc"
     },
     categoria: "Cosplay",
     pista: ""
@@ -644,8 +644,8 @@ export const mensajes = {
   "acostados": {
     type: "download",
     descarga: {
-      url: "assets/unlocked_content/images/te_amo_13.jpg.enc",
-      nombre: "te_amo_13.jpg.enc"
+      url: "assets/unlocked_content/encrypted/MR-YV-JY-008.jpg.wenc",
+      nombre: "MR-YV-JY-008.jpg.wenc"
     },
     categoria: "Cosplay",
     pista: ""
@@ -653,8 +653,8 @@ export const mensajes = {
   "atulado": {
     type: "download",
     descarga: {
-      url: "assets/unlocked_content/images/te_amo_14.jpg.enc",
-      nombre: "te_amo_14.jpg.enc"
+      url: "assets/unlocked_content/encrypted/MR-YV-JY-007.jpg.wenc",
+      nombre: "MR-YV-JY-007.jpg.wenc"
     },
     categoria: "Cosplay",
     pista: ""
@@ -662,8 +662,8 @@ export const mensajes = {
   "porquenopuedodejardepensarenti": {
     type: "download",
     descarga: {
-      url: "assets/unlocked_content/images/te_amo_15.jpg.enc",
-      nombre: "te_amo_15.jpg.enc"
+      url: "assets/unlocked_content/encrypted/MR-YV-JY-006.jpg.wenc",
+      nombre: "MR-YV-JY-006.jpg.wenc"
     },
     categoria: "Cosplay",
     pista: ""
@@ -671,8 +671,8 @@ export const mensajes = {
   "teamedesdeelprimerdiaqueteconoci": {
     type: "download",
     descarga: {
-      url: "assets/unlocked_content/images/te_amo_16.jpg.enc",
-      nombre: "te_amo_16.jpg.enc"
+      url: "assets/unlocked_content/encrypted/MR-YV-JY-005.jpg.wenc",
+      nombre: "MR-YV-JY-005.jpg.wenc"
     },
     categoria: "Cosplay",
     pista: ""
@@ -687,8 +687,8 @@ export const mensajes = {
   "teamo0315": {
     type: "download",
     descarga: {
-      url: "assets/unlocked_content/images/te_amo_17.jpg.enc",
-      nombre: "te_amo_17.jpg.enc"
+      url: "assets/unlocked_content/encrypted/MR-YV-JY-004.jpg.wenc",
+      nombre: "MR-YV-JY-004.jpg.wenc"
     },
     categoria: "Cosplay",
     pista: ""
@@ -702,10 +702,9 @@ export const mensajes = {
   "sofiacasarezmendoza": {
     type: "download",
     descarga: {
-      url: "assets/unlocked_content/images/soy_tuya.jpg.enc",
-      nombre: "soy_tuya.jpg.enc"
+      url: "assets/unlocked_content/encrypted/MR-KS-XD-004.jpg.wenc",
+      nombre: "MR-KS-XD-004.jpg.wenc"
     },
-    encrypted: true,
     categoria: "Cosplay",
     pista: ""
   },
@@ -717,20 +716,18 @@ export const mensajes = {
   },
   "namek": {
     type: "download",
-    texto: "Usa tu contraseña de siempre seguida de dos a minúsculas",
     descarga: {
-      url: "assets/unlocked_content/images/shibari_01.jpg.wenc",
-      nombre: "tetris.jpg.wenc"
+      url: "assets/unlocked_content/encrypted/MR-KS-XD-003.jpg.wenc",
+      nombre: "MR-KS-XD-003.jpg.wenc"
     },
     categoria: "Cosplay",
     pista: ""
   },
   "kamebesito": {
     type: "download",
-    texto: "Usa tu contraseña de siempre seguida de dos a minúsculas",
     descarga: {
-      url: "assets/unlocked_content/images/a02.jpg.enc",
-      nombre: "a02.jpg.enc"
+      url: "assets/unlocked_content/encrypted/MR-KS-XD-002.jpg.wenc",
+      nombre: "MR-KS-XD-002.jpg.wenc"
     },
     categoria: "Cosplay",
     pista: ""
