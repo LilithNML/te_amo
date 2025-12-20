@@ -375,3 +375,48 @@ input[type=range] { flex-grow: 1; accent-color: var(--highlight-pink); }
     border-radius: 15px;
   }
 }
+
+/* --- Estilos para el Visor Multimedia Seguro --- */
+.media-modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.9); z-index: 3000;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    backdrop-filter: blur(5px);
+}
+
+.media-content-container {
+    max-width: 90%; max-height: 80vh;
+    display: flex; justify-content: center; align-items: center;
+    box-shadow: 0 0 50px rgba(0,0,0,0.5);
+}
+
+.secure-media {
+    max-width: 100%; max-height: 80vh;
+    border-radius: 8px;
+}
+
+.media-controls {
+    margin-top: 20px;
+    display: flex; gap: 15px;
+    background: rgba(255,255,255,0.1);
+    padding: 10px 20px; border-radius: 30px;
+}
+
+.media-btn {
+    background: transparent; border: 1px solid rgba(255,255,255,0.5);
+    color: white; padding: 8px 15px; border-radius: 20px; cursor: pointer;
+    font-size: 0.9em; transition: all 0.3s; display: flex; align-items: center; gap: 5px;
+}
+
+.media-btn:hover { background: rgba(255,255,255,0.2); border-color: white; }
+.media-btn.close { border-color: #ff4d6d; color: #ff4d6d; }
+.media-btn.close:hover { background: #ff4d6d; color: white; }
+
+/* Barra de progreso en el botón */
+.progress-btn-bg {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.1); /* Sombra de progreso */
+    width: 0%; transition: width 0.1s linear;
+    z-index: 0;
+}
+.btn-text-layer { position: relative; z-index: 1; }
