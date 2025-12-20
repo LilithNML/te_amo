@@ -16,6 +16,10 @@ export class GameEngine {
         this.failedAttempts = parseInt(localStorage.getItem("failedAttempts") || "0");
         this.MAX_FAILED_ATTEMPTS = 5;
         this.init();
+        this.hintBtn = document.getElementById("hintBtn");
+    if (this.hintBtn) {
+        this.hintBtn.addEventListener("click", () => this.giveHint());
+}
     }
 
     init() {
