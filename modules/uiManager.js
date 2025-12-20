@@ -1,6 +1,6 @@
 /**
  * modules/uiManager.js
- * Versión Final: Integración WebCrypto + Modal de Contraseña Seguro
+ * Versión Final: Streaming Seguro + Sesión + Progreso Real
  */
 
 import { normalizeText } from './utils.js';
@@ -30,6 +30,10 @@ export class UIManager {
             filterFavBtn: document.getElementById("filterFavBtn"),
             closeUnlockedBtn: document.getElementById("closeUnlockedBtn")
         };
+
+        // ESTADO DE SESIÓN (Memoria RAM)
+        // Se borra al recargar la página. Reduce fatiga de contraseñas.
+        this.cachedPassword = null; 
 
         this.showingFavoritesOnly = false;
         this.typewriterTimeout = null;
@@ -168,49 +172,93 @@ export class UIManager {
                 const aLink = document.createElement("a"); aLink.href=data.link; aLink.target="_blank"; aLink.className="button"; aLink.innerHTML='Abrir Enlace <i class="fas fa-external-link-alt"></i>'; container.appendChild(aLink);
                 break;
             
-            // --- DESCARGA SEGURA CON MODAL PERSONALIZADO ---
+            // --- MANEJO AVANZADO DE ARCHIVOS CIFRADOS ---
             case "download":
                 const dlBtn = document.createElement("button");
                 dlBtn.className = "button";
+                dlBtn.style.position = "relative"; // Para la barra de progreso
+                dlBtn.style.overflow = "hidden";
+
                 const urlF = data.descarga.url||"";
                 const esCifrado = data.encrypted || urlF.endsWith(".enc") || urlF.endsWith(".wenc");
-
-                dlBtn.innerHTML = esCifrado 
+                
+                // Texto inicial
+                const btnContent = esCifrado 
                     ? `<i class="fas fa-lock"></i> Desbloquear ${data.descarga.nombre}`
                     : `<i class="fas fa-download"></i> Descargar ${data.descarga.nombre}`;
+                
+                dlBtn.innerHTML = `<span class="btn-text-layer">${btnContent}</span>`;
 
                 dlBtn.onclick = () => {
                     if (esCifrado) {
-                        // Usamos un modal propio en lugar de prompt()
-                        this.askPassword(data.descarga.nombre, async (password) => {
-                            const originalHTML = dlBtn.innerHTML;
-                            dlBtn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> Verificando...`;
+                        // Función para procesar el descifrado
+                        const iniciarProceso = async (password) => {
+                            // UI: Desactivar botón y preparar barra
                             dlBtn.disabled = true;
-                            
+                            const progressBg = document.createElement("div");
+                            progressBg.className = "progress-btn-bg";
+                            dlBtn.prepend(progressBg);
+                            const textLayer = dlBtn.querySelector(".btn-text-layer");
+                            const originalText = textLayer.innerHTML;
+
                             try {
-                                const exito = await descifrarArchivo(data.descarga.url, data.descarga.nombre, password);
-                                dlBtn.innerHTML = originalHTML;
+                                // Llamada al descifrador con callback de progreso
+                                const blobDescifrado = await descifrarArchivo(
+                                    data.descarga.url, 
+                                    data.descarga.nombre, 
+                                    password,
+                                    (percent, statusText) => {
+                                        // Actualizar barra visual
+                                        progressBg.style.width = `${percent}%`;
+                                        if (percent < 100) {
+                                            textLayer.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> ${percent}% Descargando...`;
+                                        } else {
+                                            textLayer.innerHTML = `<i class="fas fa-cog fa-spin"></i> ${statusText || 'Procesando...'}`;
+                                        }
+                                    }
+                                );
+
+                                // Restaurar botón
                                 dlBtn.disabled = false;
-                                
-                                if (exito) {
+                                progressBg.remove();
+                                textLayer.innerHTML = originalText;
+
+                                if (blobDescifrado) {
+                                    // ÉXITO: Guardar sesión y abrir visor
+                                    this.cachedPassword = password; 
                                     this.showToast("¡Acceso concedido!");
                                     this.triggerConfetti();
+                                    
+                                    // Abrir el visor "Streaming" en lugar de descargar
+                                    this.renderMediaModal(blobDescifrado, data.descarga.nombre);
                                 } else {
+                                    // Fallo contraseña
+                                    this.cachedPassword = null; // Limpiar por seguridad
                                     this.showError();
                                     alert("Contraseña incorrecta.");
                                 }
                             } catch (err) {
-                                dlBtn.innerHTML = originalHTML;
                                 dlBtn.disabled = false;
+                                if(progressBg) progressBg.remove();
+                                textLayer.innerHTML = originalText;
+                                
                                 console.error(err);
                                 if(err.message.includes("ERROR_404")) {
-                                    alert("Error: El archivo no se encuentra en el servidor (404). Verifica la carpeta assets.");
+                                    alert("Error 404: Archivo no encontrado.");
                                 } else {
                                     alert("Error técnico: " + err.message);
                                 }
                             }
-                        });
+                        };
+
+                        // Lógica de Sesión: ¿Tenemos contraseña guardada?
+                        if (this.cachedPassword) {
+                            iniciarProceso(this.cachedPassword);
+                        } else {
+                            this.askPassword(data.descarga.nombre, (pass) => iniciarProceso(pass));
+                        }
                     } else {
+                        // Descarga normal no cifrada
                         const a = document.createElement("a"); a.href=data.descarga.url; a.download=data.descarga.nombre; a.click();
                     }
                 };
@@ -221,73 +269,127 @@ export class UIManager {
     }
 
     /**
-     * Crea un modal temporal para pedir contraseña de forma segura.
-     * Evita mayúsculas automáticas y autocorrector del móvil.
+     * VISOR MULTIMEDIA SEGURO (Streaming Local)
+     * Crea un modal tipo Netflix/Galería para ver el contenido sin descargarlo.
      */
-    askPassword(filename, callback) {
-        // Crear overlay
+    renderMediaModal(blob, filename) {
+        // 1. Determinar tipo de archivo por extensión
+        const ext = filename.split('.').pop().toLowerCase();
+        let mimeType = "application/octet-stream";
+        let type = "unknown";
+
+        if (['jpg','jpeg','png','gif','webp'].includes(ext)) { mimeType = `image/${ext}`; type = "image"; }
+        else if (['mp4','webm','mov'].includes(ext)) { mimeType = `video/${ext === 'mov' ? 'mp4' : ext}`; type = "video"; }
+        else if (['mp3','wav','ogg'].includes(ext)) { mimeType = `audio/${ext}`; type = "audio"; }
+
+        // Si no es multimedia soportado, forzar descarga directa
+        if (type === "unknown") {
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a"); a.href = url; a.download = filename; a.click();
+            setTimeout(() => URL.revokeObjectURL(url), 100);
+            return;
+        }
+
+        // 2. Crear ObjectURL seguro (apunta a RAM)
+        // Cortamos el blob al tipo correcto para que el navegador lo renderice bien
+        const safeBlob = new Blob([blob], { type: mimeType });
+        const objectUrl = URL.createObjectURL(safeBlob);
+
+        // 3. Crear UI del Modal
         const overlay = document.createElement("div");
-        overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:2000;display:flex;justify-content:center;align-items:center;padding:20px;";
+        overlay.className = "media-modal-overlay";
         
-        // Crear caja del modal
+        const container = document.createElement("div");
+        container.className = "media-content-container";
+
+        let mediaElement;
+        if (type === "image") {
+            mediaElement = document.createElement("img");
+            mediaElement.className = "secure-media";
+        } else if (type === "video") {
+            mediaElement = document.createElement("video");
+            mediaElement.className = "secure-media";
+            mediaElement.controls = true;
+            mediaElement.autoplay = true;
+        } else if (type === "audio") {
+            mediaElement = document.createElement("audio");
+            mediaElement.controls = true;
+            mediaElement.autoplay = true;
+            container.style.boxShadow = "none"; // Audio no necesita caja grande
+        }
+
+        mediaElement.src = objectUrl;
+        container.appendChild(mediaElement);
+
+        // 4. Controles (Cerrar y Descarga Discreta)
+        const controls = document.createElement("div");
+        controls.className = "media-controls";
+
+        const btnDownload = document.createElement("button");
+        btnDownload.className = "media-btn";
+        btnDownload.innerHTML = '<i class="fas fa-save"></i> Guardar';
+        btnDownload.onclick = () => {
+            const a = document.createElement("a");
+            a.href = objectUrl;
+            a.download = filename;
+            a.click();
+        };
+
+        const btnClose = document.createElement("button");
+        btnClose.className = "media-btn close";
+        btnClose.innerHTML = '<i class="fas fa-times"></i> Cerrar';
+        
+        // Función de cierre y limpieza de memoria
+        const closeFn = () => {
+            document.body.removeChild(overlay);
+            URL.revokeObjectURL(objectUrl); // ¡Vital para liberar RAM!
+        };
+        btnClose.onclick = closeFn;
+
+        controls.appendChild(btnDownload);
+        controls.appendChild(btnClose);
+
+        overlay.appendChild(container);
+        overlay.appendChild(controls);
+        document.body.appendChild(overlay);
+    }
+
+    askPassword(filename, callback) {
+        const overlay = document.createElement("div");
+        overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:2000;display:flex;justify-content:center;align-items:center;padding:20px;backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);";
+        
         const card = document.createElement("div");
-        card.style.cssText = "background:var(--card-bg, #fff);padding:25px;border-radius:15px;width:100%;max-width:320px;text-align:center;box-shadow:0 10px 25px rgba(0,0,0,0.5);";
-        card.innerHTML = `<h3 style="margin-top:0;color:var(--text-color,#333)">Desbloquear Archivo</h3><p style="font-size:0.9em;margin-bottom:15px">Introduce la contraseña para:<br><b>${filename}</b></p>`;
+        card.style.cssText = "background:rgba(255,255,255,0.95);padding:25px;border-radius:15px;width:100%;max-width:320px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.5);";
+        card.innerHTML = `<h3 style="margin-top:0;color:#333">Desbloquear Archivo</h3><p style="font-size:0.9em;margin-bottom:15px;color:#555">Introduce la contraseña para:<br><b>${filename}</b></p>`;
 
-        // Input PASSWORD (Clave para que no falle en móvil)
         const input = document.createElement("input");
-        input.type = "password";
-        input.placeholder = "Contraseña...";
+        input.type = "password"; input.placeholder = "Contraseña...";
         input.style.cssText = "width:100%;padding:12px;margin-bottom:15px;border:1px solid #ccc;border-radius:8px;font-size:16px;box-sizing:border-box;";
-        // Desactivar ayudas del teclado
-        input.setAttribute("autocomplete", "off");
-        input.setAttribute("autocorrect", "off");
-        input.setAttribute("autocapitalize", "off");
-        input.setAttribute("spellcheck", "false");
+        input.setAttribute("autocomplete", "off"); input.setAttribute("autocorrect", "off"); input.setAttribute("autocapitalize", "off");
 
-        // Botones
         const btnContainer = document.createElement("div");
-        btnContainer.style.display = "flex";
-        btnContainer.style.gap = "10px";
+        btnContainer.style.display = "flex"; btnContainer.style.gap = "10px";
 
         const btnCancel = document.createElement("button");
         btnCancel.textContent = "Cancelar";
-        btnCancel.style.cssText = "flex:1;padding:10px;border:none;background:#ccc;border-radius:6px;cursor:pointer;";
+        btnCancel.style.cssText = "flex:1;padding:10px;border:none;background:#e0e0e0;border-radius:6px;cursor:pointer;color:#333";
         
         const btnConfirm = document.createElement("button");
         btnConfirm.textContent = "Desbloquear";
         btnConfirm.style.cssText = "flex:1;padding:10px;border:none;background:var(--primary-color, #ff4d6d);color:white;border-radius:6px;cursor:pointer;font-weight:bold;";
 
-        btnContainer.appendChild(btnCancel);
-        btnContainer.appendChild(btnConfirm);
-        card.appendChild(input);
-        card.appendChild(btnContainer);
-        overlay.appendChild(card);
+        btnContainer.appendChild(btnCancel); btnContainer.appendChild(btnConfirm);
+        card.appendChild(input); card.appendChild(btnContainer); overlay.appendChild(card);
         document.body.appendChild(overlay);
-
         input.focus();
 
-        // Lógica de cierre
-        const close = () => { document.body.removeChild(overlay); };
-        
+        const close = () => document.body.removeChild(overlay);
         btnCancel.onclick = close;
-        
-        const submit = () => {
-            const pass = input.value; // Sin trim() agresivo, tomamos lo que el usuario escribe, pero el input type="password" evita errores.
-            if(pass) {
-                close();
-                callback(pass);
-            } else {
-                input.style.borderColor = "red";
-                input.focus();
-            }
-        };
-
-        btnConfirm.onclick = submit;
-        input.onkeydown = (e) => { if(e.key === 'Enter') submit(); };
+        const submit = () => { const pass = input.value; if(pass){ close(); callback(pass); } else { input.style.borderColor = "red"; input.focus(); } };
+        btnConfirm.onclick = submit; input.onkeydown = (e) => { if(e.key === 'Enter') submit(); };
     }
 
-    // --- UTILS UI ---
+    // --- RESTO DE MÉTODOS UI (Sin cambios) ---
     renderMessage(t,b){const c=this.elements.contentDiv;c.hidden=0;c.innerHTML=`<h2>${t}</h2><p>${b}</p>`;c.classList.remove("fade-in");void c.offsetWidth;c.classList.add("fade-in");}
     showError(){this.elements.input.classList.add("shake","error");setTimeout(()=>this.elements.input.classList.remove("shake"),500);}
     showSuccess(){this.elements.input.classList.remove("error");this.elements.input.classList.add("success");}
@@ -299,8 +401,6 @@ export class UIManager {
         if(b)b.innerHTML=play?'<i class="fas fa-pause"></i>':'<i class="fas fa-play"></i>';
         if(l&&name)l.textContent=name.replace(/_/g," ").replace(/\.[^/.]+$/,"");
     }
-
-    // --- MENUS ---
     setupMenuListeners(){
         this.elements.menuButton.addEventListener("click",(e)=>{e.stopPropagation();this.elements.dropdownMenu.classList.toggle("show");});
         document.addEventListener("click",(e)=>{if(!this.elements.menuButton.contains(e.target)&&!this.elements.dropdownMenu.contains(e.target))this.elements.dropdownMenu.classList.remove("show");});
@@ -327,8 +427,6 @@ export class UIManager {
             c.appendChild(d);
         });
     }
-
-    // --- LISTAS ---
     setupListListeners(){
         this.elements.searchUnlocked.addEventListener("input",()=>this.triggerListFilter());
         this.elements.categoryFilter.addEventListener("change",()=>this.triggerListFilter());
@@ -366,7 +464,6 @@ export class UIManager {
         });
         if(vc===0)this.elements.unlockedList.innerHTML='<p style="text-align:center;width:100%;opacity:0.7">Sin resultados.</p>';
     }
-
     exportProgress(){
         const d={unlocked:JSON.parse(localStorage.getItem("desbloqueados")||"[]"),favorites:JSON.parse(localStorage.getItem("favoritos")||"[]"),achievements:JSON.parse(localStorage.getItem("logrosAlcanzados")||"[]"),timestamp:new Date().toISOString()};
         const b=new Blob([JSON.stringify(d,null,2)],{type:"application/json"});const u=URL.createObjectURL(b);const a=document.createElement("a");a.href=u;a.download=`progreso_${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(u);this.showToast("Progreso exportado");
