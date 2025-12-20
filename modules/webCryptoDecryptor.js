@@ -1,121 +1,98 @@
 /**
  * modules/webCryptoDecryptor.js
- * Descifrador Nativo WebCrypto - CORREGIDO (Soporte Magic Bytes WC01)
- * ------------------------------------------------------------------
- * Sincronizado con 'index-webcrypto.html':
- * - Estructura: [Magic(4)] + [Salt(16)] + [IV(12)] + [Ciphertext]
- * - Iteraciones: 150,000
+ * Versión Streaming + Progreso Real
  */
 
-export async function descifrarArchivo(url, filename, password) {
+export async function descifrarArchivo(url, filename, password, onProgress) {
     try {
-        // 1. Descarga Anti-Caché
+        // 1. Descarga con Reporte de Progreso
         const urlSinCache = url + (url.includes('?') ? '&' : '?') + 't=' + new Date().getTime();
         
         const response = await fetch(urlSinCache, { cache: "no-store" });
         if (!response.ok) throw new Error(`Error de red: ${response.status}`);
         
-        const fileBuffer = await response.arrayBuffer();
-        const dataView = new Uint8Array(fileBuffer);
+        // Obtener tamaño total para la barra de progreso
+        const contentLength = response.headers.get('content-length');
+        const total = contentLength ? parseInt(contentLength, 10) : 0;
+        let loaded = 0;
 
-        // --- CONSTANTES DE TU HERRAMIENTA ---
-        const MAGIC_BYTES = [0x57, 0x43, 0x30, 0x31]; // "WC01"
+        const reader = response.body.getReader();
+        const chunks = [];
+
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            
+            chunks.push(value);
+            loaded += value.length;
+
+            // Reportar progreso si existe la función callback
+            if (onProgress && total > 0) {
+                const percent = Math.round((loaded / total) * 100);
+                onProgress(percent);
+            }
+        }
+
+        // Reconstruir el buffer completo
+        const fileBuffer = new Uint8Array(loaded);
+        let position = 0;
+        for (let chunk of chunks) {
+            fileBuffer.set(chunk, position);
+            position += chunk.length;
+        }
+
+        const dataView = new Uint8Array(fileBuffer.buffer);
+
+        // --- CONSTANTES ---
+        const MAGIC_BYTES = [0x57, 0x43, 0x30, 0x31]; // WC01
         const MAGIC_LEN = 4;
         const SALT_LEN = 16;
         const IV_LEN = 12;
-        const ITERATIONS = 150000; // Vital que coincida
+        const ITERATIONS = 150000;
 
-        // 2. VALIDACIONES DE INTEGRIDAD
-        
-        // A) Validar si es un error HTML (404 disfrazado)
+        // 2. VALIDACIONES
         const headerString = String.fromCharCode(...dataView.slice(0, 5));
         if (headerString.includes("<!DOC") || headerString.includes("<htm")) {
-            throw new Error("ERROR_404: El archivo no existe en la carpeta assets.");
+            throw new Error("ERROR_404: El archivo no existe.");
         }
 
-        // B) Validar tamaño mínimo
         if (fileBuffer.byteLength < MAGIC_LEN + SALT_LEN + IV_LEN) {
             throw new Error("Archivo corrupto: Tamaño insuficiente.");
         }
 
-        // C) Validar Magic Bytes (WC01)
-        // Esto confirma si el archivo fue creado con tu herramienta o no
         for (let i = 0; i < MAGIC_LEN; i++) {
-            if (dataView[i] !== MAGIC_BYTES[i]) {
-                // Si no coincide, puede que sea un archivo viejo sin firma.
-                // Lanzamos error para no intentar descifrar basura.
-                console.warn(`Byte ${i} esperado ${MAGIC_BYTES[i]} pero es ${dataView[i]}`);
-                throw new Error("Formato inválido: Falta la firma 'WC01'. Vuelve a cifrar el archivo.");
-            }
+            if (dataView[i] !== MAGIC_BYTES[i]) throw new Error("Formato inválido: Falta firma WC01.");
         }
 
-        // 3. EXTRAER PARTES (Con el offset correcto)
-        let offset = MAGIC_LEN; // Empezamos DESPUÉS de "WC01"
-
-        const salt = fileBuffer.slice(offset, offset + SALT_LEN);
-        offset += SALT_LEN;
-
-        const iv = fileBuffer.slice(offset, offset + IV_LEN);
-        offset += IV_LEN;
-
+        // 3. EXTRAER PARTES
+        let offset = MAGIC_LEN;
+        const salt = fileBuffer.slice(offset, offset + SALT_LEN); offset += SALT_LEN;
+        const iv = fileBuffer.slice(offset, offset + IV_LEN); offset += IV_LEN;
         const ciphertext = fileBuffer.slice(offset);
 
-        // 4. IMPORTAR CLAVE (PBKDF2)
+        // 4. DERIVAR CLAVE
+        if (onProgress) onProgress(100, "Descifrando..."); // Estado final
+
         const textEncoder = new TextEncoder();
         const passwordKey = await window.crypto.subtle.importKey(
-            "raw",
-            textEncoder.encode(password),
-            { name: "PBKDF2" },
-            false,
-            ["deriveKey"]
+            "raw", textEncoder.encode(password), { name: "PBKDF2" }, false, ["deriveKey"]
         );
 
-        // 5. DERIVAR CLAVE AES
         const aesKey = await window.crypto.subtle.deriveKey(
-            {
-                name: "PBKDF2",
-                salt: new Uint8Array(salt),
-                iterations: ITERATIONS, 
-                hash: "SHA-256"
-            },
-            passwordKey,
-            { name: "AES-GCM", length: 256 },
-            false,
-            ["decrypt"]
+            { name: "PBKDF2", salt: salt, iterations: ITERATIONS, hash: "SHA-256" },
+            passwordKey, { name: "AES-GCM", length: 256 }, false, ["decrypt"]
         );
 
-        // 6. DESCIFRAR
+        // 5. DESCIFRAR
         const decryptedContent = await window.crypto.subtle.decrypt(
-            { name: "AES-GCM", iv: new Uint8Array(iv) },
-            aesKey,
-            ciphertext
+            { name: "AES-GCM", iv: iv }, aesKey, ciphertext
         );
 
-        // 7. DESCARGAR
-        const blob = new Blob([decryptedContent], { type: "application/octet-stream" });
-        const link = document.createElement("a");
-        link.href = window.URL.createObjectURL(blob);
-        
-        // Limpiar extensión
-        let finalName = filename.replace(/\.(wenc|enc)$/i, "");
-        if (!finalName.includes(".")) finalName = "descifrado_" + filename;
-
-        link.download = finalName;
-        document.body.appendChild(link);
-        link.click();
-        
-        setTimeout(() => {
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(link.href);
-        }, 100);
-
-        return true;
+        // 6. RETORNAR BLOB (No descargar aún)
+        return new Blob([decryptedContent], { type: "application/octet-stream" });
 
     } catch (error) {
-        // OperationError = Contraseña incorrecta (o Salt incorrecta)
-        if (error.name === "OperationError") {
-            return false; 
-        }
+        if (error.name === "OperationError") return false; // Contraseña mal
         throw error;
     }
 }
