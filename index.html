@@ -6,7 +6,6 @@
     <title>Nuestro Juego Secreto</title>
     
     <link rel="stylesheet" href="style.css">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.6/viewer.min.css">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,7 +15,6 @@
 
     <div id="tsparticles"></div>
     <div class="background-overlay"></div>
-
     <div id="achievement-toast-container"></div>
 
     <button id="menuButton" class="menu-button" aria-label="Menú Principal">
@@ -38,21 +36,26 @@
     </div>
 
     <div class="container">
-        <img src="assets/images/FullMoon.webp" alt="Luna" class="header-img">
+        <img src="assets/images/luna-fases.webp" alt="Luna" class="header-img">
         
         <h1>Descubre el Secreto</h1>
         <p class="intro-text">Introduce un código, una fecha especial o una palabra clave...</p>
 
-        <div class="input-container">
-            <button id="hintBtn" class="button" title="Pedir una pista" aria-label="Pedir pista">
-                <i class="fas fa-lightbulb"></i>
-            </button>
-
-            <input type="text" id="codeInput" placeholder="Escribe aquí..." autocomplete="off">
+        <div class="input-wrapper">
+            <div class="input-group">
+                <input type="text" id="codeInput" placeholder="Escribe aquí..." autocomplete="off">
+                
+                <div class="action-buttons">
+                    <button id="hintBtn" class="button icon-btn" title="Pedir Pista">
+                        <i class="fas fa-lightbulb"></i>
+                    </button>
+                    <button id="checkBtn" class="button icon-btn" title="Verificar">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
             
-            <button id="checkBtn" class="button" title="Verificar">
-                <i class="fas fa-paper-plane"></i>
-            </button>
+            <div id="feedbackMessage" class="feedback-text"></div>
         </div>
 
         <div id="contenido" class="contenido-container" hidden></div>
@@ -73,23 +76,15 @@
         
         <div class="filter-controls">
             <input type="text" id="searchUnlocked" placeholder="Buscar...">
-            <select id="categoryFilter">
-                <option value="">Todas</option>
-            </select>
-            <button id="filterFavBtn" class="button small-button">
-                <i class="far fa-heart"></i> Favoritos
-            </button>
+            <select id="categoryFilter"><option value="">Todas</option></select>
+            <button id="filterFavBtn" class="button small-button"><i class="far fa-heart"></i> Favoritos</button>
         </div>
 
-        <ul id="unlockedList" class="lista-codigos">
-            </ul>
+        <ul id="unlockedList" class="lista-codigos"></ul>
     </div>
 
     <div id="audioPanel" class="side-panel" aria-hidden="true">
-        <div class="panel-header">
-            <h3>Reproductor</h3>
-            <button id="closeAudioPanel" class="close-panel-btn"><i class="fas fa-times"></i></button>
-        </div>
+        <div class="panel-header"><h3>Reproductor</h3><button id="closeAudioPanel" class="close-panel-btn"><i class="fas fa-times"></i></button></div>
         <div class="audio-content">
             <div id="trackName" style="text-align: center; margin-bottom: 20px;">Selecciona música...</div>
             <div class="audio-controls">
@@ -98,29 +93,21 @@
                 <button id="audioNext" class="audio-btn small"><i class="fas fa-step-forward"></i></button>
             </div>
             <div class="volume-section">
-                <i class="fas fa-volume-down"></i>
-                <input type="range" id="volumeControl" min="0" max="1" step="0.1" value="0.5">
-                <i class="fas fa-volume-up"></i>
+                <i class="fas fa-volume-down"></i><input type="range" id="volumeControl" min="0" max="1" step="0.1" value="0.5"><i class="fas fa-volume-up"></i>
             </div>
-            <ul id="playlist" style="list-style: none; padding: 0; margin-top: 20px;">
-                </ul>
+            <ul id="playlist" style="list-style: none; padding: 0; margin-top: 20px;"></ul>
         </div>
     </div>
 
     <div id="toolsPanel" class="side-panel" aria-hidden="true">
-        <div class="panel-header">
-            <h3>Herramientas</h3>
-            <button id="closeToolsPanel" class="close-panel-btn"><i class="fas fa-times"></i></button>
-        </div>
-        <div id="toolsListContainer" class="tools-container">
-            </div>
+        <div class="panel-header"><h3>Herramientas</h3><button id="closeToolsPanel" class="close-panel-btn"><i class="fas fa-times"></i></button></div>
+        <div id="toolsListContainer" class="tools-container"></div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tsparticles-slim@2.0.6/tsparticles.slim.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.6/viewer.min.js"></script>
-
     <script type="module" src="main.js"></script>
 
 </body>
