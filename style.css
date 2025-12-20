@@ -420,3 +420,60 @@ input[type=range] { flex-grow: 1; accent-color: var(--highlight-pink); }
     z-index: 0;
 }
 .btn-text-layer { position: relative; z-index: 1; }
+
+/* --- 1. GLASSMORPHISM (Cristal Esmerilado) --- */
+.glass-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.4); /* Fondo más transparente */
+    backdrop-filter: blur(12px); /* El desenfoque mágico */
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 2000;
+    display: flex; justify-content: center; align-items: center; padding: 20px;
+    animation: fadeIn 0.3s ease;
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.75); /* Blanco translúcido */
+    border: 1px solid rgba(255, 255, 255, 0.5); /* Borde sutil */
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); /* Sombra suave */
+    backdrop-filter: blur(4px);
+    border-radius: 16px;
+    padding: 25px; width: 100%; max-width: 320px; text-align: center;
+    color: #333;
+}
+
+/* Modo Oscuro para Glassmorphism */
+body.dark-mode .glass-card {
+    background: rgba(30, 30, 30, 0.70);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+/* --- 2. TEMAS VISUALES (Easter Eggs) --- */
+/* Tema Rosa (010424) */
+body.theme-pink {
+    --primary-color: #ff69b4; --bg-color: #fff0f5; --card-bg: #fff; --text-color: #d10056;
+}
+body.theme-pink .glass-card { background: rgba(255, 240, 245, 0.8); border-color: #ff69b4; }
+
+/* Tema Navidad */
+body.theme-christmas {
+    --primary-color: #d42426; --bg-color: #1a472a; --card-bg: #f0f0f0; --text-color: #1a472a;
+    background-image: repeating-linear-gradient(45deg, #1a472a 0, #1a472a 10px, #143d23 10px, #143d23 20px);
+}
+body.theme-christmas h1, body.theme-christmas h2 { color: #d42426; text-shadow: 1px 1px 0 #fff; }
+body.theme-christmas .glass-card { border: 2px solid #d42426; }
+
+/* --- 3. EFECTO GLITCH (Error) --- */
+.glitch-active {
+    animation: glitch-anim 0.2s infinite;
+    filter: invert(1) grayscale(1);
+}
+@keyframes glitch-anim {
+    0% { transform: translate(0) }
+    20% { transform: translate(-2px, 2px) }
+    40% { transform: translate(-2px, -2px) }
+    60% { transform: translate(2px, 2px) }
+    80% { transform: translate(2px, -2px) }
+    100% { transform: translate(0) }
+                             }
