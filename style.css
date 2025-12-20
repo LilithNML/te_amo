@@ -1,26 +1,27 @@
 /* =========================================
-   STYLE.CSS - Versión Limpia (Producción)
+   STYLE.CSS - Versión Final Producción (Clean & Optimized)
    ========================================= */
 
-/* 1. FUENTES E IMPORTACIONES */
+/* 1. FUENTES */
 @import url('https://fonts.googleapis.com/css2?family=Courgette&family=Montserrat:wght@300;400;500;600&display=swap');
 
-/* 2. VARIABLES Y TEMAS */
+/* 2. VARIABLES (SISTEMA DE DISEÑO) */
 :root {
-  /* Fuentes */
+  /* Tipografía */
   --title-font: 'Courgette', cursive;
   --body-font: 'Montserrat', sans-serif;
 
-  /* Paleta Base (Tema Claro - Default) */
+  /* Paleta Base (Tema Claro) */
   --text-light: #CDD8D5;
   --text-medium: #AEA5A5;
   --text-dark: #E0CFC1;
   --header-color: #BCBDB9;
   
-  /* Fondos y Capas */
+  /* Capas y Fondos */
   --background-overlay: rgba(20, 18, 28, 0.75);
-  --container-bg: rgba(32, 30, 43, 0.65); /* Cristal Oscuro Base */
+  --container-bg: rgba(32, 30, 43, 0.65);
   --content-bg: rgba(30, 32, 33, 0.8);
+  --modal-overlay-bg: rgba(0, 0, 0, 0.92);
   
   /* Interacción */
   --border-color-input: #8E7383;
@@ -28,7 +29,7 @@
   --button-bg-initial: #9A8C8B;
   --button-bg-hover: #3F3938;
   
-  /* Estados y Colores de Resalte */
+  /* Acentos y Estados */
   --progress-color: #A3C3BD;
   --highlight-pink: #ff7aa8;
   --highlight-pink-light: #ffaed0;
@@ -43,16 +44,16 @@
   --favorite-icon-default: #888;
   --favorite-icon-active: #FFD700;
 
-  /* Z-Index Layers (Organización) */
-  --z-bg: -1;
-  --z-content: 10;
+  /* Z-Index (Arquitectura de Capas) */
+  --z-back: -1;
+  --z-base: 10;
   --z-menu: 1500;
   --z-toast: 2000;
   --z-modal: 3000;
   --z-overlay: 9999;
 }
 
-/* Variables Modo Oscuro */
+/* Modo Oscuro */
 body.dark-mode {
   --text-light: #f2e6df;
   --text-medium: #d8ccc3;
@@ -66,9 +67,8 @@ body.dark-mode {
   --highlight-pink: #A860A8;
 }
 
-/* 3. RESET Y BASE */
+/* 3. RESET Y ESTRUCTURA BASE */
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
 html { scroll-behavior: smooth; }
 
 body {
@@ -79,9 +79,10 @@ body {
   display: flex; flex-direction: column; min-height: 100vh;
   align-items: center; justify-content: center;
   position: relative; overflow-x: hidden;
+  transition: background 0.5s ease;
 }
 
-/* Scrollbar Personalizado */
+/* Scrollbar Premium */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.3); }
 ::-webkit-scrollbar-thumb { background: var(--button-bg-initial); border-radius: 4px; }
@@ -90,46 +91,39 @@ body {
 .background-overlay {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
   background-color: var(--background-overlay);
-  backdrop-filter: blur(4px); z-index: var(--z-bg);
+  backdrop-filter: blur(4px); z-index: var(--z-back);
 }
 
-/* 4. LAYOUT PRINCIPAL (Glassmorphism) */
+/* 4. CONTENEDOR PRINCIPAL (Glassmorphism) */
 .container {
   background-color: var(--container-bg);
   padding: 2.5rem; border-radius: 16px;
   text-align: center; max-width: 900px; width: 90%;
   margin: 5rem auto 3rem auto; position: relative;
   
-  /* Efecto Cristal */
-  backdrop-filter: blur(16px) saturate(120%);
-  -webkit-backdrop-filter: blur(16px) saturate(120%);
+  /* Efecto Cristal Optimizado */
+  backdrop-filter: blur(12px) saturate(120%);
+  -webkit-backdrop-filter: blur(12px) saturate(120%);
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: 0 15px 35px 0 rgba(0, 0, 0, 0.4);
   
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
-  z-index: var(--z-content);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  z-index: var(--z-base);
 }
+.container:hover { transform: translateY(-2px); box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.5); }
 
-.container:hover { 
-  transform: translateY(-2px); 
-  box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.5);
-}
-
-/* 5. TIPOGRAFÍA E IMÁGENES */
-h1, h2, .section-title {
-  font-family: var(--title-font); color: var(--header-color);
-  font-weight: 400; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
-}
-h1 { margin-bottom: 1.5rem; font-size: 3em; letter-spacing: 1px; }
+/* 5. TIPOGRAFÍA Y CABECERA */
+h1 { font-family: var(--title-font); color: var(--header-color); font-weight: 400; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); margin-bottom: 1.5rem; font-size: 3em; letter-spacing: 1px; }
+h2, .section-title { font-family: var(--title-font); color: var(--header-color); font-weight: 400; }
 .intro-text { font-size: 1.1em; margin-bottom: 2rem; color: var(--text-medium); }
 
 .header-img { 
-    width: 140px; height: auto; margin-bottom: 1.5rem; 
-    animation: float 6s ease-in-out infinite; 
-    filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
+  width: 140px; height: auto; margin-bottom: 1.5rem; 
+  animation: float 6s ease-in-out infinite; 
+  filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
 }
 
-/* 6. INPUTS Y BOTONES */
+/* 6. FORMULARIOS E INTERACCIÓN */
 .input-container { display: flex; gap: 12px; margin-bottom: 2rem; justify-content: center; }
 
 #codeInput {
@@ -139,11 +133,7 @@ h1 { margin-bottom: 1.5rem; font-size: 3em; letter-spacing: 1px; }
   font-family: var(--body-font); font-size: 1.1em; text-align: center;
   transition: all 0.3s ease;
 }
-#codeInput:focus { 
-  border-color: var(--highlight-pink); 
-  background-color: rgba(255, 255, 255, 0.1);
-  outline: none; box-shadow: 0 0 15px rgba(255, 122, 168, 0.3); 
-}
+#codeInput:focus { border-color: var(--highlight-pink); background-color: rgba(255, 255, 255, 0.1); outline: none; box-shadow: 0 0 15px rgba(255, 122, 168, 0.3); }
 #codeInput.success { border-color: var(--highlight-green); box-shadow: 0 0 15px rgba(39, 174, 96, 0.3); }
 #codeInput.error { border-color: var(--highlight-red); box-shadow: 0 0 15px rgba(231, 76, 60, 0.3); }
 
@@ -155,11 +145,7 @@ h1 { margin-bottom: 1.5rem; font-size: 3em; letter-spacing: 1px; }
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   text-decoration: none; position: relative; overflow: hidden;
 }
-.button:hover { 
-  background-color: var(--button-bg-hover); 
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
+.button:hover { background-color: var(--button-bg-hover); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
 .button:active { transform: translateY(0); }
 .button.small-button { padding: 10px 18px; font-size: 0.9em; }
 
@@ -172,26 +158,11 @@ h1 { margin-bottom: 1.5rem; font-size: 3em; letter-spacing: 1px; }
 .contenido-container img { max-width: 100%; border-radius: 12px; margin: 1.5em auto; display: block; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
 .mensaje-texto { font-size: 1.2em; white-space: pre-wrap; color: var(--text-light); }
 
-/* Video Wrappers */
-.video-wrapper {
-  position: relative; width: 100%; aspect-ratio: 16 / 9;
-  border-radius: 12px; overflow: hidden; background: black; margin: 1.5em 0;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-}
-.video-loader {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  width: 40px; height: 40px; border: 4px solid rgba(255, 255, 255, 0.3);
-  border-top-color: var(--highlight-pink); border-radius: 50%;
-  animation: spin 1s linear infinite; z-index: 1;
-}
-.video-frame { width: 100%; height: 100%; position: relative; z-index: 2; opacity: 0; transition: opacity 0.6s ease-in; border: none; }
-@keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
-
-/* Cursor Máquina Escribir */
+/* Efecto Máquina de Escribir */
 .typewriter-cursor::after { content: '|'; animation: blink 1s step-start infinite; color: var(--highlight-pink); margin-left: 2px; }
 @keyframes blink { 50% { opacity: 0; } }
 
-/* 8. BARRA DE PROGRESO */
+/* 8. PROGRESO Y LOGROS */
 .achievements-section { margin-top: 3rem; padding-top: 2rem; border-top: 1px dashed rgba(255,255,255,0.2); }
 .progress-bar-container {
   width: 100%; max-width: 400px; background-color: rgba(255,255,255,0.1);
@@ -204,11 +175,10 @@ h1 { margin-bottom: 1.5rem; font-size: 3em; letter-spacing: 1px; }
   box-shadow: 0 0 10px rgba(255, 122, 168, 0.5);
 }
 
-/* 9. LISTAS (Locked/Unlocked) */
+/* 9. PANELES Y LISTAS */
 .unlocked-codes-panel, .unlocked-codes-section { 
   background-color: var(--content-bg); padding: 1.5rem; 
-  border-radius: 12px; margin-top: 1.5rem; 
-  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 12px; margin-top: 1.5rem; border: 1px solid rgba(255,255,255,0.05);
 }
 .filter-controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 1.5rem; justify-content: center; }
 .filter-controls input, .filter-controls select { 
@@ -223,21 +193,13 @@ h1 { margin-bottom: 1.5rem; font-size: 3em; letter-spacing: 1px; }
   display: flex; justify-content: space-between; align-items: center; 
   cursor: pointer; transition: all 0.3s ease;
 }
-.lista-codigo-item:not(.locked):hover { 
-  background: rgba(255,255,255,0.15); 
-  transform: translateY(-3px); 
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
+.lista-codigo-item:not(.locked):hover { background: rgba(255,255,255,0.15); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
 .codigo-text { font-weight: 500; color: var(--text-dark); text-transform: capitalize; }
 .category { font-size: 0.75em; background: rgba(0,0,0,0.3); padding: 3px 8px; border-radius: 10px; margin-left: 8px; }
 
-/* Estado Bloqueado */
-.lista-codigo-item.locked {
-  background: rgba(0,0,0,0.2); border: 1px dashed rgba(255,255,255,0.1);
-  color: var(--text-medium); cursor: default; opacity: 0.7;
-}
+/* Items Bloqueados */
+.lista-codigo-item.locked { background: rgba(0,0,0,0.2); border: 1px dashed rgba(255,255,255,0.1); color: var(--text-medium); cursor: default; opacity: 0.7; }
 .lista-codigo-item.locked .codigo-text { font-family: monospace; letter-spacing: 2px; }
-.lock-icon { font-size: 1.2em; color: var(--text-medium); margin-right: 10px; }
 
 .favorite-toggle-btn { background: none; border: none; cursor: pointer; font-size: 1.2em; padding: 5px; transition: transform 0.2s; }
 .favorite-toggle-btn:hover { transform: scale(1.2); }
@@ -245,7 +207,7 @@ h1 { margin-bottom: 1.5rem; font-size: 3em; letter-spacing: 1px; }
 .lista-codigo-item .favorite-toggle-btn.active i { color: var(--favorite-icon-active); filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.4)); }
 #filterFavBtn.active { background-color: var(--highlight-pink); color: white; border-color: var(--highlight-pink); }
 
-/* 10. MENÚ HAMBURGUESA Y PANELES */
+/* 10. MENÚ HAMBURGUESA Y SIDEBARS */
 .menu-button {
   position: fixed; top: 20px; left: 20px; z-index: var(--z-menu);
   background: var(--highlight-pink); color: white; border: none; border-radius: 50%;
@@ -266,14 +228,10 @@ h1 { margin-bottom: 1.5rem; font-size: 3em; letter-spacing: 1px; }
 .dropdown-menu button, .menu-link-button {
   display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px;
   color: var(--text-light); background: none; border: none; text-align: left;
-  cursor: pointer; border-radius: 8px; font-family: var(--body-font); font-size: 1em; text-decoration: none;
-  transition: background 0.2s;
+  cursor: pointer; border-radius: 8px; font-family: var(--body-font); font-size: 1em; text-decoration: none; transition: background 0.2s;
 }
-.dropdown-menu button:hover, .menu-link-button:hover { background: rgba(255,255,255,0.1); color: var(--highlight-pink); }
-.menu-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 8px 0; }
-.danger-text { color: var(--highlight-red) !important; }
+.dropdown-menu button:hover { background: rgba(255,255,255,0.1); color: var(--highlight-pink); }
 
-/* Paneles Laterales */
 .side-panel {
   position: fixed; top: 0; right: 0; width: 320px; height: 100vh;
   background: rgba(20, 20, 25, 0.95); backdrop-filter: blur(20px);
@@ -298,7 +256,7 @@ h1 { margin-bottom: 1.5rem; font-size: 3em; letter-spacing: 1px; }
 .tool-btn { display: block; text-align: center; background: var(--button-bg-initial); color: white; padding: 10px; border-radius: 8px; text-decoration: none; font-size: 0.9em; transition: background 0.2s; }
 .tool-btn:hover { background: var(--button-bg-hover); }
 
-/* 11. TOASTS Y ANIMACIONES */
+/* 11. TOASTS, PARTICULAS, IFRAMES */
 #achievement-toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: var(--z-toast); pointer-events: none; width: 90%; max-width: 400px; display: flex; flex-direction: column; align-items: center; }
 .achievement-toast {
   background: var(--achievement-bg); color: var(--achievement-text); padding: 12px 24px;
@@ -306,57 +264,43 @@ h1 { margin-bottom: 1.5rem; font-size: 3em; letter-spacing: 1px; }
   animation: slideDown 0.5s ease-out, fadeOut 0.5s ease-in 3.5s forwards;
   backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.1);
 }
-@keyframes slideDown { from {transform:translateY(-100%); opacity:0;} to {transform:translateY(0); opacity:1;} }
-@keyframes fadeOut { to {opacity:0;} }
-@keyframes float { 0% {transform:translateY(0);} 50% {transform:translateY(-10px);} 100% {transform:translateY(0);} }
-@keyframes shake { 0%,100%{transform:translateX(0);} 25%{transform:translateX(-5px);} 75%{transform:translateX(5px);} }
-.shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+#tsparticles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: calc(var(--z-back) - 1); pointer-events: none; }
 
-/* 12. PARTICULAS */
-#tsparticles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: calc(var(--z-bg) - 1); pointer-events: none; }
-
-/* 13. IFRAMES INTERNOS (Juegos/Mini-apps) */
 .internal-wrapper { width: 100%; display: flex; flex-direction: column; align-items: center; margin-top: 15px; }
 .internal-frame {
   width: 100%; height: 600px;
   border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 20px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-  transition: all 0.3s ease;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4); transition: all 0.3s ease;
 }
 
 /* ==========================================================================
-   14. ESTILOS AVANZADOS (Streaming & Glassmorphism)
+   12. ELEMENTOS ESPECIALES (Streaming & Glassmorphism)
    ========================================================================== */
 
-/* --- A. VISOR MULTIMEDIA SEGURO --- */
+/* --- VISOR MULTIMEDIA SEGURO --- */
 .media-modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.92); /* Fondo oscuro inmersivo */
+    background: var(--modal-overlay-bg);
     z-index: var(--z-overlay);
     
     /* ALINEACIÓN CORRECTA */
-    display: flex; 
-    flex-direction: column !important; /* Imagen arriba, controles abajo */
-    justify-content: center; 
-    align-items: center;
+    display: flex; flex-direction: column !important; 
+    justify-content: center; align-items: center;
     
     backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
     animation: fadeIn 0.3s ease;
 }
-@keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
 
 .media-content-container {
     flex: 0 1 auto; display: flex; justify-content: center; align-items: center;
     max-width: 95%; max-height: 80vh; 
-    margin-bottom: 25px; /* Separación botones */
+    margin-bottom: 25px; /* Espacio para los botones abajo */
     position: relative;
 }
 
 .secure-media {
     max-width: 100%; max-height: 75vh;
-    border-radius: 12px;
-    box-shadow: 0 0 30px rgba(0,0,0,0.5);
-    object-fit: contain;
+    border-radius: 12px; box-shadow: 0 0 30px rgba(0,0,0,0.5); object-fit: contain;
 }
 .secure-media-audio { width: 300px; }
 
@@ -372,14 +316,19 @@ h1 { margin-bottom: 1.5rem; font-size: 3em; letter-spacing: 1px; }
 .media-btn.close { border-color: #ff4d6d; color: #ff99ac; }
 .media-btn.close:hover { background: #ff4d6d; color: white; }
 
-/* Barra progreso */
+/* Barra progreso en botón */
 .progress-btn-bg {
     position: absolute; left: 0; top: 0; bottom: 0;
     background: rgba(0, 0, 0, 0.2); width: 0%; transition: width 0.1s linear; z-index: 0;
 }
 .btn-text-layer { position: relative; z-index: 1; }
 
-/* --- B. GLASSMORPHISM GENÉRICO (MODALES) --- */
+/* Video Loaders */
+.video-wrapper { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; background: black; margin: 1.5em 0; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+.video-loader { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; border: 4px solid rgba(255, 255, 255, 0.3); border-top-color: var(--highlight-pink); border-radius: 50%; animation: spin 1s linear infinite; z-index: 1; }
+.video-frame { width: 100%; height: 100%; position: relative; z-index: 2; opacity: 0; transition: opacity 0.6s ease-in; border: none; }
+
+/* --- GLASSMORPHISM GENÉRICO (MODALES) --- */
 .glass-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0, 0, 0, 0.5);
@@ -402,7 +351,16 @@ body.dark-mode .glass-card {
     border: 1px solid rgba(255, 255, 255, 0.15); color: #fff;
 }
 
-/* 15. MEDIA QUERIES FINALES */
+/* ANIMACIONES GLOBALES */
+@keyframes float { 0% {transform:translateY(0);} 50% {transform:translateY(-10px);} 100% {transform:translateY(0);} }
+@keyframes fadeIn { from {opacity:0; transform:translateY(10px);} to {opacity:1; transform:translateY(0);} }
+@keyframes slideDown { from {transform:translateY(-100%); opacity:0;} to {transform:translateY(0); opacity:1;} }
+@keyframes fadeOut { to {opacity:0;} }
+@keyframes shake { 0%,100%{transform:translateX(0);} 25%{transform:translateX(-5px);} 75%{transform:translateX(5px);} }
+.shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+@keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+/* 13. MEDIA QUERIES (RESPONSIVE) */
 @media (max-width: 600px) {
   h1 { font-size: 2.2em; }
   .container { padding: 1.5rem; width: 95%; margin-top: 5rem; }
