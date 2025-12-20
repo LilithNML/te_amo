@@ -1,6 +1,6 @@
 /**
  * modules/uiManager.js
- * Versión Final: Streaming + Glassmorphism + Easter Eggs + Fixes Visuales
+ * Versión Final: Total Experience (Streaming + Glassmorphism + Temas Completos)
  */
 
 import { normalizeText } from './utils.js';
@@ -45,7 +45,7 @@ export class UIManager {
         this.setupListListeners();
         this.initDynamicPlaceholder();
         
-        // Retraso leve para no bloquear carga inicial
+        // Retraso leve para no bloquear carga inicial de partículas
         setTimeout(() => this.initParticles(), 100); 
     }
 
@@ -64,67 +64,159 @@ export class UIManager {
     }
 
     // =================================================================
-    // LÓGICA DE HUEVOS DE PASCUA (EASTER EGGS)
+    // LÓGICA DE HUEVOS DE PASCUA (TOTALES)
     // =================================================================
     checkEasterEgg(text) {
         const code = text.trim().toLowerCase();
-        const body = document.body;
+        
+        // 1. TEMA ROMÁNTICO ("010424" o "rosa")
+        if (code === "010424" || code === "rosa") {
+            this.setTheme("pink");
+            return true;
+        }
 
-        // 1. "TE AMO"
+        // 2. TEMA NAVIDAD ("navidad")
+        if (code === "navidad") {
+            this.setTheme("christmas");
+            return true;
+        }
+
+        // 3. RESETEAR TEMA ("reset" o "normal")
+        if (code === "reset" || code === "normal") {
+            this.setTheme("default");
+            return true;
+        }
+
+        // 4. "TE AMO" (Efecto temporal)
         if (code === "te amo" || code === "teamo") {
             this.showToast("❤️ Yo también te amo ❤️");
             this.triggerHeartConfetti();
             return true;
         }
 
-        // 2. "010424" (Ejemplo Fecha) -> Tema Rosa
-        if (code === "010424") {
-            body.classList.remove("theme-christmas");
-            body.classList.toggle("theme-pink");
-            const active = body.classList.contains("theme-pink");
-            this.showToast(active ? "🌸 Modo Romántico Activado" : "🌸 Modo Romántico Desactivado");
-            this.triggerConfetti();
-            return true;
-        }
-
-        // 3. "NAVIDAD" -> Tema Navideño
-        if (code === "navidad") {
-            body.classList.remove("theme-pink");
-            body.classList.toggle("theme-christmas");
-            const active = body.classList.contains("theme-christmas");
-            this.showToast(active ? "🎄 ¡Feliz Navidad! 🎅" : "🎄 Navidad Desactivada");
-            return true;
-        }
-
-        // 4. "ERROR" -> Glitch
-        if (code === "error") {
-            this.showToast("⚠️ ERROR CRÍTICO DEL SISTEMA ⚠️");
-            body.classList.add("glitch-active");
-            setTimeout(() => {
-                body.classList.remove("glitch-active");
-                this.showToast("Sistema restaurado... ¿O no?");
-            }, 3000);
-            return true;
-        }
-
-        // 5. "TERROR" -> Audio
+        // 5. "TERROR" (Audio + Susto)
         if (code === "terror") {
-            const audio = new Audio('./assets/audio/terror.mp3');
-            audio.volume = 1.0;
-            audio.play().then(() => {
-                this.showToast("👻 ¿Escuchaste eso?");
-                // Flash negro
-                const overlay = document.createElement('div');
-                overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:black;z-index:9999;";
-                document.body.appendChild(overlay);
-                setTimeout(() => overlay.remove(), 200);
-            }).catch(e => {
-                this.showToast("❌ Falta el archivo 'assets/audio/terror.mp3'");
-            });
+            this.triggerTerrorEffect();
+            return true;
+        }
+        
+        // 6. "ERROR" (Glitch)
+        if (code === "error") {
+            this.triggerGlitchEffect();
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * Aplica un tema visual completo (CSS + Imágenes + Partículas)
+     */
+    setTheme(themeName) {
+        const body = document.body;
+        const headerImg = document.querySelector(".header-img");
+        
+        // Limpiar clases de temas previos
+        body.classList.remove("theme-pink", "theme-christmas");
+
+        if (themeName === "pink") {
+            // --- TEMA ROSA ---
+            body.classList.add("theme-pink");
+            this.showToast("🌸 Modo Romántico Activado");
+            
+            // Cambiar Imágenes (Asegúrate de tener estos archivos)
+            body.style.backgroundImage = "url('assets/images/fondo-pink.webp')";
+            if(headerImg) headerImg.src = "assets/images/header-pink.webp";
+            
+            // Partículas de Corazones
+            this.loadThemeParticles("hearts");
+
+        } else if (themeName === "christmas") {
+            // --- TEMA NAVIDAD ---
+            body.classList.add("theme-christmas");
+            this.showToast("🎄 ¡Modo Navidad Activado! 🎅");
+            
+            // Cambiar Imágenes
+            body.style.backgroundImage = "url('assets/images/fondo-navidad.webp')";
+            if(headerImg) headerImg.src = "assets/images/header-navidad.webp";
+            
+            // Partículas de Nieve
+            this.loadThemeParticles("snow");
+
+        } else {
+            // --- DEFAULT ---
+            this.showToast("Estilo Restaurado");
+            body.style.backgroundImage = "url('assets/images/fondo-romantico.webp')";
+            if(headerImg) headerImg.src = "assets/images/luna-fases.webp";
+            
+            // Partículas Originales
+            this.initParticles(); 
+        }
+    }
+
+    /**
+     * Carga configuraciones especiales de tsParticles (Nieve/Corazones)
+     */
+    async loadThemeParticles(type) {
+        // @ts-ignore
+        if (typeof tsParticles === 'undefined') return;
+
+        let config = {};
+
+        if (type === "snow") {
+            config = {
+                fpsLimit: 60, fullScreen: { enable: true, zIndex: 1 },
+                particles: {
+                    number: { value: 100, density: { enable: true, area: 800 } },
+                    color: { value: "#ffffff" },
+                    shape: { type: "circle" },
+                    opacity: { value: 0.8 },
+                    size: { value: 5, random: true },
+                    move: { enable: true, speed: 3, direction: "bottom", straight: false, random: true, outModes: "out" }
+                },
+                interactivity: { events: { onHover: { enable: true, mode: "repulse" } } }
+            };
+        } else if (type === "hearts") {
+            config = {
+                fpsLimit: 60, fullScreen: { enable: true, zIndex: 0 },
+                particles: {
+                    number: { value: 40, density: { enable: true, area: 800 } },
+                    color: { value: ["#ffb7c5", "#ff69b4", "#ffffff"] },
+                    shape: { type: "circle" }, // Si tsParticles no tiene 'heart' por defecto, usa círculos rosas
+                    opacity: { value: 0.6 },
+                    size: { value: 10, random: true },
+                    move: { enable: true, speed: 2, direction: "top", straight: false, random: true, outModes: "out" }
+                }
+            };
+        }
+
+        // @ts-ignore
+        await tsParticles.load('tsparticles', config);
+    }
+
+    triggerTerrorEffect() {
+        const audio = new Audio('./assets/audio/terror.mp3');
+        audio.volume = 1.0; 
+        audio.play().then(() => {
+            this.showToast("👻 ...");
+            // Flash negro
+            const overlay = document.createElement('div');
+            overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:black;z-index:9999;";
+            document.body.appendChild(overlay);
+            
+            // Opcional: Imagen de susto fugaz
+            // const img = document.createElement("img"); img.src="assets/images/susto.webp"; 
+            // img.style.cssText="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);max-width:100%";
+            // overlay.appendChild(img);
+
+            setTimeout(() => overlay.remove(), 250);
+        }).catch(() => this.showToast("❌ Falta audio terror.mp3"));
+    }
+
+    triggerGlitchEffect() {
+        this.showToast("⚠️ ERROR CRÍTICO DEL SISTEMA");
+        document.body.classList.add("glitch-active");
+        setTimeout(() => document.body.classList.remove("glitch-active"), 3000);
     }
 
     triggerHeartConfetti() {
@@ -133,12 +225,10 @@ export class UIManager {
         const defaults = { spread: 360, ticks: 100, gravity: 0, decay: 0.94, startVelocity: 30, shapes: ['heart'], colors: ['#FFC0CB', '#FF69B4', '#FF1493', '#C71585'] };
         // @ts-ignore
         confetti({ ...defaults, particleCount: 50, scalar: 2 });
-        // @ts-ignore
-        confetti({ ...defaults, particleCount: 25, scalar: 3 });
     }
 
     // =================================================================
-    // VISUALES GENERALES
+    // VISUALES GENERALES (DEFAULT)
     // =================================================================
     async initParticles() {
         // @ts-ignore
@@ -254,7 +344,7 @@ export class UIManager {
                 const aLink = document.createElement("a"); aLink.href=data.link; aLink.target="_blank"; aLink.className="button"; aLink.innerHTML='Abrir Enlace <i class="fas fa-external-link-alt"></i>'; container.appendChild(aLink);
                 break;
             
-            // --- MANEJO AVANZADO DE ARCHIVOS CIFRADOS ---
+            // --- MANEJO AVANZADO DE ARCHIVOS CIFRADOS (Streaming + Progreso) ---
             case "download":
                 const dlBtn = document.createElement("button");
                 dlBtn.className = "button";
@@ -348,7 +438,7 @@ export class UIManager {
     }
 
     /**
-     * VISOR MULTIMEDIA SEGURO (Streaming + DOM Corregido)
+     * VISOR MULTIMEDIA SEGURO (CORREGIDO Y ALINEADO)
      */
     renderMediaModal(blob, filename) {
         // Detectar tipo de archivo
@@ -372,7 +462,7 @@ export class UIManager {
         const objectUrl = URL.createObjectURL(safeBlob);
 
         // --- CONSTRUCCIÓN DEL DOM ---
-        // Overlay (Flex Column)
+        // Overlay (Flex Column forzado por CSS)
         const overlay = document.createElement("div");
         overlay.className = "media-modal-overlay"; 
         
@@ -443,10 +533,10 @@ export class UIManager {
      */
     askPassword(filename, callback) {
         const overlay = document.createElement("div");
-        overlay.className = "glass-overlay"; // Clase CSS nueva
+        overlay.className = "glass-overlay"; // Clase CSS Glass
         
         const card = document.createElement("div");
-        card.className = "glass-card"; // Clase CSS nueva
+        card.className = "glass-card"; // Clase CSS Glass
         card.innerHTML = `<h3 style="margin-top:0;">Desbloquear Archivo</h3><p style="font-size:0.9em;margin-bottom:15px;opacity:0.8">Introduce la contraseña para:<br><b>${filename}</b></p>`;
 
         const input = document.createElement("input");
