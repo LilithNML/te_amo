@@ -1,16 +1,17 @@
 /* =========================================
-   STYLE.CSS - Versión Final (Producción)
+   STYLE.CSS - Versión Final Pulida (Producción)
    ========================================= */
 
-/* Importación de fuentes optimizada */
+/* 1. FUENTES E IMPORTACIONES */
 @import url('https://fonts.googleapis.com/css2?family=Courgette&family=Montserrat:wght@300;400;500;600&display=swap');
 
+/* 2. VARIABLES Y TEMAS */
 :root {
   /* Fuentes */
   --title-font: 'Courgette', cursive;
   --body-font: 'Montserrat', sans-serif;
 
-  /* Paleta de Colores (Tema Claro - Default) */
+  /* Paleta Base (Tema Claro) */
   --text-light: #CDD8D5;
   --text-medium: #AEA5A5;
   --text-dark: #E0CFC1;
@@ -27,7 +28,7 @@
   --button-bg-initial: #9A8C8B;
   --button-bg-hover: #3F3938;
   
-  /* Estados */
+  /* Estados y Colores de Resalte */
   --progress-color: #A3C3BD;
   --highlight-pink: #ff7aa8;
   --highlight-pink-light: #ffaed0;
@@ -37,11 +38,18 @@
   /* Componentes */
   --achievement-bg: #4A4A6A;
   --achievement-text: #E0CFC1;
-  --modal-bg: rgba(0, 0, 0, 0.94); /* Fondo oscuro profundo para el modal */
   
   /* Iconos */
   --favorite-icon-default: #888;
   --favorite-icon-active: #FFD700;
+
+  /* Z-Index Layers (Organización) */
+  --z-bg: -1;
+  --z-content: 10;
+  --z-menu: 1500;
+  --z-toast: 2000;
+  --z-modal: 3000;
+  --z-overlay: 9999;
 }
 
 /* Variables Modo Oscuro */
@@ -58,9 +66,11 @@ body.dark-mode {
   --highlight-pink: #A860A8;
 }
 
-/* Reset y Base */
+/* 3. RESET Y BASE */
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
 html { scroll-behavior: smooth; }
+
 body {
   font-family: var(--body-font);
   background: url('assets/images/fondo-romantico.webp') no-repeat center center fixed;
@@ -71,36 +81,52 @@ body {
   position: relative; overflow-x: hidden;
 }
 
+/* Scrollbar Personalizado */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.3); }
+::-webkit-scrollbar-thumb { background: var(--button-bg-initial); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--highlight-pink); }
+
 .background-overlay {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
   background-color: var(--background-overlay);
-  backdrop-filter: blur(4px); z-index: -1;
+  backdrop-filter: blur(4px); z-index: var(--z-bg);
 }
 
-/* Contenedor Principal (Glassmorphism) */
+/* 4. LAYOUT PRINCIPAL (Glassmorphism) */
 .container {
   background-color: var(--container-bg);
   padding: 2.5rem; border-radius: 16px;
   text-align: center; max-width: 900px; width: 90%;
-  margin: 4rem auto 2rem auto; position: relative;
-  backdrop-filter: blur(12px) saturate(120%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-  transition: transform 0.4s ease;
+  margin: 5rem auto 3rem auto; position: relative;
+  
+  /* Efecto Cristal Mejorado */
+  backdrop-filter: blur(16px) saturate(120%);
+  -webkit-backdrop-filter: blur(16px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 15px 35px 0 rgba(0, 0, 0, 0.4);
+  
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  z-index: var(--z-content);
 }
-.container:hover { transform: translateY(-2px); }
 
-/* Tipografía */
+.container:hover { 
+  transform: translateY(-2px); 
+  box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.5);
+}
+
+/* 5. TIPOGRAFÍA */
 h1, h2, .section-title {
   font-family: var(--title-font); color: var(--header-color);
   font-weight: 400; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
 }
-h1 { margin-bottom: 1.5rem; font-size: 3em; }
+h1 { margin-bottom: 1.5rem; font-size: 3em; letter-spacing: 1px; }
 .intro-text { font-size: 1.1em; margin-bottom: 2rem; color: var(--text-medium); }
-.header-img { width: 140px; height: auto; margin-bottom: 1.5rem; animation: float 6s ease-in-out infinite; }
+.header-img { width: 140px; height: auto; margin-bottom: 1.5rem; animation: float 6s ease-in-out infinite; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)); }
 
-/* Inputs y Botones */
+/* 6. INPUTS Y BOTONES */
 .input-container { display: flex; gap: 12px; margin-bottom: 2rem; justify-content: center; }
+
 #codeInput {
   flex-grow: 1; max-width: 350px; padding: 15px 20px;
   border: 2px solid var(--border-color-input); border-radius: 12px;
@@ -108,9 +134,14 @@ h1 { margin-bottom: 1.5rem; font-size: 3em; }
   font-family: var(--body-font); font-size: 1.1em; text-align: center;
   transition: all 0.3s ease;
 }
-#codeInput:focus { border-color: var(--highlight-pink); outline: none; box-shadow: 0 0 15px rgba(255, 122, 168, 0.3); }
-#codeInput.success { border-color: var(--highlight-green); }
-#codeInput.error { border-color: var(--highlight-red); }
+#codeInput:focus { 
+  border-color: var(--highlight-pink); 
+  background-color: rgba(255, 255, 255, 0.1);
+  outline: none; 
+  box-shadow: 0 0 15px rgba(255, 122, 168, 0.3); 
+}
+#codeInput.success { border-color: var(--highlight-green); box-shadow: 0 0 15px rgba(39, 174, 96, 0.3); }
+#codeInput.error { border-color: var(--highlight-red); box-shadow: 0 0 15px rgba(231, 76, 60, 0.3); }
 
 .button {
   background-color: var(--button-bg-initial); color: var(--text-light);
@@ -118,393 +149,247 @@ h1 { margin-bottom: 1.5rem; font-size: 3em; }
   font-family: var(--body-font); font-weight: 600; font-size: 1em;
   cursor: pointer; transition: all 0.3s ease;
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  text-decoration: none;
+  text-decoration: none; position: relative; overflow: hidden;
 }
-.button:hover { background-color: var(--button-bg-hover); transform: translateY(-2px); }
+.button:hover { 
+  background-color: var(--button-bg-hover); 
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+.button:active { transform: translateY(0); }
 .button.small-button { padding: 10px 18px; font-size: 0.9em; }
 
-/* Contenido Dinámico */
+/* 7. CONTENIDO DINÁMICO */
 .contenido-container {
-  background-color: var(--content-bg); padding: 2rem; border-radius: 12px;
-  margin-top: 2rem; text-align: left; line-height: 1.7; color: var(--text-medium);
+  background-color: var(--content-bg); padding: 2.5rem; border-radius: 16px;
+  margin-top: 2rem; text-align: left; line-height: 1.8; color: var(--text-medium);
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
-.contenido-container img { max-width: 100%; border-radius: 8px; margin: 1em auto; display: block; }
-.video-frame { width: 100%; aspect-ratio: 16 / 9; border-radius: 12px; margin: 1em 0; background: #000; }
+.contenido-container img { max-width: 100%; border-radius: 12px; margin: 1.5em auto; display: block; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
 .mensaje-texto { font-size: 1.2em; white-space: pre-wrap; color: var(--text-light); }
 
-/* Progreso */
+/* Video Wrappers & Loaders */
+.video-wrapper {
+  position: relative; width: 100%; aspect-ratio: 16 / 9;
+  border-radius: 12px; overflow: hidden; background: black; margin: 1.5em 0;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+.video-loader {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 40px; height: 40px; border: 4px solid rgba(255, 255, 255, 0.3);
+  border-top-color: var(--highlight-pink); border-radius: 50%;
+  animation: spin 1s linear infinite; z-index: 1;
+}
+.video-frame {
+  width: 100%; height: 100%; position: relative; z-index: 2;
+  opacity: 0; transition: opacity 0.6s ease-in; border: none;
+}
+@keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+/* Cursor Máquina de Escribir */
+.typewriter-cursor::after {
+  content: '|'; animation: blink 1s step-start infinite; color: var(--highlight-pink); margin-left: 2px;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+/* 8. BARRA DE PROGRESO Y LOGROS */
 .achievements-section { margin-top: 3rem; padding-top: 2rem; border-top: 1px dashed rgba(255,255,255,0.2); }
 .progress-bar-container {
   width: 100%; max-width: 400px; background-color: rgba(255,255,255,0.1);
   border-radius: 20px; height: 16px; margin: 0 auto; overflow: hidden;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
 }
 .progress-bar-fill {
   height: 100%; background: linear-gradient(90deg, var(--progress-color), var(--highlight-pink-light));
-  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 10px rgba(255, 122, 168, 0.5);
 }
 
-/* Lista de Desbloqueados */
-.unlocked-codes-panel, .unlocked-codes-section { background-color: var(--content-bg); padding: 1.5rem; border-radius: 12px; margin-top: 1.5rem; }
+/* 9. LISTA DE CÓDIGOS (Desbloqueados) */
+.unlocked-codes-panel, .unlocked-codes-section { 
+  background-color: var(--content-bg); padding: 1.5rem; 
+  border-radius: 12px; margin-top: 1.5rem; 
+  border: 1px solid rgba(255,255,255,0.05);
+}
 .filter-controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 1.5rem; justify-content: center; }
-.filter-controls input, .filter-controls select { padding: 10px; border-radius: 8px; border: 1px solid var(--border-color-input); background: var(--input-bg); color: var(--text-light); }
-.lista-codigos { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; list-style: none; }
-.lista-codigo-item {
-  background: rgba(255,255,255,0.05); padding: 12px 15px; border-radius: 8px;
-  display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: background 0.2s;
+.filter-controls input, .filter-controls select { 
+  padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-color-input); 
+  background: var(--input-bg); color: var(--text-light); outline: none;
 }
-.lista-codigo-item:hover { background: rgba(255,255,255,0.1); }
-.codigo-text { font-weight: 500; color: var(--text-dark); text-transform: capitalize; }
-.category { font-size: 0.75em; background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px; margin-left: 8px; }
 
-.favorite-toggle-btn { background: none; border: none; cursor: pointer; font-size: 1.1em; padding: 5px; transition: transform 0.2s; }
+.lista-codigos { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; list-style: none; }
+.lista-codigo-item {
+  position: relative; background: rgba(255,255,255,0.08); 
+  padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);
+  display: flex; justify-content: space-between; align-items: center; 
+  cursor: pointer; transition: all 0.3s ease;
+}
+.lista-codigo-item:not(.locked):hover { 
+  background: rgba(255,255,255,0.15); 
+  transform: translateY(-3px); 
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+.codigo-text { font-weight: 500; color: var(--text-dark); text-transform: capitalize; }
+.category { font-size: 0.75em; background: rgba(0,0,0,0.3); padding: 3px 8px; border-radius: 10px; margin-left: 8px; }
+
+/* Estado Bloqueado */
+.lista-codigo-item.locked {
+  background: rgba(0,0,0,0.2); border: 1px dashed rgba(255,255,255,0.1);
+  color: var(--text-medium); cursor: default; opacity: 0.7;
+}
+.lista-codigo-item.locked .codigo-text { font-family: monospace; letter-spacing: 2px; }
+.lock-icon { font-size: 1.2em; color: var(--text-medium); margin-right: 10px; }
+
+.favorite-toggle-btn { background: none; border: none; cursor: pointer; font-size: 1.2em; padding: 5px; transition: transform 0.2s; }
 .favorite-toggle-btn:hover { transform: scale(1.2); }
 .favorite-toggle-btn i { color: var(--favorite-icon-default); }
 .lista-codigo-item .favorite-toggle-btn.active i { color: var(--favorite-icon-active); filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.4)); }
-#filterFavBtn.active { background-color: var(--highlight-pink); color: white; }
+#filterFavBtn.active { background-color: var(--highlight-pink); color: white; border-color: var(--highlight-pink); }
 
-/* Menú Hamburguesa */
+/* 10. MENÚ HAMBURGUESA Y PANELES */
 .menu-button {
-  position: fixed; top: 20px; left: 20px; z-index: 1500;
+  position: fixed; top: 20px; left: 20px; z-index: var(--z-menu);
   background: var(--highlight-pink); color: white; border: none; border-radius: 50%;
-  width: 45px; height: 45px; font-size: 1.2em; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  width: 50px; height: 50px; font-size: 1.3em; cursor: pointer; 
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4); transition: transform 0.3s;
 }
+.menu-button:hover { transform: scale(1.1) rotate(90deg); }
+
 .dropdown-menu {
-  position: fixed; top: 75px; left: 20px; background: var(--container-bg);
-  backdrop-filter: blur(15px); border-radius: 12px; padding: 10px; min-width: 240px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.5); transform: translateX(-150%);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1499; visibility: hidden;
+  position: fixed; top: 80px; left: 20px; background: rgba(30, 30, 30, 0.95);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-radius: 16px; padding: 15px; min-width: 250px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6); transform: translateX(-150%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: calc(var(--z-menu) - 1); 
+  visibility: hidden; border: 1px solid rgba(255,255,255,0.1);
 }
 .dropdown-menu.show { transform: translateX(0); visibility: visible; }
 .dropdown-menu button, .menu-link-button {
-  display: flex; align-items: center; gap: 10px; width: 100%; padding: 12px;
+  display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px;
   color: var(--text-light); background: none; border: none; text-align: left;
   cursor: pointer; border-radius: 8px; font-family: var(--body-font); font-size: 1em; text-decoration: none;
+  transition: background 0.2s;
 }
 .dropdown-menu button:hover, .menu-link-button:hover { background: rgba(255,255,255,0.1); color: var(--highlight-pink); }
 .menu-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 8px 0; }
 .danger-text { color: var(--highlight-red) !important; }
 
-/* Paneles Laterales (Audio & Herramientas) */
+/* Paneles Laterales */
 .side-panel {
-  position: fixed; top: 0; right: 0; width: 300px; height: 100vh;
-  background: var(--content-bg); backdrop-filter: blur(15px);
-  box-shadow: -5px 0 20px rgba(0,0,0,0.5); padding: 25px;
-  transform: translateX(100%); transition: transform 0.3s ease; z-index: 2500;
-  display: flex; flex-direction: column;
+  position: fixed; top: 0; right: 0; width: 320px; height: 100vh;
+  background: rgba(20, 20, 25, 0.95); backdrop-filter: blur(20px);
+  box-shadow: -10px 0 30px rgba(0,0,0,0.6); padding: 30px;
+  transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 2500; display: flex; flex-direction: column; border-left: 1px solid rgba(255,255,255,0.1);
 }
 .side-panel.show { transform: translateX(0); }
-.panel-header { width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
-.close-panel-btn { background: none; border: none; color: var(--text-light); font-size: 1.2em; cursor: pointer; }
-
-/* Controles de Audio */
-.audio-controls { display: flex; gap: 15px; margin: 20px 0; justify-content: center; }
-.audio-btn { background: var(--button-bg-initial); color: var(--text-light); border: none; width: 50px; height: 50px; border-radius: 50%; font-size: 1.2em; cursor: pointer; }
-.audio-btn.small { width: 40px; height: 40px; font-size: 1em; background: rgba(255,255,255,0.1); }
-.volume-section { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
-input[type=range] { flex-grow: 1; accent-color: var(--highlight-pink); }
+.panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.close-panel-btn { background: none; border: none; color: var(--text-light); font-size: 1.5em; cursor: pointer; transition: color 0.2s; }
+.close-panel-btn:hover { color: var(--highlight-pink); }
 
 /* Herramientas (Cards) */
-.tools-container { overflow-y: auto; flex-grow: 1; }
-.tool-card { background: rgba(255,255,255,0.05); border-radius: 10px; padding: 15px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); }
+.tools-container { overflow-y: auto; flex-grow: 1; padding-right: 5px; }
+.tool-card { 
+  background: rgba(255,255,255,0.05); border-radius: 12px; padding: 15px; 
+  margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); transition: background 0.2s;
+}
+.tool-card:hover { background: rgba(255,255,255,0.1); }
 .tool-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; color: var(--highlight-pink); font-weight: 600; }
 .tool-desc { font-size: 0.9em; color: var(--text-medium); margin-bottom: 12px; }
-.tool-btn { display: block; text-align: center; background: var(--button-bg-initial); color: white; padding: 8px; border-radius: 6px; text-decoration: none; font-size: 0.9em; }
+.tool-btn { display: block; text-align: center; background: var(--button-bg-initial); color: white; padding: 10px; border-radius: 8px; text-decoration: none; font-size: 0.9em; transition: background 0.2s; }
+.tool-btn:hover { background: var(--button-bg-hover); }
 
-
-/* Animaciones */
-@keyframes float { 0% {transform:translateY(0);} 50% {transform:translateY(-10px);} 100% {transform:translateY(0);} }
-@keyframes fadeIn { from {opacity:0; transform:translateY(10px);} to {opacity:1; transform:translateY(0);} }
-@keyframes shake { 0%,100%{transform:translateX(0);} 25%{transform:translateX(-5px);} 75%{transform:translateX(5px);} }
-.shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
-
-/* Toast */
-#achievement-toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 2000; pointer-events: none; }
+/* 11. TOASTS Y ANIMACIONES */
+#achievement-toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: var(--z-toast); pointer-events: none; width: 90%; max-width: 400px; display: flex; flex-direction: column; align-items: center; }
 .achievement-toast {
   background: var(--achievement-bg); color: var(--achievement-text); padding: 12px 24px;
   border-radius: 50px; margin-bottom: 10px; font-weight: 600; box-shadow: 0 5px 20px rgba(0,0,0,0.4);
   animation: slideDown 0.5s ease-out, fadeOut 0.5s ease-in 3.5s forwards;
+  backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.1);
 }
+
+@keyframes float { 0% {transform:translateY(0);} 50% {transform:translateY(-10px);} 100% {transform:translateY(0);} }
+@keyframes fadeIn { from {opacity:0; transform:translateY(10px);} to {opacity:1; transform:translateY(0);} }
 @keyframes slideDown { from {transform:translateY(-100%); opacity:0;} to {transform:translateY(0); opacity:1;} }
 @keyframes fadeOut { to {opacity:0;} }
+@keyframes shake { 0%,100%{transform:translateX(0);} 25%{transform:translateX(-5px);} 75%{transform:translateX(5px);} }
+.shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
 
-/* Media Queries (Móvil) */
-@media (max-width: 600px) {
-  h1 { font-size: 2em; }
-  .container { padding: 1.2rem; width: 95%; margin-top: 5rem; }
-  .contenido-container { padding: 1rem; }
-  .video-frame { min-height: 200px; }
-  .input-container { flex-direction: column; }
-  #codeInput { width: 100%; max-width: none; font-size: 1.1em; }
-  .button { width: 100%; margin-top: 5px; }
-  .filter-controls input, .filter-controls select { width: 100%; }
-}
+/* 12. PARTICULAS Y EFECTOS FONDO */
+#tsparticles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: calc(var(--z-bg) - 1); pointer-events: none; }
 
-/* =========================================
-   NUEVAS IMPLEMENTACIONES: ANIMACIONES & CARGA
-   ========================================= */
-
-/* Cursor para efecto Máquina de Escribir */
-.typewriter-cursor::after {
-  content: '|';
-  animation: blink 1s step-start infinite;
-  color: var(--highlight-pink);
-  margin-left: 2px;
-}
-
-@keyframes blink {
-  50% { opacity: 0; }
-}
-
-/* Contenedor de Video con Lazy Loading */
-.video-wrapper {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  border-radius: 12px;
-  overflow: hidden;
-  background: black;
-  margin: 1em 0;
-}
-
-/* Spinner de Carga */
-.video-loader {
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 40px; height: 40px;
-  border: 4px solid rgba(255, 255, 255, 0.3);
-  border-top-color: var(--highlight-pink);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  z-index: 1; /* Detrás del iframe cuando cargue, pero visible antes */
-}
-
-/* Iframe (oculto inicialmente para fade-in) */
-.video-frame {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  z-index: 2;
-  opacity: 0; /* Se muestra vía JS al cargar */
-  transition: opacity 0.6s ease-in;
-  border: none;
-}
-
-/* Animación Spin */
-@keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
-
-/* Ajustes Responsive previos */
-@media (max-width: 600px) {
-  /* ... (mantener ajustes móviles previos) ... */
-  .video-wrapper { min-height: 200px; }
-}
-
-
-/* AGREGAR AL FINAL: */
-
-/* Partículas de Fondo */
-#tsparticles {
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  z-index: -2; /* Detrás del overlay */
-  pointer-events: none;
-}
-
-/* Estilos de Galería (Bloqueados vs Desbloqueados) */
-.lista-codigo-item {
-  position: relative;
-  background: rgba(255,255,255,0.08); /* Un poco más visible */
-  border: 1px solid rgba(255,255,255,0.05);
-  /* ... resto de propiedades previas ... */
-}
-
-/* Estado Bloqueado */
-.lista-codigo-item.locked {
-  background: rgba(0,0,0,0.2);
-  border: 1px dashed rgba(255,255,255,0.1);
-  color: var(--text-medium);
-  cursor: default;
-  opacity: 0.7;
-}
-
-.lista-codigo-item.locked .codigo-text {
-  font-family: monospace;
-  letter-spacing: 2px;
-}
-
-.lock-icon {
-  font-size: 1.2em;
-  color: var(--text-medium);
-  margin-right: 10px;
-}
-
-/* Hover solo en desbloqueados */
-.lista-codigo-item:not(.locked):hover {
-  background: rgba(255,255,255,0.15);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-}
-
-/* Contenedor de archivos internos */
-.internal-wrapper {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 15px;
-}
-
-/* Estilo del Iframe (Ventana Interna) */
+/* 13. IFRAMES INTERNOS (Juegos/Mini-apps) */
+.internal-wrapper { width: 100%; display: flex; flex-direction: column; align-items: center; margin-top: 15px; }
 .internal-frame {
-  width: 100%;
-  height: 600px;
-  /* Borde sutil semitransparente */
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 20px; /* Bordes más redondeados */
-  
-  /* Sombra para que "flote" sobre el fondo */
+  width: 100%; height: 600px;
+  border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 20px;
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-  
-  /* Transición suave al cargar */
   transition: all 0.3s ease;
 }
 
-/* En móviles lo hacemos un poco más compacto */
-@media (max-width: 600px) {
-  .internal-frame {
-    height: 450px;
-    border-radius: 15px;
-  }
-}
+/* ==========================================================================
+   14. CARACTERÍSTICAS ESPECIALES (Easter Eggs, Glassmorphism & Visor)
+   ========================================================================== */
 
-/* --- Estilos para el Visor Multimedia Seguro --- */
-.media-modal-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.9); z-index: 3000;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    backdrop-filter: blur(5px);
-}
-
-.media-content-container {
-    max-width: 90%; max-height: 80vh;
-    display: flex; justify-content: center; align-items: center;
-    box-shadow: 0 0 50px rgba(0,0,0,0.5);
-}
-
-.secure-media {
-    max-width: 100%; max-height: 80vh;
-    border-radius: 8px;
-}
-
-.media-controls {
-    margin-top: 20px;
-    display: flex; gap: 15px;
-    background: rgba(255,255,255,0.1);
-    padding: 10px 20px; border-radius: 30px;
-}
-
-.media-btn {
-    background: transparent; border: 1px solid rgba(255,255,255,0.5);
-    color: white; padding: 8px 15px; border-radius: 20px; cursor: pointer;
-    font-size: 0.9em; transition: all 0.3s; display: flex; align-items: center; gap: 5px;
-}
-
-.media-btn:hover { background: rgba(255,255,255,0.2); border-color: white; }
-.media-btn.close { border-color: #ff4d6d; color: #ff4d6d; }
-.media-btn.close:hover { background: #ff4d6d; color: white; }
-
-/* Barra de progreso en el botón */
-.progress-btn-bg {
-    position: absolute; left: 0; top: 0; bottom: 0;
-    background: rgba(0, 0, 0, 0.1); /* Sombra de progreso */
-    width: 0%; transition: width 0.1s linear;
-    z-index: 0;
-}
-.btn-text-layer { position: relative; z-index: 1; }
-
-/* --- 1. GLASSMORPHISM (Cristal Esmerilado) --- */
+/* --- A. UTILIDADES GLASSMORPHISM --- */
 .glass-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.4); /* Fondo más transparente */
-    backdrop-filter: blur(12px); /* El desenfoque mágico */
-    -webkit-backdrop-filter: blur(12px);
-    z-index: 2000;
+    background: rgba(0, 0, 0, 0.5); /* Fondo oscuro semitransparente */
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); /* Blur fuerte */
+    z-index: var(--z-modal);
     display: flex; justify-content: center; align-items: center; padding: 20px;
     animation: fadeIn 0.3s ease;
 }
 
 .glass-card {
-    background: rgba(255, 255, 255, 0.75); /* Blanco translúcido */
-    border: 1px solid rgba(255, 255, 255, 0.5); /* Borde sutil */
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37); /* Sombra suave */
-    backdrop-filter: blur(4px);
-    border-radius: 16px;
-    padding: 25px; width: 100%; max-width: 320px; text-align: center;
-    color: #333;
+    background: rgba(255, 255, 255, 0.8); /* Blanco lechoso */
+    border: 1px solid rgba(255, 255, 255, 0.6); 
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+    border-radius: 20px; padding: 30px; 
+    width: 100%; max-width: 340px; text-align: center;
+    color: #333; /* Texto oscuro para contraste sobre blanco */
 }
 
-/* Modo Oscuro para Glassmorphism */
+/* Adaptación Modo Oscuro para Glass Card */
 body.dark-mode .glass-card {
-    background: rgba(30, 30, 30, 0.70);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(30, 30, 30, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     color: #fff;
 }
 
-/* --- 2. TEMAS VISUALES (Easter Eggs) --- */
-/* Tema Rosa (010424) */
-body.theme-pink {
-    --primary-color: #ff69b4; --bg-color: #fff0f5; --card-bg: #fff; --text-color: #d10056;
-}
-body.theme-pink .glass-card { background: rgba(255, 240, 245, 0.8); border-color: #ff69b4; }
-
-/* Tema Navidad */
-body.theme-christmas {
-    --primary-color: #d42426; --bg-color: #1a472a; --card-bg: #f0f0f0; --text-color: #1a472a;
-    background-image: repeating-linear-gradient(45deg, #1a472a 0, #1a472a 10px, #143d23 10px, #143d23 20px);
-}
-body.theme-christmas h1, body.theme-christmas h2 { color: #d42426; text-shadow: 1px 1px 0 #fff; }
-body.theme-christmas .glass-card { border: 2px solid #d42426; }
-
-/* --- 3. EFECTO GLITCH (Error) --- */
-.glitch-active {
-    animation: glitch-anim 0.2s infinite;
-    filter: invert(1) grayscale(1);
-}
-@keyframes glitch-anim {
-    0% { transform: translate(0) }
-    20% { transform: translate(-2px, 2px) }
-    40% { transform: translate(-2px, -2px) }
-    60% { transform: translate(2px, 2px) }
-    80% { transform: translate(2px, -2px) }
-    100% { transform: translate(0) }
-                             }
-
-/* --- ESTILOS VISOR MULTIMEDIA Y EASTER EGGS --- */
-
-/* Forzar columna vertical para el modal */
+/* --- B. VISOR MULTIMEDIA SEGURO (CORREGIDO) --- */
 .media-modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.85); /* Fondo oscuro */
-    z-index: 9999; /* Z-Index muy alto para estar sobre todo */
+    background: rgba(0, 0, 0, 0.92); /* Fondo muy oscuro para inmersión */
+    z-index: var(--z-overlay);
+    
+    /* FIX CRÍTICO: Alineación Vertical */
     display: flex; 
-    flex-direction: column !important; /* <--- VITAL: Obliga a estar uno debajo del otro */
+    flex-direction: column !important; /* Fuerza: Imagen Arriba, Botones Abajo */
     justify-content: center; 
     align-items: center;
-    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    animation: fadeIn 0.3s ease;
 }
 
 .media-content-container {
-    flex: 0 1 auto; /* No crecer más de lo necesario */
+    flex: 0 1 auto; /* No estirarse más de lo necesario */
     display: flex; justify-content: center; align-items: center;
-    max-width: 90%; max-height: 80vh; /* Dejar espacio para botones abajo */
-    margin-bottom: 20px; /* Espacio entre imagen y botones */
+    max-width: 95%; max-height: 80vh; 
+    margin-bottom: 25px; /* Separación con los botones */
     position: relative;
 }
 
 .secure-media {
-    max-width: 100%; max-height: 75vh; /* Límite de altura para que no se salga */
+    max-width: 100%; max-height: 75vh;
     border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    box-shadow: 0 0 30px rgba(0,0,0,0.5);
     object-fit: contain;
+}
+/* Audio player específico */
+.secure-media-audio {
+    width: 300px;
 }
 
 .media-controls {
@@ -513,14 +398,65 @@ body.theme-christmas .glass-card { border: 2px solid #d42426; }
 }
 
 .media-btn {
-    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4);
-    color: white; padding: 10px 25px; border-radius: 30px; cursor: pointer;
+    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3);
+    color: white; padding: 12px 25px; border-radius: 30px; cursor: pointer;
     font-size: 1rem; transition: all 0.2s ease;
     display: flex; align-items: center; gap: 8px;
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(5px);
 }
-.media-btn:hover { background: rgba(255,255,255,0.3); transform: scale(1.05); }
-.media-btn.close { background: rgba(255, 77, 109, 0.2); border-color: #ff4d6d; color: #ff99ac; }
+.media-btn:hover { background: rgba(255,255,255,0.25); transform: scale(1.05); }
+.media-btn.close { border-color: #ff4d6d; color: #ff99ac; }
 .media-btn.close:hover { background: #ff4d6d; color: white; }
 
-/* ... (Mantén tus estilos de Glassmorphism y Temas aquí) ... */
+/* Barra de progreso dentro del botón */
+.progress-btn-bg {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.2);
+    width: 0%; transition: width 0.1s linear; z-index: 0;
+}
+.btn-text-layer { position: relative; z-index: 1; }
+
+/* --- C. TEMAS DE HUEVOS DE PASCUA --- */
+
+/* Tema Rosa (010424) */
+body.theme-pink {
+    --primary-color: #ff69b4; --bg-color: #fff0f5; 
+    --highlight-pink: #ff1493; --border-color-input: #ff69b4;
+    background-image: linear-gradient(135deg, #fff0f5 0%, #ffe4e1 100%);
+}
+body.theme-pink .glass-card { border-color: #ff69b4; box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3); }
+
+/* Tema Navidad */
+body.theme-christmas {
+    --primary-color: #d42426; --highlight-pink: #d42426;
+    background-image: repeating-linear-gradient(45deg, #1a472a 0, #1a472a 20px, #143d23 20px, #143d23 40px);
+}
+body.theme-christmas h1, body.theme-christmas h2 { color: #d42426; text-shadow: 2px 2px 0 #fff; }
+body.theme-christmas .glass-card { border: 2px solid #d42426; }
+
+/* Efecto Glitch (Error) */
+.glitch-active { animation: glitch-anim 0.2s infinite; filter: invert(1) grayscale(1) contrast(1.2); }
+@keyframes glitch-anim {
+    0% { transform: translate(0) }
+    20% { transform: translate(-3px, 3px) }
+    40% { transform: translate(-3px, -3px) }
+    60% { transform: translate(3px, 3px) }
+    80% { transform: translate(3px, -3px) }
+    100% { transform: translate(0) }
+}
+
+/* --- 15. MEDIA QUERIES FINALES --- */
+@media (max-width: 600px) {
+  h1 { font-size: 2.2em; }
+  .container { padding: 1.5rem; width: 95%; margin-top: 5rem; }
+  .contenido-container { padding: 1.2rem; }
+  .video-frame, .internal-frame { min-height: 250px; height: auto; aspect-ratio: 16/9; }
+  .input-container { flex-direction: column; }
+  #codeInput { width: 100%; max-width: none; font-size: 1.1em; }
+  .button { width: 100%; margin-top: 5px; }
+  .filter-controls input, .filter-controls select { width: 100%; }
+  
+  .glass-card { width: 90%; }
+  .media-content-container { max-width: 100%; }
+  .media-controls { flex-wrap: wrap; justify-content: center; }
+}
