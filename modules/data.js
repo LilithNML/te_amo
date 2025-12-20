@@ -315,7 +315,7 @@ export const mensajes = {
   },
   "contador": {
     type: "internal",
-    archivo: "sub-paginas/contador/index.html",
+    archivo: "contador/index.html",
     categoria: "Cositas",
     pista: ""
   },
@@ -330,7 +330,7 @@ export const mensajes = {
   },
   "5.1": {
     type: "internal",
-    archivo: "sub-paginas/corazon/index.html",
+    archivo: "corazon/index.html",
     categoria: "Cositas",
     pista: ""
   },
