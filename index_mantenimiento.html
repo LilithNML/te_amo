@@ -1,109 +1,181 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>En mantenimiento</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: "Poppins", sans-serif;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sitio en Mantenimiento</title>
+    <style>
+        /* --- Reset y Tipografía --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    body {
-      background: radial-gradient(circle at center, #0d0d14 0%, #050509 100%);
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      text-align: center;
-      overflow: hidden;
-    }
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1c20 0%, #0f1012 100%);
+            color: #ffffff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            overflow: hidden;
+        }
 
-    .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.5rem;
-      padding: 20px;
-    }
+        /* --- Contenedor Principal --- */
+        .container {
+            padding: 2rem;
+            max-width: 800px;
+            width: 90%;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 1.5s ease-in-out;
+        }
 
-    .anime-girl {
-      width: 250px;
-      height: 250px;
-      background-image: url('https://i.postimg.cc/SR4zQ1JS/1000020864.png');
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      animation: float 3s ease-in-out infinite;
-      filter: drop-shadow(0 0 15px #7dd3fc);
-    }
+        /* --- Textos --- */
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+        }
 
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
+        p.subtitle {
+            font-size: 1.1rem;
+            color: #a0a0a0;
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+        }
 
-    h1 {
-      font-size: 1.8rem;
-      color: #7dd3fc;
-      text-shadow: 0 0 10px #38bdf8;
-    }
+        /* --- Contador --- */
+        .countdown {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
 
-    p {
-      color: #a5b4fc;
-      font-size: 1rem;
-    }
+        .time-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            min-width: 100px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
 
-    .loader {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 15px;
-    }
+        .time-box span {
+            display: block;
+        }
 
-    .loader div {
-      width: 10px;
-      height: 10px;
-      background-color: #7dd3fc;
-      border-radius: 50%;
-      animation: bounce 1.2s infinite ease-in-out;
-    }
+        .number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffffff;
+        }
 
-    .loader div:nth-child(2) {
-      animation-delay: 0.2s;
-    }
+        .label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #d1d1d1;
+            margin-top: 0.5rem;
+        }
 
-    .loader div:nth-child(3) {
-      animation-delay: 0.4s;
-    }
+        /* --- Footer --- */
+        .footer-note {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1rem;
+        }
 
-    @keyframes bounce {
-      0%, 80%, 100% { transform: scale(0); }
-      40% { transform: scale(1); }
-    }
+        /* --- Animaciones --- */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-    footer {
-      position: absolute;
-      bottom: 20px;
-      font-size: 0.8rem;
-      color: #6b7280;
-    }
-  </style>
+        /* --- Responsividad --- */
+        @media (max-width: 600px) {
+            h1 { font-size: 1.8rem; }
+            .countdown { gap: 1rem; }
+            .time-box { min-width: 70px; padding: 0.8rem; }
+            .number { font-size: 1.8rem; }
+            .label { font-size: 0.7rem; }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div class="anime-girl"></div>
-    <h1>Actualizando la página...</h1>
-    <p>Por favor espera mientras la reparo</p>
-    <div class="loader">
-      <div></div><div></div><div></div>
+
+    <div class="container">
+        <h1>Sitio en Mantenimiento</h1>
+        <p class="subtitle">
+            Estoy realizando actualizaciones para mejorar tu experiencia.<br>
+            Gracias por tu paciencia. Estará de vuelta en:
+        </p>
+
+        <div class="countdown" id="countdown">
+            <div class="time-box">
+                <span class="number" id="days">00</span>
+                <span class="label">Días</span>
+            </div>
+            <div class="time-box">
+                <span class="number" id="hours">00</span>
+                <span class="label">Horas</span>
+            </div>
+            <div class="time-box">
+                <span class="number" id="minutes">00</span>
+                <span class="label">Minutos</span>
+            </div>
+            <div class="time-box">
+                <span class="number" id="seconds">00</span>
+                <span class="label">Segundos</span>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            &copy; 2025 Licenciada Bocchi.
+        </div>
     </div>
-  </div>
-  <footer>© 2025 - Sitio en mantenimiento temporal</footer>
+
+    <script>
+        // Fecha objetivo: 25 de diciembre de 2025
+        const targetDate = new Date("December 25, 2025 00:00:00").getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                document.getElementById("countdown").innerHTML = "<div class='time-box' style='width:100%'>¡Ya estamos en línea!</div>";
+                return;
+            }
+
+            // Cálculos de tiempo
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Actualización del DOM con ceros a la izquierda si es necesario
+            document.getElementById("days").innerText = days < 10 ? "0" + days : days;
+            document.getElementById("hours").innerText = hours < 10 ? "0" + hours : hours;
+            document.getElementById("minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
+            document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
+        }
+
+        // Iniciar intervalo
+        setInterval(updateCountdown, 1000);
+        
+        // Ejecutar inmediatamente para evitar el retraso de 1s al cargar
+        updateCountdown();
+    </script>
 </body>
 </html>
