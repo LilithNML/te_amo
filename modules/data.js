@@ -731,7 +731,70 @@ export const mensajes = {
     },
     categoria: "Cosplay",
     pista: ""
-  }
+  },
+  "semilladelermitano": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/MR-KS-XD-001.jpg.wenc",
+      nombre: "MR-KS-XD-001.jpg.wenc"
+    },
+    categoria: "Cosplay",
+    pista: "Algo muy pequeño que te deja como nuevo… incluso después de casi morir."
+  },
+  "majin": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/MR-KS-HS-003.jpg.wenc",
+      nombre: "MR-KS-HS-003.jpg.wenc"
+    },
+    categoria: "Cosplay",
+    pista: "Una marca en la frente que aparece cuando alguien cede a su lado oscuro."
+  },
+  "namekusei": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/MR-KS-HS-002.jpg.wenc",
+      nombre: "MR-KS-HS-002.jpg.wenc"
+    },
+    categoria: "Cosplay",
+    pista: "Un planeta verde donde las esferas no son amarillas."
+  },
+  "lasesferasdeldragon": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/MR-KS-HS-001.jpg.wenc",
+      nombre: "MR-KS-HS-001.jpg.wenc"
+    },
+    categoria: "Cosplay",
+    pista: "Siete objetos iguales que, juntos, pueden cambiar el destino del mundo."
+  },
+  "supersaiyajin": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/LZ-KS-DS-003.jpg.wenc",
+      nombre: "LZ-KS-DS-003.jpg.wenc"
+    },
+    categoria: "Fotitos",
+    pista: "Una transformación que nace de la rabia y cambia el color del cabello."
+  },
+  "kamehameha": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/LZ-KS-DS-002.jpg.wenc",
+      nombre: "LZ-KS-DS-002.jpg.wenc"
+    },
+    categoria: "Fotitos",
+    pista: "Una técnica que se anuncia antes de ser lanzada… y todos saben qué viene."
+  },
+  "goku": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/LZ-KS-DS-001.jpg.wenc",
+      nombre: "LZ-KS-DS-001.jpg.wenc"
+    },
+    categoria: "Fotitos",
+    pista: "El protagonista que siempre quiere pelear y comer."
+  },
 };
 
 export const logros = [
