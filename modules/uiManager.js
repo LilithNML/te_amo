@@ -1,6 +1,6 @@
 /**
  * modules/uiManager.js
- * Versión Final: Streaming Seguro + Sesión + Progreso Real
+ * Versión Corregida: Fix Streaming .wenc
  */
 
 import { normalizeText } from './utils.js';
@@ -31,10 +31,7 @@ export class UIManager {
             closeUnlockedBtn: document.getElementById("closeUnlockedBtn")
         };
 
-        // ESTADO DE SESIÓN (Memoria RAM)
-        // Se borra al recargar la página. Reduce fatiga de contraseñas.
         this.cachedPassword = null; 
-
         this.showingFavoritesOnly = false;
         this.typewriterTimeout = null;
 
@@ -172,28 +169,28 @@ export class UIManager {
                 const aLink = document.createElement("a"); aLink.href=data.link; aLink.target="_blank"; aLink.className="button"; aLink.innerHTML='Abrir Enlace <i class="fas fa-external-link-alt"></i>'; container.appendChild(aLink);
                 break;
             
-            // --- MANEJO AVANZADO DE ARCHIVOS CIFRADOS ---
+            // --- MANEJO AVANZADO DE ARCHIVOS CIFRADOS (Fix: Limpieza de nombre) ---
             case "download":
                 const dlBtn = document.createElement("button");
                 dlBtn.className = "button";
-                dlBtn.style.position = "relative"; // Para la barra de progreso
+                dlBtn.style.position = "relative"; 
                 dlBtn.style.overflow = "hidden";
 
                 const urlF = data.descarga.url||"";
                 const esCifrado = data.encrypted || urlF.endsWith(".enc") || urlF.endsWith(".wenc");
                 
-                // Texto inicial
+                // Limpiamos el nombre VISUALMENTE también para que no se vea el .wenc feo
+                const nombreLimpio = data.descarga.nombre.replace(/\.(wenc|enc)$/i, "");
+
                 const btnContent = esCifrado 
-                    ? `<i class="fas fa-lock"></i> Desbloquear ${data.descarga.nombre}`
-                    : `<i class="fas fa-download"></i> Descargar ${data.descarga.nombre}`;
+                    ? `<i class="fas fa-lock"></i> Desbloquear ${nombreLimpio}`
+                    : `<i class="fas fa-download"></i> Descargar ${nombreLimpio}`;
                 
                 dlBtn.innerHTML = `<span class="btn-text-layer">${btnContent}</span>`;
 
                 dlBtn.onclick = () => {
                     if (esCifrado) {
-                        // Función para procesar el descifrado
                         const iniciarProceso = async (password) => {
-                            // UI: Desactivar botón y preparar barra
                             dlBtn.disabled = true;
                             const progressBg = document.createElement("div");
                             progressBg.className = "progress-btn-bg";
@@ -202,38 +199,37 @@ export class UIManager {
                             const originalText = textLayer.innerHTML;
 
                             try {
-                                // Llamada al descifrador con callback de progreso
                                 const blobDescifrado = await descifrarArchivo(
                                     data.descarga.url, 
                                     data.descarga.nombre, 
                                     password,
                                     (percent, statusText) => {
-                                        // Actualizar barra visual
                                         progressBg.style.width = `${percent}%`;
                                         if (percent < 100) {
-                                            textLayer.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> ${percent}% Descargando...`;
+                                            textLayer.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> ${percent}% Cargando...`;
                                         } else {
-                                            textLayer.innerHTML = `<i class="fas fa-cog fa-spin"></i> ${statusText || 'Procesando...'}`;
+                                            textLayer.innerHTML = `<i class="fas fa-cog fa-spin"></i> ${statusText || 'Abriendo...'}`;
                                         }
                                     }
                                 );
 
-                                // Restaurar botón
                                 dlBtn.disabled = false;
                                 progressBg.remove();
                                 textLayer.innerHTML = originalText;
 
                                 if (blobDescifrado) {
-                                    // ÉXITO: Guardar sesión y abrir visor
                                     this.cachedPassword = password; 
                                     this.showToast("¡Acceso concedido!");
                                     this.triggerConfetti();
                                     
-                                    // Abrir el visor "Streaming" en lugar de descargar
-                                    this.renderMediaModal(blobDescifrado, data.descarga.nombre);
+                                    // ⚠️ CORRECCIÓN CLAVE: Limpiar extensión antes de llamar al visor
+                                    // Si el archivo es "video.mp4.wenc", pasamos "video.mp4"
+                                    const nombreFinal = data.descarga.nombre.replace(/\.(wenc|enc)$/i, "");
+                                    
+                                    // Pasamos el nombre LIMPIO al visor
+                                    this.renderMediaModal(blobDescifrado, nombreFinal);
                                 } else {
-                                    // Fallo contraseña
-                                    this.cachedPassword = null; // Limpiar por seguridad
+                                    this.cachedPassword = null; 
                                     this.showError();
                                     alert("Contraseña incorrecta.");
                                 }
@@ -241,7 +237,6 @@ export class UIManager {
                                 dlBtn.disabled = false;
                                 if(progressBg) progressBg.remove();
                                 textLayer.innerHTML = originalText;
-                                
                                 console.error(err);
                                 if(err.message.includes("ERROR_404")) {
                                     alert("Error 404: Archivo no encontrado.");
@@ -251,11 +246,10 @@ export class UIManager {
                             }
                         };
 
-                        // Lógica de Sesión: ¿Tenemos contraseña guardada?
                         if (this.cachedPassword) {
                             iniciarProceso(this.cachedPassword);
                         } else {
-                            this.askPassword(data.descarga.nombre, (pass) => iniciarProceso(pass));
+                            this.askPassword(nombreLimpio, (pass) => iniciarProceso(pass));
                         }
                     } else {
                         // Descarga normal no cifrada
@@ -269,11 +263,10 @@ export class UIManager {
     }
 
     /**
-     * VISOR MULTIMEDIA SEGURO (Streaming Local)
-     * Crea un modal tipo Netflix/Galería para ver el contenido sin descargarlo.
+     * VISOR MULTIMEDIA SEGURO (Streaming)
      */
     renderMediaModal(blob, filename) {
-        // 1. Determinar tipo de archivo por extensión
+        // Ahora 'filename' llega limpio (ej: "video.mp4"), así que la detección funcionará.
         const ext = filename.split('.').pop().toLowerCase();
         let mimeType = "application/octet-stream";
         let type = "unknown";
@@ -282,20 +275,21 @@ export class UIManager {
         else if (['mp4','webm','mov'].includes(ext)) { mimeType = `video/${ext === 'mov' ? 'mp4' : ext}`; type = "video"; }
         else if (['mp3','wav','ogg'].includes(ext)) { mimeType = `audio/${ext}`; type = "audio"; }
 
-        // Si no es multimedia soportado, forzar descarga directa
+        // Si sigue siendo desconocido (ej: es un .zip o .pdf), forzamos la descarga del archivo descifrado
         if (type === "unknown") {
             const url = URL.createObjectURL(blob);
-            const a = document.createElement("a"); a.href = url; a.download = filename; a.click();
+            const a = document.createElement("a"); 
+            a.href = url; 
+            a.download = filename; // Se descargará con el nombre limpio (.mp4, no .wenc)
+            a.click();
             setTimeout(() => URL.revokeObjectURL(url), 100);
             return;
         }
 
-        // 2. Crear ObjectURL seguro (apunta a RAM)
-        // Cortamos el blob al tipo correcto para que el navegador lo renderice bien
+        // Crear ObjectURL con el MIME correcto para reproducción
         const safeBlob = new Blob([blob], { type: mimeType });
         const objectUrl = URL.createObjectURL(safeBlob);
 
-        // 3. Crear UI del Modal
         const overlay = document.createElement("div");
         overlay.className = "media-modal-overlay";
         
@@ -311,17 +305,18 @@ export class UIManager {
             mediaElement.className = "secure-media";
             mediaElement.controls = true;
             mediaElement.autoplay = true;
+            // Prevenir descarga con clic derecho en videos (opcional)
+            mediaElement.oncontextmenu = (e) => e.preventDefault();
         } else if (type === "audio") {
             mediaElement = document.createElement("audio");
             mediaElement.controls = true;
             mediaElement.autoplay = true;
-            container.style.boxShadow = "none"; // Audio no necesita caja grande
+            container.style.boxShadow = "none";
         }
 
         mediaElement.src = objectUrl;
         container.appendChild(mediaElement);
 
-        // 4. Controles (Cerrar y Descarga Discreta)
         const controls = document.createElement("div");
         controls.className = "media-controls";
 
@@ -339,10 +334,9 @@ export class UIManager {
         btnClose.className = "media-btn close";
         btnClose.innerHTML = '<i class="fas fa-times"></i> Cerrar';
         
-        // Función de cierre y limpieza de memoria
         const closeFn = () => {
             document.body.removeChild(overlay);
-            URL.revokeObjectURL(objectUrl); // ¡Vital para liberar RAM!
+            URL.revokeObjectURL(objectUrl);
         };
         btnClose.onclick = closeFn;
 
@@ -354,119 +348,51 @@ export class UIManager {
         document.body.appendChild(overlay);
     }
 
+    // --- RESTO DE MÉTODOS SIN CAMBIOS ---
     askPassword(filename, callback) {
         const overlay = document.createElement("div");
         overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:2000;display:flex;justify-content:center;align-items:center;padding:20px;backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);";
-        
         const card = document.createElement("div");
         card.style.cssText = "background:rgba(255,255,255,0.95);padding:25px;border-radius:15px;width:100%;max-width:320px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.5);";
         card.innerHTML = `<h3 style="margin-top:0;color:#333">Desbloquear Archivo</h3><p style="font-size:0.9em;margin-bottom:15px;color:#555">Introduce la contraseña para:<br><b>${filename}</b></p>`;
-
         const input = document.createElement("input");
         input.type = "password"; input.placeholder = "Contraseña...";
         input.style.cssText = "width:100%;padding:12px;margin-bottom:15px;border:1px solid #ccc;border-radius:8px;font-size:16px;box-sizing:border-box;";
         input.setAttribute("autocomplete", "off"); input.setAttribute("autocorrect", "off"); input.setAttribute("autocapitalize", "off");
-
         const btnContainer = document.createElement("div");
         btnContainer.style.display = "flex"; btnContainer.style.gap = "10px";
-
         const btnCancel = document.createElement("button");
         btnCancel.textContent = "Cancelar";
         btnCancel.style.cssText = "flex:1;padding:10px;border:none;background:#e0e0e0;border-radius:6px;cursor:pointer;color:#333";
-        
         const btnConfirm = document.createElement("button");
         btnConfirm.textContent = "Desbloquear";
         btnConfirm.style.cssText = "flex:1;padding:10px;border:none;background:var(--primary-color, #ff4d6d);color:white;border-radius:6px;cursor:pointer;font-weight:bold;";
-
         btnContainer.appendChild(btnCancel); btnContainer.appendChild(btnConfirm);
         card.appendChild(input); card.appendChild(btnContainer); overlay.appendChild(card);
         document.body.appendChild(overlay);
         input.focus();
-
         const close = () => document.body.removeChild(overlay);
         btnCancel.onclick = close;
         const submit = () => { const pass = input.value; if(pass){ close(); callback(pass); } else { input.style.borderColor = "red"; input.focus(); } };
         btnConfirm.onclick = submit; input.onkeydown = (e) => { if(e.key === 'Enter') submit(); };
     }
-
-    // --- RESTO DE MÉTODOS UI (Sin cambios) ---
     renderMessage(t,b){const c=this.elements.contentDiv;c.hidden=0;c.innerHTML=`<h2>${t}</h2><p>${b}</p>`;c.classList.remove("fade-in");void c.offsetWidth;c.classList.add("fade-in");}
     showError(){this.elements.input.classList.add("shake","error");setTimeout(()=>this.elements.input.classList.remove("shake"),500);}
     showSuccess(){this.elements.input.classList.remove("error");this.elements.input.classList.add("success");}
     clearInput(){this.elements.input.value="";}
     updateProgress(u,t){const p=t>0?Math.round((u/t)*100):0;this.elements.progressBar.style.width=`${p}%`;this.elements.progressText.textContent=`Descubiertos: ${u} / ${t}`;}
     showToast(m){const t=document.createElement("div");t.className="achievement-toast";t.textContent=m;this.elements.toastContainer.appendChild(t);setTimeout(()=>t.remove(),4000);}
-    updateAudioUI(play,name){
-        const b=document.getElementById("audioPlayPause"); const l=document.getElementById("trackName");
-        if(b)b.innerHTML=play?'<i class="fas fa-pause"></i>':'<i class="fas fa-play"></i>';
-        if(l&&name)l.textContent=name.replace(/_/g," ").replace(/\.[^/.]+$/,"");
-    }
-    setupMenuListeners(){
-        this.elements.menuButton.addEventListener("click",(e)=>{e.stopPropagation();this.elements.dropdownMenu.classList.toggle("show");});
-        document.addEventListener("click",(e)=>{if(!this.elements.menuButton.contains(e.target)&&!this.elements.dropdownMenu.contains(e.target))this.elements.dropdownMenu.classList.remove("show");});
-        this.bindMenuAction("menuHome",()=>{this.toggleUnlockedPanel(0);window.scrollTo({top:0,behavior:'smooth'});});
-        this.bindMenuAction("menuShowUnlocked",()=>this.toggleUnlockedPanel(1));
-        this.bindMenuAction("menuFavorites",()=>{this.toggleUnlockedPanel(1);this.showingFavoritesOnly=1;this.updateFilterUI();this.triggerListFilter();});
-        this.bindMenuAction("menuDarkMode",()=>this.toggleDarkMode());
-        this.bindMenuAction("menuAudio",()=>this.openPanel(this.elements.audioPanel));
-        this.bindMenuAction("menuTools",()=>{this.renderTools();this.openPanel(this.elements.toolsPanel);});
-        this.bindMenuAction("menuExport",()=>this.exportProgress());
-        this.bindMenuAction("menuImport",()=>this.elements.importInput.click());
-        this.elements.importInput.addEventListener("change",(e)=>{if(e.target.files.length)this.handleImportFile(e.target.files[0]);this.elements.importInput.value="";});
-        if(this.elements.closeAudioPanel)this.elements.closeAudioPanel.addEventListener("click",()=>this.closePanel(this.elements.audioPanel));
-        if(this.elements.closeToolsPanel)this.elements.closeToolsPanel.addEventListener("click",()=>this.closePanel(this.elements.toolsPanel));
-    }
+    updateAudioUI(play,name){const b=document.getElementById("audioPlayPause"); const l=document.getElementById("trackName");if(b)b.innerHTML=play?'<i class="fas fa-pause"></i>':'<i class="fas fa-play"></i>';if(l&&name)l.textContent=name.replace(/_/g," ").replace(/\.[^/.]+$/,"");}
+    setupMenuListeners(){this.elements.menuButton.addEventListener("click",(e)=>{e.stopPropagation();this.elements.dropdownMenu.classList.toggle("show");});document.addEventListener("click",(e)=>{if(!this.elements.menuButton.contains(e.target)&&!this.elements.dropdownMenu.contains(e.target))this.elements.dropdownMenu.classList.remove("show");});this.bindMenuAction("menuHome",()=>{this.toggleUnlockedPanel(0);window.scrollTo({top:0,behavior:'smooth'});});this.bindMenuAction("menuShowUnlocked",()=>this.toggleUnlockedPanel(1));this.bindMenuAction("menuFavorites",()=>{this.toggleUnlockedPanel(1);this.showingFavoritesOnly=1;this.updateFilterUI();this.triggerListFilter();});this.bindMenuAction("menuDarkMode",()=>this.toggleDarkMode());this.bindMenuAction("menuAudio",()=>this.openPanel(this.elements.audioPanel));this.bindMenuAction("menuTools",()=>{this.renderTools();this.openPanel(this.elements.toolsPanel);});this.bindMenuAction("menuExport",()=>this.exportProgress());this.bindMenuAction("menuImport",()=>this.elements.importInput.click());this.elements.importInput.addEventListener("change",(e)=>{if(e.target.files.length)this.handleImportFile(e.target.files[0]);this.elements.importInput.value="";});if(this.elements.closeAudioPanel)this.elements.closeAudioPanel.addEventListener("click",()=>this.closePanel(this.elements.audioPanel));if(this.elements.closeToolsPanel)this.elements.closeToolsPanel.addEventListener("click",()=>this.closePanel(this.elements.toolsPanel));}
     bindMenuAction(id,fn){const b=document.getElementById(id);if(b)b.addEventListener("click",()=>{fn();this.elements.dropdownMenu.classList.remove("show");});}
     openPanel(p){if(p){p.classList.add("show");p.setAttribute("aria-hidden","false");}}
     closePanel(p){if(p){p.classList.remove("show");p.setAttribute("aria-hidden","true");}}
-    renderTools(){
-        const c=this.elements.toolsListContainer;if(!c)return;c.innerHTML="";
-        herramientasExternas.forEach(t=>{
-            const d=document.createElement("div");d.className="tool-card";
-            d.innerHTML=`<div class="tool-header"><i class="${t.icono}"></i> ${t.nombre}</div><div class="tool-desc">${t.descripcion}</div><a href="${t.url}" target="_blank" class="tool-btn">Abrir <i class="fas fa-external-link-alt"></i></a>`;
-            c.appendChild(d);
-        });
-    }
-    setupListListeners(){
-        this.elements.searchUnlocked.addEventListener("input",()=>this.triggerListFilter());
-        this.elements.categoryFilter.addEventListener("change",()=>this.triggerListFilter());
-        this.elements.filterFavBtn.addEventListener("click",()=>{this.showingFavoritesOnly=!this.showingFavoritesOnly;this.updateFilterUI();this.triggerListFilter();});
-        this.elements.closeUnlockedBtn.addEventListener("click",()=>this.toggleUnlockedPanel(0));
-    }
+    renderTools(){const c=this.elements.toolsListContainer;if(!c)return;c.innerHTML="";herramientasExternas.forEach(t=>{const d=document.createElement("div");d.className="tool-card";d.innerHTML=`<div class="tool-header"><i class="${t.icono}"></i> ${t.nombre}</div><div class="tool-desc">${t.descripcion}</div><a href="${t.url}" target="_blank" class="tool-btn">Abrir <i class="fas fa-external-link-alt"></i></a>`;c.appendChild(d);});}
+    setupListListeners(){this.elements.searchUnlocked.addEventListener("input",()=>this.triggerListFilter());this.elements.categoryFilter.addEventListener("change",()=>this.triggerListFilter());this.elements.filterFavBtn.addEventListener("click",()=>{this.showingFavoritesOnly=!this.showingFavoritesOnly;this.updateFilterUI();this.triggerListFilter();});this.elements.closeUnlockedBtn.addEventListener("click",()=>this.toggleUnlockedPanel(0));}
     toggleUnlockedPanel(s){this.elements.unlockedSection.hidden=!s;if(s)this.elements.unlockedSection.scrollIntoView({behavior:'smooth'});}
     updateFilterUI(){const b=this.elements.filterFavBtn;b.classList.toggle("active",this.showingFavoritesOnly);b.innerHTML=this.showingFavoritesOnly?'<i class="fas fa-heart"></i> Favoritos':'<i class="far fa-heart"></i> Favoritos';}
-    renderUnlockedList(u,f,m){
-        this.currentData={u,f,m}; const cats=new Set();Object.values(m).forEach(v=>{if(v.categoria)cats.add(v.categoria)});
-        const cur=this.elements.categoryFilter.value; this.elements.categoryFilter.innerHTML='<option value="">Todas</option>';
-        cats.forEach(c=>{const o=document.createElement("option");o.value=c;o.textContent=c;if(c===cur)o.selected=1;this.elements.categoryFilter.appendChild(o)});
-        this.triggerListFilter();
-    }
-    triggerListFilter(){
-        if(!this.currentData)return; const {u,f,m}=this.currentData;
-        const s=normalizeText(this.elements.searchUnlocked.value); const cat=this.elements.categoryFilter.value;
-        this.elements.unlockedList.innerHTML=""; let vc=0;
-        Object.keys(m).sort().forEach(code=>{
-            const d=m[code]; const isU=u.has(code);
-            if(this.showingFavoritesOnly&&!f.has(code))return;
-            if(s&&isU&&!normalizeText(code).includes(s))return;
-            if(cat&&d.categoria!==cat)return;
-            vc++; const li=document.createElement("li");
-            if(isU){
-                li.className="lista-codigo-item"; li.innerHTML=`<div style="flex-grow:1"><span class="codigo-text">${code}</span><span class="category">${d.categoria}</span></div>`;
-                const fb=document.createElement("button");fb.className=`favorite-toggle-btn ${f.has(code)?'active':''}`;fb.innerHTML=`<i class="${f.has(code)?'fas':'far'} fa-heart"></i>`;
-                fb.onclick=(e)=>{e.stopPropagation();if(this.onToggleFavorite)this.onToggleFavorite(code);};
-                li.onclick=()=>{if(this.onCodeSelected)this.onCodeSelected(code);this.elements.contentDiv.scrollIntoView({behavior:'smooth'});}; li.appendChild(fb);
-            }else{
-                li.className="lista-codigo-item locked"; li.innerHTML=`<div style="flex-grow:1;display:flex;align-items:center;"><i class="fas fa-lock lock-icon"></i><div><span class="codigo-text">??????</span><span class="category" style="opacity:0.5">${d.categoria||'Secreto'}</span></div></div>`;
-                li.onclick=()=>this.showToast("🔒 ¡Sigue buscando!");
-            }
-            this.elements.unlockedList.appendChild(li);
-        });
-        if(vc===0)this.elements.unlockedList.innerHTML='<p style="text-align:center;width:100%;opacity:0.7">Sin resultados.</p>';
-    }
-    exportProgress(){
-        const d={unlocked:JSON.parse(localStorage.getItem("desbloqueados")||"[]"),favorites:JSON.parse(localStorage.getItem("favoritos")||"[]"),achievements:JSON.parse(localStorage.getItem("logrosAlcanzados")||"[]"),timestamp:new Date().toISOString()};
-        const b=new Blob([JSON.stringify(d,null,2)],{type:"application/json"});const u=URL.createObjectURL(b);const a=document.createElement("a");a.href=u;a.download=`progreso_${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(u);this.showToast("Progreso exportado");
-    }
+    renderUnlockedList(u,f,m){this.currentData={u,f,m}; const cats=new Set();Object.values(m).forEach(v=>{if(v.categoria)cats.add(v.categoria)});const cur=this.elements.categoryFilter.value; this.elements.categoryFilter.innerHTML='<option value="">Todas</option>';cats.forEach(c=>{const o=document.createElement("option");o.value=c;o.textContent=c;if(c===cur)o.selected=1;this.elements.categoryFilter.appendChild(o)});this.triggerListFilter();}
+    triggerListFilter(){if(!this.currentData)return; const {u,f,m}=this.currentData;const s=normalizeText(this.elements.searchUnlocked.value); const cat=this.elements.categoryFilter.value;this.elements.unlockedList.innerHTML=""; let vc=0;Object.keys(m).sort().forEach(code=>{const d=m[code]; const isU=u.has(code);if(this.showingFavoritesOnly&&!f.has(code))return;if(s&&isU&&!normalizeText(code).includes(s))return;if(cat&&d.categoria!==cat)return;vc++; const li=document.createElement("li");if(isU){li.className="lista-codigo-item"; li.innerHTML=`<div style="flex-grow:1"><span class="codigo-text">${code}</span><span class="category">${d.categoria}</span></div>`;const fb=document.createElement("button");fb.className=`favorite-toggle-btn ${f.has(code)?'active':''}`;fb.innerHTML=`<i class="${f.has(code)?'fas':'far'} fa-heart"></i>`;fb.onclick=(e)=>{e.stopPropagation();if(this.onToggleFavorite)this.onToggleFavorite(code);};li.onclick=()=>{if(this.onCodeSelected)this.onCodeSelected(code);this.elements.contentDiv.scrollIntoView({behavior:'smooth'});}; li.appendChild(fb);}else{li.className="lista-codigo-item locked"; li.innerHTML=`<div style="flex-grow:1;display:flex;align-items:center;"><i class="fas fa-lock lock-icon"></i><div><span class="codigo-text">??????</span><span class="category" style="opacity:0.5">${d.categoria||'Secreto'}</span></div></div>`;li.onclick=()=>this.showToast("🔒 ¡Sigue buscando!");}this.elements.unlockedList.appendChild(li);});if(vc===0)this.elements.unlockedList.innerHTML='<p style="text-align:center;width:100%;opacity:0.7">Sin resultados.</p>';}
+    exportProgress(){const d={unlocked:JSON.parse(localStorage.getItem("desbloqueados")||"[]"),favorites:JSON.parse(localStorage.getItem("favoritos")||"[]"),achievements:JSON.parse(localStorage.getItem("logrosAlcanzados")||"[]"),timestamp:new Date().toISOString()};const b=new Blob([JSON.stringify(d,null,2)],{type:"application/json"});const u=URL.createObjectURL(b);const a=document.createElement("a");a.href=u;a.download=`progreso_${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(u);this.showToast("Progreso exportado");}
     handleImportFile(f){const r=new FileReader();r.onload=(e)=>{try{const d=JSON.parse(e.target.result);if(this.onImportData)this.onImportData(d);}catch(z){this.showToast("Archivo inválido");}};r.readAsText(f);}
 }
