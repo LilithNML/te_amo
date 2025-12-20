@@ -1,46 +1,55 @@
 /**
  * modules/GameEngine.js
- * Lógica central del juego: Manejo de códigos, pistas y estado de desbloqueo.
+ * Lógica del juego: Validación de códigos, pistas y gestión de estado.
  */
 
 import { mensajes } from './data.js';
-import { normalizeText } from './utils.js';
+// Asumimos que utils.js ya tiene estas funciones (como mencionaste)
+import { normalizeText, levenshteinDistance } from './utils.js';
 
 export class GameEngine {
     constructor(uiManager, audioManager) {
         this.ui = uiManager;
         this.audio = audioManager;
-        this.mensajes = mensajes; // Base de datos de códigos
+        this.mensajes = mensajes; 
 
-        // Estado del jugador
+        // Estado
         this.unlockedSet = new Set(JSON.parse(localStorage.getItem("desbloqueados") || "[]"));
         this.favoritesSet = new Set(JSON.parse(localStorage.getItem("favoritos") || "[]"));
+        
+        // Contador de errores para pistas automáticas (Restaurado)
+        this.errorCount = 0;
 
-        // Referencias a botones de acción
+        // Referencias botones
         this.checkBtn = document.getElementById("checkBtn");
-        this.hintBtn = document.getElementById("hintBtn"); // Botón de Pista Nuevo
+        this.hintBtn = document.getElementById("hintBtn"); // Botón nuevo
 
         this.init();
     }
 
     init() {
-        // 1. Configurar Listeners Principales
+        // Listeners
         if (this.checkBtn) {
             this.checkBtn.addEventListener("click", () => this.handleCode());
         }
 
+        // Listener del Botón de Pista Manual
         if (this.hintBtn) {
-            this.hintBtn.addEventListener("click", () => this.giveHint());
+            this.hintBtn.addEventListener("click", () => this.giveHint(true)); // true = forzado por botón
         }
 
-        // Permitir "Enter" en el input
+        // Enter en el input
         if (this.ui.elements.input) {
             this.ui.elements.input.addEventListener("keydown", (e) => {
                 if (e.key === "Enter") this.handleCode();
+                // Limpiar feedback al escribir de nuevo
+                if (this.ui.elements.feedback && this.ui.elements.feedback.textContent !== "") {
+                    this.ui.clearFeedback();
+                }
             });
         }
 
-        // 2. Configurar Callbacks de la UI (Para cuando el usuario interactúa con la lista)
+        // Callbacks UI
         this.ui.onCodeSelected = (code) => {
             const data = this.mensajes[code];
             if (data) {
@@ -51,23 +60,21 @@ export class GameEngine {
 
         this.ui.onToggleFavorite = (code) => this.toggleFavorite(code);
         
-        // Manejar importación de datos externos
         this.ui.onImportData = (data) => {
-            if (data.unlocked && Array.isArray(data.unlocked)) {
+            if (data.unlocked) {
                 this.unlockedSet = new Set(data.unlocked);
                 this.favoritesSet = new Set(data.favorites || []);
                 this.saveProgress();
-                this.ui.showToast("Progreso cargado exitosamente");
-                location.reload(); // Recargar para ver cambios
+                this.ui.showToast("Progreso cargado");
+                location.reload();
             }
         };
 
-        // 3. Renderizado Inicial
         this.updateUI();
     }
 
     /**
-     * Procesa el código ingresado por el usuario.
+     * Procesa el código ingresado.
      */
     handleCode() {
         const input = this.ui.elements.input;
@@ -76,80 +83,115 @@ export class GameEngine {
 
         if (!code) return;
 
-        // Buscar en la base de datos
+        // 1. COINCIDENCIA EXACTA
         if (this.mensajes.hasOwnProperty(code)) {
-            // ¡CÓDIGO ENCONTRADO!
-            const data = this.mensajes[code];
-            
-            // 1. Desbloquear
-            if (!this.unlockedSet.has(code)) {
-                this.unlockedSet.add(code);
-                this.saveProgress();
-                this.ui.showToast("¡Nuevo secreto desbloqueado!");
-                this.ui.triggerConfetti();
-            }
+            this.unlockContent(code, rawCode);
+            this.errorCount = 0; // Reiniciar contador
+            return;
+        } 
 
-            // 2. Renderizar contenido
-            this.ui.renderContent(data, rawCode); // Usamos rawCode para mantener mayúsculas originales en título
-            this.ui.showSuccess();
+        // 2. BÚSQUEDA APROXIMADA (Restaurada)
+        const closest = this.findBestMatch(code);
 
-            // 3. Reproducir audio asociado (si tiene)
-            if (data.audio) {
-                this.audio.playTrack(data.audio);
-            }
-
-            // 4. Actualizar lista visual
-            this.updateUI();
-            this.ui.dismissKeyboard();
-
+        if (closest) {
+            // "Quizás quisiste decir..."
+            this.ui.showFeedback(`¿Quisiste decir "${closest}"?`, 'suggestion');
+            this.ui.showError(); // Agita input
+            this.errorCount++;
         } else {
-            // CÓDIGO INCORRECTO
+            // 3. FALLO
+            this.ui.showFeedback("Código incorrecto.", 'error');
             this.ui.showError();
-            this.ui.showToast("Código incorrecto o no existe.");
+            this.errorCount++;
         }
-        
-        // Limpiar input
-        this.ui.clearInput();
+
+        // 4. PISTA AUTOMÁTICA (5 errores)
+        if (this.errorCount >= 5) {
+            this.giveHint(false); // false = automática
+            this.errorCount = 0;
+        }
     }
 
     /**
-     * Sistema de Pistas: Busca un código no descubierto y da una pista.
+     * Lógica de desbloqueo exitoso
      */
-    giveHint() {
-        // 1. Obtener todos los códigos posibles
-        const allCodes = Object.keys(this.mensajes);
+    unlockContent(code, displayTitle) {
+        const data = this.mensajes[code];
         
-        // 2. Filtrar los que NO están desbloqueados
+        if (!this.unlockedSet.has(code)) {
+            this.unlockedSet.add(code);
+            this.saveProgress();
+            this.ui.showToast("¡Nuevo secreto desbloqueado!");
+            this.ui.triggerConfetti();
+        }
+
+        this.ui.renderContent(data, displayTitle);
+        this.ui.showSuccess();
+        
+        // Importante: Limpiar feedback anterior
+        if(this.ui.clearFeedback) this.ui.clearFeedback();
+
+        if (data.audio) this.audio.playTrack(data.audio);
+
+        this.updateUI();
+        this.ui.dismissKeyboard();
+        this.ui.elements.input.value = "";
+    }
+
+    /**
+     * Busca la clave más cercana (Levenshtein)
+     */
+    findBestMatch(inputCode) {
+        const keys = Object.keys(this.mensajes);
+        let bestMatch = null;
+        let minDistance = Infinity;
+        // Umbral: palabras cortas (<5) toleran 1 error, largas 2.
+        const threshold = inputCode.length < 5 ? 1 : 2;
+
+        keys.forEach(key => {
+            const dist = levenshteinDistance(inputCode, key);
+            if (dist < minDistance) {
+                minDistance = dist;
+                bestMatch = key;
+            }
+        });
+
+        if (minDistance <= threshold) {
+            return bestMatch;
+        }
+        return null;
+    }
+
+    /**
+     * Muestra una pista en el área de feedback.
+     * @param {boolean} manual - Si fue invocado por el botón (true) o por errores (false)
+     */
+    giveHint(manual = false) {
+        const allCodes = Object.keys(this.mensajes);
         const lockedCodes = allCodes.filter(code => !this.unlockedSet.has(code));
 
         if (lockedCodes.length === 0) {
-            this.ui.showToast("🎉 ¡Increíble! Ya has descubierto todo.");
-            this.ui.triggerConfetti();
+            if (manual) this.ui.showToast("🎉 ¡Ya has descubierto todo!");
             return;
         }
 
-        // 3. Elegir uno al azar
+        // Elegir código al azar
         const randomCode = lockedCodes[Math.floor(Math.random() * lockedCodes.length)];
         const data = this.mensajes[randomCode];
 
-        // 4. Obtener texto de pista
+        // Obtener texto de pista (de data.js) o generar genérica
         const pistaTexto = data.pista && data.pista.trim() !== "" 
             ? data.pista 
-            : `El código empieza con: ${randomCode.charAt(0).toUpperCase()}...`;
+            : `Intenta buscar: ${randomCode.charAt(0).toUpperCase()}...`;
 
-        // 5. Mostrar
-        this.ui.showToast(`Pista: ${pistaTexto}`);
+        // Mostrar en el área de feedback (Debajo del input)
+        this.ui.showFeedback(`💡 Pista: ${pistaTexto}`, 'hint');
         
-        // Animación sutil para indicar dónde escribir
-        const input = this.ui.elements.input;
-        input.focus();
-        input.classList.add("shake");
-        setTimeout(() => input.classList.remove("shake"), 500);
+        if (manual) {
+            this.ui.elements.input.focus();
+        }
     }
 
-    /**
-     * Alterna el estado de favorito de un código.
-     */
     toggleFavorite(code) {
         if (this.favoritesSet.has(code)) {
             this.favoritesSet.delete(code);
@@ -157,20 +199,14 @@ export class GameEngine {
             this.favoritesSet.add(code);
         }
         this.saveProgress();
-        this.updateUI(); // Refrescar la lista para actualizar el icono
+        this.updateUI();
     }
 
-    /**
-     * Guarda el estado actual en localStorage.
-     */
     saveProgress() {
         localStorage.setItem("desbloqueados", JSON.stringify([...this.unlockedSet]));
         localStorage.setItem("favoritos", JSON.stringify([...this.favoritesSet]));
     }
 
-    /**
-     * Actualiza la lista lateral y la barra de progreso.
-     */
     updateUI() {
         this.ui.updateProgress(this.unlockedSet.size, Object.keys(this.mensajes).length);
         this.ui.renderUnlockedList(this.unlockedSet, this.favoritesSet, this.mensajes);
