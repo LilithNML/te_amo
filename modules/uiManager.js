@@ -1,6 +1,6 @@
 /**
  * modules/uiManager.js
- * Versión Corregida: Fix Streaming .wenc
+ * Versión Final: Streaming + Glassmorphism + Easter Eggs
  */
 
 import { normalizeText } from './utils.js';
@@ -56,7 +56,90 @@ export class UIManager {
         this.showToast(isDark ? "Modo Oscuro Activado" : "Modo Claro Activado");
     }
 
-    // --- VISUALES ---
+    // --- HUEVOS DE PASCUA (EASTER EGGS) ---
+    /**
+     * Verifica si el texto introducido es un código secreto especial.
+     * Retorna true si encontró y ejecutó un efecto, false si debe seguir buscando archivos.
+     */
+    checkEasterEgg(text) {
+        const code = text.trim().toLowerCase(); // Normalizar entrada para comparar
+        const body = document.body;
+
+        // 1. "TE AMO" -> Lluvia de corazones
+        if (code === "te amo" || code === "teamo") {
+            this.showToast("❤️ Yo también te amo ❤️");
+            this.triggerHeartConfetti();
+            return true;
+        }
+
+        // 2. "010424" -> Tema Rosa (Fecha especial)
+        if (code === "010424") {
+            body.classList.remove("theme-christmas"); // Limpiar otros temas
+            body.classList.toggle("theme-pink");
+            const active = body.classList.contains("theme-pink");
+            this.showToast(active ? "🌸 Modo Romántico Activado" : "🌸 Modo Romántico Desactivado");
+            this.triggerConfetti(); // Celebración pequeña
+            return true;
+        }
+
+        // 3. "NAVIDAD" -> Tema Navideño
+        if (code === "navidad") {
+            body.classList.remove("theme-pink"); // Limpiar otros temas
+            body.classList.toggle("theme-christmas");
+            const active = body.classList.contains("theme-christmas");
+            this.showToast(active ? "🎄 ¡Feliz Navidad! 🎅" : "🎄 Navidad Desactivada");
+            // Efecto de nieve (opcional, reutilizando particulas si se configura)
+            return true;
+        }
+
+        // 4. "ERROR" -> Efecto Glitch
+        if (code === "error") {
+            this.showToast("⚠️ ERROR CRÍTICO DEL SISTEMA ⚠️");
+            body.classList.add("glitch-active");
+            // Reproducir sonido de error si quieres
+            setTimeout(() => {
+                body.classList.remove("glitch-active");
+                this.showToast("Sistema restaurado... ¿O no?");
+            }, 3000); // Dura 3 segundos
+            return true;
+        }
+
+        // 5. "TERROR" -> Audio de susto
+        if (code === "terror") {
+            // Asegúrate de tener 'assets/audio/susto.mp3' o cambia la ruta
+            const audio = new Audio('./assets/audio/terror.mp3');
+            audio.volume = 1.0;
+            audio.play().then(() => {
+                this.showToast("👻 ¿Escuchaste eso?");
+                // Oscurecer pantalla brevemente
+                const overlay = document.createElement('div');
+                overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:black;z-index:9999;";
+                document.body.appendChild(overlay);
+                setTimeout(() => overlay.remove(), 200); // Flash negro rápido
+            }).catch(e => {
+                this.showToast("❌ Falta el archivo de audio 'terror.mp3'");
+            });
+            return true;
+        }
+
+        return false; // No es un easter egg, buscar en base de datos
+    }
+
+    triggerHeartConfetti() {
+        // @ts-ignore
+        if (typeof confetti === 'undefined') return;
+        
+        const defaults = { spread: 360, ticks: 100, gravity: 0, decay: 0.94, startVelocity: 30, shapes: ['heart'], colors: ['#FFC0CB', '#FF69B4', '#FF1493', '#C71585'] };
+
+        // @ts-ignore
+        confetti({ ...defaults, particleCount: 50, scalar: 2 });
+        // @ts-ignore
+        confetti({ ...defaults, particleCount: 25, scalar: 3 });
+        // @ts-ignore
+        confetti({ ...defaults, particleCount: 10, scalar: 4 });
+    }
+
+    // --- VISUALES GENERALES ---
     async initParticles() {
         // @ts-ignore
         if (typeof tsParticles === 'undefined') return;
@@ -77,7 +160,7 @@ export class UIManager {
     }
 
     initDynamicPlaceholder() {
-        const frases = ["Escribe aquí...", "Una fecha especial...", "¿Nuestro lugar?", "Un apodo...", "Nombre de canción..."];
+        const frases = ["Escribe 'Te amo'...", "Prueba con 'Navidad'...", "¿Intentaste '010424'?", "Escribe 'Error'...", "Busca tus recuerdos..."];
         let index = 0;
         setInterval(() => {
             index = (index + 1) % frases.length;
@@ -179,7 +262,6 @@ export class UIManager {
                 const urlF = data.descarga.url||"";
                 const esCifrado = data.encrypted || urlF.endsWith(".enc") || urlF.endsWith(".wenc");
                 
-                // Limpiamos el nombre VISUALMENTE también para que no se vea el .wenc feo
                 const nombreLimpio = data.descarga.nombre.replace(/\.(wenc|enc)$/i, "");
 
                 const btnContent = esCifrado 
@@ -221,12 +303,7 @@ export class UIManager {
                                     this.cachedPassword = password; 
                                     this.showToast("¡Acceso concedido!");
                                     this.triggerConfetti();
-                                    
-                                    // ⚠️ CORRECCIÓN CLAVE: Limpiar extensión antes de llamar al visor
-                                    // Si el archivo es "video.mp4.wenc", pasamos "video.mp4"
                                     const nombreFinal = data.descarga.nombre.replace(/\.(wenc|enc)$/i, "");
-                                    
-                                    // Pasamos el nombre LIMPIO al visor
                                     this.renderMediaModal(blobDescifrado, nombreFinal);
                                 } else {
                                     this.cachedPassword = null; 
@@ -252,7 +329,6 @@ export class UIManager {
                             this.askPassword(nombreLimpio, (pass) => iniciarProceso(pass));
                         }
                     } else {
-                        // Descarga normal no cifrada
                         const a = document.createElement("a"); a.href=data.descarga.url; a.download=data.descarga.nombre; a.click();
                     }
                 };
@@ -263,10 +339,9 @@ export class UIManager {
     }
 
     /**
-     * VISOR MULTIMEDIA SEGURO (Streaming)
+     * VISOR MULTIMEDIA SEGURO (Streaming) - GLASSMORPHISM
      */
     renderMediaModal(blob, filename) {
-        // Ahora 'filename' llega limpio (ej: "video.mp4"), así que la detección funcionará.
         const ext = filename.split('.').pop().toLowerCase();
         let mimeType = "application/octet-stream";
         let type = "unknown";
@@ -275,23 +350,19 @@ export class UIManager {
         else if (['mp4','webm','mov'].includes(ext)) { mimeType = `video/${ext === 'mov' ? 'mp4' : ext}`; type = "video"; }
         else if (['mp3','wav','ogg'].includes(ext)) { mimeType = `audio/${ext}`; type = "audio"; }
 
-        // Si sigue siendo desconocido (ej: es un .zip o .pdf), forzamos la descarga del archivo descifrado
         if (type === "unknown") {
             const url = URL.createObjectURL(blob);
-            const a = document.createElement("a"); 
-            a.href = url; 
-            a.download = filename; // Se descargará con el nombre limpio (.mp4, no .wenc)
-            a.click();
+            const a = document.createElement("a"); a.href = url; a.download = filename; a.click();
             setTimeout(() => URL.revokeObjectURL(url), 100);
             return;
         }
 
-        // Crear ObjectURL con el MIME correcto para reproducción
         const safeBlob = new Blob([blob], { type: mimeType });
         const objectUrl = URL.createObjectURL(safeBlob);
 
+        // USANDO CLASES CSS GLASSMORPHISM
         const overlay = document.createElement("div");
-        overlay.className = "media-modal-overlay";
+        overlay.className = "glass-overlay"; // Clase CSS nueva
         
         const container = document.createElement("div");
         container.className = "media-content-container";
@@ -305,7 +376,6 @@ export class UIManager {
             mediaElement.className = "secure-media";
             mediaElement.controls = true;
             mediaElement.autoplay = true;
-            // Prevenir descarga con clic derecho en videos (opcional)
             mediaElement.oncontextmenu = (e) => e.preventDefault();
         } else if (type === "audio") {
             mediaElement = document.createElement("audio");
@@ -348,34 +418,47 @@ export class UIManager {
         document.body.appendChild(overlay);
     }
 
-    // --- RESTO DE MÉTODOS SIN CAMBIOS ---
+    /**
+     * MODAL PASSWORD - GLASSMORPHISM
+     */
     askPassword(filename, callback) {
+        // Overlay con clase Glass
         const overlay = document.createElement("div");
-        overlay.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:2000;display:flex;justify-content:center;align-items:center;padding:20px;backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);";
+        overlay.className = "glass-overlay"; // Usamos la nueva clase CSS
+        
+        // Card con clase Glass
         const card = document.createElement("div");
-        card.style.cssText = "background:rgba(255,255,255,0.95);padding:25px;border-radius:15px;width:100%;max-width:320px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.5);";
-        card.innerHTML = `<h3 style="margin-top:0;color:#333">Desbloquear Archivo</h3><p style="font-size:0.9em;margin-bottom:15px;color:#555">Introduce la contraseña para:<br><b>${filename}</b></p>`;
+        card.className = "glass-card"; // Usamos la nueva clase CSS
+        card.innerHTML = `<h3 style="margin-top:0;">Desbloquear Archivo</h3><p style="font-size:0.9em;margin-bottom:15px;opacity:0.8">Introduce la contraseña para:<br><b>${filename}</b></p>`;
+
         const input = document.createElement("input");
         input.type = "password"; input.placeholder = "Contraseña...";
-        input.style.cssText = "width:100%;padding:12px;margin-bottom:15px;border:1px solid #ccc;border-radius:8px;font-size:16px;box-sizing:border-box;";
+        input.style.cssText = "width:100%;padding:12px;margin-bottom:15px;border:1px solid rgba(0,0,0,0.1);border-radius:8px;font-size:16px;box-sizing:border-box;background:rgba(255,255,255,0.9);";
         input.setAttribute("autocomplete", "off"); input.setAttribute("autocorrect", "off"); input.setAttribute("autocapitalize", "off");
+
         const btnContainer = document.createElement("div");
         btnContainer.style.display = "flex"; btnContainer.style.gap = "10px";
+
         const btnCancel = document.createElement("button");
         btnCancel.textContent = "Cancelar";
-        btnCancel.style.cssText = "flex:1;padding:10px;border:none;background:#e0e0e0;border-radius:6px;cursor:pointer;color:#333";
+        btnCancel.style.cssText = "flex:1;padding:10px;border:none;background:rgba(0,0,0,0.1);border-radius:6px;cursor:pointer;color:inherit;";
+        
         const btnConfirm = document.createElement("button");
         btnConfirm.textContent = "Desbloquear";
-        btnConfirm.style.cssText = "flex:1;padding:10px;border:none;background:var(--primary-color, #ff4d6d);color:white;border-radius:6px;cursor:pointer;font-weight:bold;";
+        btnConfirm.style.cssText = "flex:1;padding:10px;border:none;background:var(--primary-color, #ff4d6d);color:white;border-radius:6px;cursor:pointer;font-weight:bold;box-shadow:0 4px 15px rgba(255, 77, 109, 0.4);";
+
         btnContainer.appendChild(btnCancel); btnContainer.appendChild(btnConfirm);
         card.appendChild(input); card.appendChild(btnContainer); overlay.appendChild(card);
         document.body.appendChild(overlay);
         input.focus();
+
         const close = () => document.body.removeChild(overlay);
         btnCancel.onclick = close;
-        const submit = () => { const pass = input.value; if(pass){ close(); callback(pass); } else { input.style.borderColor = "red"; input.focus(); } };
+        const submit = () => { const pass = input.value; if(pass){ close(); callback(pass); } else { input.style.border = "1px solid red"; input.focus(); } };
         btnConfirm.onclick = submit; input.onkeydown = (e) => { if(e.key === 'Enter') submit(); };
     }
+
+    // --- RESTO DE MÉTODOS UI ---
     renderMessage(t,b){const c=this.elements.contentDiv;c.hidden=0;c.innerHTML=`<h2>${t}</h2><p>${b}</p>`;c.classList.remove("fade-in");void c.offsetWidth;c.classList.add("fade-in");}
     showError(){this.elements.input.classList.add("shake","error");setTimeout(()=>this.elements.input.classList.remove("shake"),500);}
     showSuccess(){this.elements.input.classList.remove("error");this.elements.input.classList.add("success");}
