@@ -29,7 +29,7 @@
   
   <div id="achievement-toast-container" aria-live="polite"></div>
 
-  <button id="menuButton" class="menu-button" aria-label="Abrir menú">
+  <button id="menuButton" class="menu-button" aria-label="Menú Principal">
     <i class="fas fa-bars"></i>
   </button>
 
@@ -43,18 +43,13 @@
     </a>
     
     <button id="menuTools"><i class="fas fa-toolbox"></i> Herramientas</button>
-    
     <div class="menu-divider"></div>
-    
     <button id="menuDarkMode"><i class="fas fa-moon"></i> Modo Oscuro</button>
     <button id="menuAudio"><i class="fas fa-music"></i> Audio</button>
-    
     <div class="menu-divider"></div>
-    
     <button id="menuExport"><i class="fas fa-file-export"></i> Exportar</button>
     <button id="menuImport"><i class="fas fa-file-import"></i> Importar</button>
     <input type="file" id="importInput" accept=".json" style="display:none">
-    
     <button id="menuReset" class="danger-text"><i class="fas fa-trash-alt"></i> Restablecer</button>
   </nav>
 
@@ -66,7 +61,7 @@
     <div class="input-container">
       <input type="text" id="codeInput" placeholder="Escribe aquí..." autocomplete="off" />
       
-      <button id="checkBtn" class="button" title="Verificar Código">
+      <button id="checkBtn" class="button" title="Verificar">
         <i class="fas fa-paper-plane"></i> Verificar
       </button>
       
@@ -98,10 +93,7 @@
   </main>
 
   <aside id="audioPanel" class="side-panel">
-    <div class="panel-header">
-      <h3>Reproductor</h3>
-      <button id="closeAudioPanel" class="close-panel-btn"><i class="fas fa-times"></i></button>
-    </div>
+    <div class="panel-header"><h3>Reproductor</h3><button id="closeAudioPanel" class="close-panel-btn"><i class="fas fa-times"></i></button></div>
     <div class="audio-info"><p id="trackName">Selecciona música</p></div>
     <div class="audio-controls">
       <button id="audioPrev" class="audio-btn"><i class="fas fa-backward"></i></button>
@@ -119,10 +111,7 @@
   </aside>
 
   <aside id="toolsPanel" class="side-panel">
-    <div class="panel-header">
-      <h3>Herramientas</h3>
-      <button id="closeToolsPanel" class="close-panel-btn"><i class="fas fa-times"></i></button>
-    </div>
+    <div class="panel-header"><h3>Herramientas</h3><button id="closeToolsPanel" class="close-panel-btn"><i class="fas fa-times"></i></button></div>
     <div id="toolsListContainer" class="tools-container"></div>
   </aside>
 
@@ -131,13 +120,10 @@
   <audio id="bgMusic" preload="auto"></audio>
 
   <script type="module" src="main.js"></script>
-  
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./service-worker.js")
-          .then(reg => console.log("SW registrado:", reg.scope))
-          .catch(err => console.log("Error SW:", err));
+        navigator.serviceWorker.register("./service-worker.js").catch(e => console.log(e));
       });
     }
   </script>
