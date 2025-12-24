@@ -1,23 +1,19 @@
 /* =========================================
-   STYLE.CSS - Versión Restaurada & Optimizada
+   STYLE.CSS - Versión "Zero Jump" (Stable Layout)
    ========================================= */
 
 /* 1. FUENTES */
 @import url('https://fonts.googleapis.com/css2?family=Courgette&family=Montserrat:wght@300;400;500;600&display=swap');
 
-/* 2. VARIABLES (SISTEMA DE DISEÑO) */
+/* 2. VARIABLES */
 :root {
-  /* Tipografía */
   --title-font: 'Courgette', cursive;
   --body-font: 'Montserrat', sans-serif;
-
-  /* Paleta Base */
   --text-light: #CDD8D5;
   --text-medium: #AEA5A5;
   --text-dark: #E0CFC1;
   --header-color: #BCBDB9;
   
-  /* Capas y Fondos */
   --background-overlay: rgba(20, 18, 28, 0.75);
   --container-bg: rgba(32, 30, 43, 0.75);
   --content-bg: rgba(30, 32, 33, 0.85);
@@ -25,12 +21,10 @@
   --modal-bg: rgba(30, 30, 30, 0.95);
   --modal-overlay-bg: rgba(0, 0, 0, 0.85);
   
-  /* Interacción */
   --border-color-input: #8E7383;
   --button-bg-initial: #9A8C8B;
   --button-bg-hover: #3F3938;
   
-  /* Acentos y Estados */
   --progress-color: #A3C3BD;
   --highlight-pink: #ff7aa8;
   --highlight-pink-light: #ffaed0;
@@ -38,24 +32,19 @@
   --highlight-red: #E74C3C;
   --highlight-gold: #FFD700;
   
-  /* Componentes */
   --achievement-bg: #4A4A6A;
   --achievement-text: #E0CFC1;
-  
-  /* Iconos */
   --favorite-icon-default: #888;
   --favorite-icon-active: #FFD700;
 
-  /* Z-Index (Arquitectura de Capas) */
-  --z-back: -1;
+  --z-back: -10;
   --z-base: 10;
   --z-fab: 1500;
   --z-menu: 1499;
   --z-toast: 2000;
-  --z-modal: 9999; /* Máxima prioridad para modales */
+  --z-modal: 9999;
 }
 
-/* Modo Oscuro */
 body.dark-mode {
   --text-light: #f2e6df;
   --text-medium: #d8ccc3;
@@ -66,35 +55,39 @@ body.dark-mode {
   --highlight-pink: #A860A8;
 }
 
-/* 3. RESET Y ESTRUCTURA BASE (Fix Android Background) */
+/* 3. RESET Y ESTRUCTURA BASE (SOLUCIÓN B) */
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; height: 100%; }
 
 body {
   font-family: var(--body-font);
   color: var(--text-light);
   display: flex; flex-direction: column;
-  /* Usamos min-height: 100dvh para evitar saltos con la barra de navegación móvil */
-  min-height: 100vh; min-height: 100dvh; 
+  /* SVH: Small Viewport Height - ESTABLE en Android, ignora la barra de navegación dinámica */
+  min-height: 100svh; 
   align-items: center; justify-content: flex-start;
   position: relative; overflow-x: hidden;
   text-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
 
-/* FIX FONDO: Pseudo-elemento fijo que no salta al hacer scroll */
-body::before {
-  content: "";
-  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-  background: url('assets/images/fondo-romantico.webp') no-repeat center center;
-  background-size: cover;
-  z-index: calc(var(--z-back) - 1);
-  will-change: transform;
+/* SOLUCIÓN A: FONDO DESACOPLADO DEL BODY */
+#fixed-bg {
+  position: fixed;
+  inset: 0;
+  background: url('assets/images/fondo-romantico.webp') center / cover no-repeat;
+  z-index: var(--z-back);
+  
+  /* CRÍTICO: Fuerza capa de GPU y evita repaints al hacer scroll */
+  transform: translateZ(0);
+  pointer-events: none;
 }
 
 .background-overlay {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
   background-color: var(--background-overlay);
-  backdrop-filter: blur(4px); z-index: var(--z-back);
+  backdrop-filter: blur(4px); 
+  z-index: calc(var(--z-back) + 1);
+  pointer-events: none;
 }
 
 /* Scrollbar */
@@ -108,7 +101,6 @@ body::before {
   background-color: var(--container-bg);
   padding: 2.5rem; border-radius: 16px;
   text-align: center; max-width: 900px; width: 90%;
-  /* Margen grande abajo para el FAB */
   margin: 4rem auto 8rem auto; position: relative;
   
   backdrop-filter: blur(12px) saturate(120%);
@@ -116,16 +108,16 @@ body::before {
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: 0 15px 35px 0 rgba(0, 0, 0, 0.4);
   z-index: var(--z-base);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* 5. TIPOGRAFÍA */
+/* 5. TIPOGRAFÍA Y CABECERA */
 h1 { font-family: var(--title-font); color: var(--header-color); font-weight: 400; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); margin-bottom: 1.5rem; font-size: 3em; letter-spacing: 1px; }
 h2, .section-title { font-family: var(--title-font); color: var(--header-color); font-weight: 400; margin-bottom: 1rem; }
 .intro-text { font-size: 1.1em; margin-bottom: 2rem; color: var(--text-medium); }
 
 .header-img { 
   width: 140px; height: auto; margin-bottom: 1.5rem; 
+  /* La animación se define aquí pero se desactivará en móvil */
   animation: float 6s ease-in-out infinite; 
   filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
 }
@@ -159,7 +151,7 @@ h2, .section-title { font-family: var(--title-font); color: var(--header-color);
 #hintBtn { background-color: var(--highlight-gold); color: #333; width: 50px; padding: 0; font-size: 1.2rem; }
 #hintBtn:hover { background-color: #f39c12; color: #fff; box-shadow: 0 0 15px rgba(255,215,0,0.5); }
 
-/* 7. CONTENIDO DINÁMICO (Cartas, Videos, Iframes) */
+/* 7. CONTENIDO DINÁMICO (Restaurado) */
 .contenido-container {
   background-color: var(--content-bg); padding: 2.5rem; border-radius: 16px;
   margin-top: 2rem; text-align: left; line-height: 1.8; color: var(--text-medium);
@@ -169,32 +161,26 @@ h2, .section-title { font-family: var(--title-font); color: var(--header-color);
 .contenido-container img { max-width: 100%; border-radius: 12px; margin: 1.5em auto; display: block; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
 .mensaje-texto { font-size: 1.2em; white-space: pre-wrap; color: var(--text-light); }
 
-/* --- FIX VIDEOS --- */
+/* FIX VIDEOS: Sin bordes blancos y relación de aspecto correcta */
 .video-wrapper {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 9; /* Forzar relación de aspecto */
-  border-radius: 12px;
-  overflow: hidden;
-  margin: 1.5em 0;
-  background: #000;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+  position: relative; width: 100%; aspect-ratio: 16 / 9;
+  border-radius: 12px; overflow: hidden; margin: 1.5em 0;
+  background: #000; box-shadow: 0 8px 20px rgba(0,0,0,0.5);
 }
 .video-frame {
   position: absolute; top: 0; left: 0; width: 100%; height: 100%;
   border: none; opacity: 0; transition: opacity 0.6s ease-in;
 }
 
-/* --- FIX IFRAMES EXTERNOS --- */
+/* FIX IFRAMES: Tamaño adecuado en móvil */
 .internal-wrapper { width: 100%; display: flex; flex-direction: column; align-items: center; margin-top: 15px; }
 .internal-frame {
-  width: 100%; 
-  height: 600px; /* Altura base PC */
+  width: 100%; height: 600px;
   border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 20px;
-  background: white; /* Fondo blanco para páginas que lo necesiten */
+  background: white;
 }
 
-/* 8. PROGRESO Y LOGROS (Estilo Restaurado) */
+/* 8. PROGRESO ARCOÍRIS (Restaurado) */
 .achievements-section { margin-top: 3rem; padding-top: 2rem; border-top: 1px dashed rgba(255,255,255,0.2); }
 .progress-bar-container {
   width: 100%; max-width: 400px; background-color: rgba(255,255,255,0.1);
@@ -203,13 +189,12 @@ h2, .section-title { font-family: var(--title-font); color: var(--header-color);
 }
 .progress-bar-fill {
   height: 100%;
-  /* Gradiente Multicolor Restaurado */
   background: linear-gradient(90deg, var(--progress-color), var(--highlight-pink-light), var(--highlight-pink));
   transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 0 10px rgba(255, 122, 168, 0.5);
 }
 
-/* 9. LISTAS Y PANELES (Estilos Restaurados) */
+/* 9. LISTAS, COLECCIÓN Y PANELES (Estilos Completos Restaurados) */
 .unlocked-codes-panel, .unlocked-codes-section { 
   background-color: var(--content-bg); padding: 1.5rem; 
   border-radius: 12px; margin-top: 1.5rem; border: 1px solid rgba(255,255,255,0.05);
@@ -236,7 +221,7 @@ h2, .section-title { font-family: var(--title-font); color: var(--header-color);
 .favorite-toggle-btn.active { color: var(--favorite-icon-active); }
 #filterFavBtn.active { background-color: var(--highlight-pink); color: white; }
 
-/* 10. MENÚ FAB Y SIDEBARS */
+/* 10. MENÚ FAB */
 .menu-button {
   position: fixed; bottom: 25px; right: 25px; z-index: var(--z-fab);
   background: var(--highlight-pink); color: white; border: none; border-radius: 50%;
@@ -246,14 +231,17 @@ h2, .section-title { font-family: var(--title-font); color: var(--header-color);
 }
 .menu-button:active { transform: scale(0.9); }
 
+/* Menú Desplegable con solución C (aislamiento) */
 .dropdown-menu {
   position: fixed; bottom: 95px; right: 25px; 
-  background: var(--modal-bg); backdrop-filter: blur(20px);
+  background: var(--modal-bg); /* Fondo sólido fallback */
   border-radius: 16px; padding: 15px; min-width: 220px;
   box-shadow: 0 10px 40px rgba(0,0,0,0.6); 
   opacity: 0; visibility: hidden; transform: translateY(20px) scale(0.9);
   transform-origin: bottom right; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
   z-index: var(--z-menu); border: 1px solid rgba(255,255,255,0.1);
+  /* BACKDROP FILTER SOLO AQUI SI ES NECESARIO, PERO CUIDADO EN MOVIL */
+  backdrop-filter: blur(20px); 
 }
 .dropdown-menu.show { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
 
@@ -268,7 +256,7 @@ h2, .section-title { font-family: var(--title-font); color: var(--header-color);
 .menu-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 8px 0; }
 .danger-text { color: var(--highlight-red) !important; }
 
-/* Paneles Laterales (Tools / Audio) */
+/* 11. SIDEBARS (Herramientas y Audio) */
 .side-panel {
   position: fixed; top: 0; right: 0; width: 320px; height: 100vh;
   background: var(--modal-bg); backdrop-filter: blur(20px);
@@ -280,12 +268,9 @@ h2, .section-title { font-family: var(--title-font); color: var(--header-color);
 .panel-header { display: flex; justify-content: space-between; margin-bottom: 20px; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
 .close-panel-btn { background: none; border: none; color: white; font-size: 1.5em; cursor: pointer; }
 
-/* Estilos de las Herramientas (Tool Cards) */
+/* Estilos de herramientas */
 .tools-container { overflow-y: auto; flex-grow: 1; }
-.tool-card { 
-  background: rgba(255,255,255,0.05); border-radius: 12px; padding: 15px; 
-  margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); 
-}
+.tool-card { background: rgba(255,255,255,0.05); border-radius: 12px; padding: 15px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); }
 .tool-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; color: var(--highlight-pink); font-weight: 600; }
 .tool-desc { font-size: 0.9em; color: var(--text-medium); margin-bottom: 12px; }
 .tool-btn { display: block; text-align: center; background: var(--button-bg-initial); color: white; padding: 10px; border-radius: 8px; text-decoration: none; font-size: 0.9em; }
@@ -295,7 +280,7 @@ h2, .section-title { font-family: var(--title-font); color: var(--header-color);
 .audio-btn { background: rgba(255,255,255,0.1); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2em; }
 .audio-btn.small { width: 30px; height: 30px; font-size: 0.9em; }
 
-/* 11. TOASTS Y MODALES (Restaurado) */
+/* 12. TOASTS Y MODALES (Centrado Real) */
 #achievement-toast-container { 
   position: fixed; top: 20px; left: 50%; transform: translateX(-50%); 
   z-index: var(--z-toast); pointer-events: none; width: 90%; max-width: 400px; 
@@ -308,13 +293,12 @@ h2, .section-title { font-family: var(--title-font); color: var(--header-color);
   backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.1);
 }
 
-/* --- FIX MODALES CENTRADOS --- */
+/* Modales centrados con Flexbox */
 .glass-overlay, .media-modal-overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: var(--modal-overlay-bg);
     backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
     z-index: var(--z-modal);
-    /* Flexbox crucial para centrado vertical y horizontal */
     display: flex; justify-content: center; align-items: center; flex-direction: column;
     padding: 20px; animation: fadeIn 0.3s ease;
 }
@@ -330,23 +314,25 @@ h2, .section-title { font-family: var(--title-font); color: var(--header-color);
 
 .media-content-container { max-width: 95%; max-height: 80vh; display: flex; justify-content: center; align-items: center; margin-bottom: 20px; }
 .secure-media { max-width: 100%; max-height: 70vh; border-radius: 12px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
-.media-controls { display: flex; gap: 15px; }
+.media-controls { display: flex; gap: 15px; z-index: 10002; }
 .media-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 10px 20px; border-radius: 30px; cursor: pointer; display: flex; align-items: center; gap: 5px; }
 
-/* 12. ANIMACIONES */
+/* 13. ANIMACIONES */
 @keyframes slideDown { from {transform:translateY(-100%); opacity:0;} to {transform:translateY(0); opacity:1;} }
 @keyframes fadeOut { to {opacity:0;} }
 @keyframes slideUp { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
 @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
 @keyframes float { 0%,100% {transform:translateY(0);} 50% {transform:translateY(-10px);} }
 
-/* 13. OPTIMIZACIÓN MÓVIL (MEDIA QUERIES FINALES) */
+/* 14. OPTIMIZACIÓN MÓVIL (MEDIA QUERIES FINALES) */
 @media (max-width: 600px) {
-  /* Contenedor */
+  /* MICRO-OPTIMIZACIÓN 4: Desactivar animación de float en móvil */
+  .header-img { animation: none; }
+  
   .container { width: 95%; margin-top: 3rem; padding: 1.5rem 1rem; padding-bottom: 7rem; }
   h1 { font-size: 2em; }
   
-  /* GRID TÁCTIL para Inputs */
+  /* GRID TÁCTIL */
   .input-container {
     display: grid; grid-template-columns: 1fr 54px; grid-template-rows: auto auto; gap: 10px;
   }
@@ -354,11 +340,8 @@ h2, .section-title { font-family: var(--title-font); color: var(--header-color);
   #checkBtn { grid-column: 1 / 2; width: 100%; margin: 0; }
   #hintBtn { grid-column: 2 / 3; width: 100%; height: 100%; margin: 0; }
 
-  /* Ajustes Visuales */
   .contenido-container { padding: 1.2rem; font-size: 16px; }
-  .internal-frame { height: 75vh; } /* Iframe grande en móvil */
-  
-  /* Paneles y Menú */
+  .internal-frame { height: 75vh; }
   .side-panel { width: 90%; }
   .menu-button { width: 55px; height: 55px; bottom: 15px; right: 15px; }
   .dropdown-menu { bottom: 85px; right: 15px; }
