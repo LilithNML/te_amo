@@ -71,16 +71,29 @@ body.dark-mode {
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html { scroll-behavior: smooth; }
 
+/* Elimina el background del body y pásalo a un pseudo-elemento */
 body {
   font-family: var(--body-font);
-  background: url('assets/images/fondo-romantico.webp') no-repeat center center fixed;
-  background-size: cover;
+  /* background: url(...) NO AQUÍ */
   color: var(--text-light);
   display: flex; flex-direction: column; min-height: 100vh;
-  align-items: center; justify-content: center;
+  /* Usar dvh (Dynamic Viewport Height) evita problemas con la barra de navegación */
+  min-height: 100dvh; 
+  align-items: center; justify-content: flex-start; /* Cambiar center por flex-start para permitir scroll */
   position: relative; overflow-x: hidden;
-  transition: background 0.5s ease;
 }
+
+/* Nuevo fondo estable para móviles */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: url('assets/images/fondo-romantico.webp') no-repeat center center;
+  background-size: cover;
+  z-index: var(--z-back);
+  will-change: transform; /* Optimización de GPU */
+}
+
 
 /* Scrollbar Premium */
 ::-webkit-scrollbar { width: 8px; }
@@ -360,6 +373,34 @@ body.dark-mode .glass-card {
 .shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
 @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
 
+
+/* --- BOTÓN DE PISTAS --- */
+#hintBtn {
+    background-color: #f1c40f; /* Amarillo Pista */
+    color: #fff;
+    width: 50px; /* Cuadrado perfecto */
+    padding: 0; /* Centrar icono */
+    font-size: 1.2rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#hintBtn:hover {
+    background-color: #f39c12; /* Naranja al pasar mouse */
+    box-shadow: 0 0 15px rgba(241, 196, 15, 0.6); /* Resplandor */
+    transform: translateY(-2px) scale(1.05);
+}
+
+#hintBtn:active {
+    transform: scale(0.95);
+}
+
+/* Modo Oscuro: Ajuste de brillo */
+body.dark-mode #hintBtn {
+    background-color: #d4ac0d;
+    color: #1a1a1a; /* Icono oscuro para contraste */
+}
+
+
 /* 13. MEDIA QUERIES (RESPONSIVE) */
 /* =========================================
    OPTIMIZACIÓN MÓVIL (ANDROID FINAL)
@@ -433,31 +474,4 @@ body.dark-mode .glass-card {
     top: 10px; /* Más arriba */
     width: 95%;
   }
-}
-
-
-/* --- BOTÓN DE PISTAS --- */
-#hintBtn {
-    background-color: #f1c40f; /* Amarillo Pista */
-    color: #fff;
-    width: 50px; /* Cuadrado perfecto */
-    padding: 0; /* Centrar icono */
-    font-size: 1.2rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-#hintBtn:hover {
-    background-color: #f39c12; /* Naranja al pasar mouse */
-    box-shadow: 0 0 15px rgba(241, 196, 15, 0.6); /* Resplandor */
-    transform: translateY(-2px) scale(1.05);
-}
-
-#hintBtn:active {
-    transform: scale(0.95);
-}
-
-/* Modo Oscuro: Ajuste de brillo */
-body.dark-mode #hintBtn {
-    background-color: #d4ac0d;
-    color: #1a1a1a; /* Icono oscuro para contraste */
 }
