@@ -795,6 +795,66 @@ export const mensajes = {
     categoria: "Fotitos",
     pista: "El protagonista que siempre quiere pelear y comer."
   },
+  "garnet": {
+    type: "text",
+    texto: "A veces solo quiero que cierres los ojos y sientas que, pase lo que pase, aquí tienes un lugar donde siempre te abrazo y te sostengo.",
+    categoria: "Carta",
+    pista: "Dos gemas unidas por amor que ven futuros distintos mientras protegen a un niño en Beach City."
+  },
+  "perla": {
+    type: "text",
+    texto: "Sé que hay momentos que duelen y no piden soluciones, solo alguien que se quede cerca.\n\nYo estoy aquí para ti, para tus heridas, para todo lo que necesites compartir.",
+    categoria: "Carta",
+    pista: "En este mundo de gemas y canciones, fui creada para servir… pero elegí cuidar al niño de la estrella."
+  },
+  "amatista": {
+    type: "text",
+    texto: "No me asustan tus días oscuros; porque en ellos aprendí a ver la luz tan hermosa que siempre llevas dentro.",
+    categoria: "Carta",
+    pista: "Nací tarde de la tierra, vivo en un templo con forma de rostro y aprendo a quererme gracias a Steven."
+  },
+  "peridot": {
+    type: "text",
+    texto: "Lo que siento por ti podría caber en un suspiro, pero créeme, ese suspiro sostiene todo mi mundo y mi corazón.",
+    categoria: "Carta",
+    pista: "Llegué a Beach City hablando de clods y tecnología, pero una serie de canciones me volvió más humana."
+  },
+  "lapislazuli": {
+    type: "text",
+    texto: "Si hoy todo se te hace pesado, aquí estoy a tu lado.\n\nNo para arreglar nada, solo para caminar contigo y que no tengas que hacerlo solo.",
+    categoria: "Carta",
+    pista: "Desde un espejo en el mundo de Steven Universe, el mar obedeció mi dolor."
+  },
+  "jasper": {
+    type: "text",
+    texto: "Cuando necesites un hombro o un abrazo, simplemente ven.\n\nAquí estoy, sin que tengas que pedirlo, sin que tengas que decir nada.",
+    categoria: "Carta",
+    pista: "En la guerra de las gemas fui fuerza pura, pero en la Tierra del niño de la estrella aprendí a romperme."
+  },
+  "rosecuarzo": {
+    type: "text",
+    texto: "No tengas miedo de caer: mis manos están hechas para sostenerte, levantarte y acompañarte en cada paso, siempre que lo necesites.",
+    categoria: "Carta",
+    pista: "Antes de que Steven cantara para sanar, yo lideré la rebelión de las gemas."
+  },
+  "fusion": {
+    type: "text",
+    texto: "Mi amor,\n\nHoy estuve pensando en la palabra “hermoso”. Y me pregunté: ¿qué significa realmente?\n¿Es solo aquello que nos alegra la vista, lo que brilla bajo la luz del sol, lo que nos hace suspirar en silencio?\nTal vez lo hermoso no es lo perfecto, ni lo evidente, ni lo que el mundo aplaude.\nTal vez lo hermoso es lo que permanece, lo que enseña, lo que sostiene incluso cuando todo cambia.\n\nPienso en un atardecer, y sí, es hermoso. Pienso en un río tranquilo, y también.\nPero más que eso, lo hermoso está en lo que toca el corazón: una risa inesperada, una palabra sincera, un gesto que calma sin pedir nada a cambio.\nLo hermoso, me doy cuenta, es aquello que nos hace sentir seguros, que nos recuerda que la vida puede ser suave y cálida, incluso en medio del caos.\n\nY entonces pienso en ti. Y entiendo de repente algo muy simple y profundo: tú eres hermoso.\nNo solo cuando sonríes o cuando todo sale bien. Eres hermoso cuando dudas, cuando sientes miedo, cuando cargas responsabilidades que a veces parecen demasiado pesadas.\nEres hermoso cuando te equivocas y aún así sigues intentando.\nPorque lo que de verdad hace hermosa a una persona no es la perfección, sino la fuerza y la luz que persiste a pesar de todo.\n\nQuiero que recuerdes esto siempre: no necesitas mostrar tu mejor versión para ser valioso, ni cargar con todo el mundo sobre tus hombros para ser admirable.\nYo veo tu luz en cada detalle, en cada pequeño acto de esfuerzo, en cada instante donde eliges seguir adelante.\nY eso, amor mío, es más que hermoso. Es inspirador. Es digno de orgullo.\nY lo mejor: es real, auténtico, tuyo.\n\nAsí que cuando dudes, cuando sientas que no alcanzas, cuando los miedos te hablen demasiado fuerte, recuerda: lo hermoso está dentro de ti, incluso en los días grises, incluso en las noches donde todo parece pesado.\nY yo estoy aquí, para verlo, para sostenerlo contigo y para que nunca olvides que eres una de las cosas más hermosas que este mundo ha creado para mí.\n\nCon todo mi amor y admiración,\nLilith Noemi Mendoza Luna",
+    categoria: "Carta",
+    pista: "En Steven Universe, cuando las gemas sienten lo mismo y cantan al ritmo del corazón, se vuelven una..."
+  },
+  "beachcity": {
+    type: "text",
+    texto: "Sé que has vivido días pesados, momentos donde todo parecía desmoronarse y dudas que parecían demasiado grandes para sostener.\nY aun así, aquí estás. Aquí seguimos. Y eso ya es un acto de valentía que merece ser celebrado.\n\nQuiero que recuerdes algo: tus caídas no te definen, tus miedos no te limitan.\nTodo lo que has pasado ha construido una fortaleza silenciosa, una luz que muchas veces ni tú ves, pero que yo sí.\nCada decisión que tomas, incluso las que parecen pequeñas o insignificantes, son pasos gigantes hacia adelante.\nEres un faro que sigue brillando, incluso cuando la noche parece demasiado larga.\n\nMe gusta imaginar tu sonrisa después de un día pesado, y pienso que ese pequeño gesto tiene el poder de iluminar mucho más de lo que crees.\nMe gusta imaginar los momentos que aún no han llegado, las risas, los abrazos, las tardes tranquilas donde todo encaja.\nPorque contigo, incluso lo cotidiano se vuelve extraordinario.\n\nNo tienes que ser perfecto, no tienes que tener todas las respuestas.\nTu valor no está en “ser fuerte siempre”, sino en tu capacidad de seguir intentando, de seguir amando, de seguir caminando incluso cuando el mundo parece pedir demasiado.\nY créeme, tu esfuerzo y tu corazón son más que suficientes.\n\nCuando sientas que todo pesa, quiero que pienses en mí como un refugio: un lugar donde puedes descansar, un abrazo que no exige nada, solo que estés tú, con tu esencia, con tu vida tal como es.\nEstoy aquí para cada miedo, cada duda, cada sonrisa y cada lágrima.\nEstoy aquí para caminar contigo, para celebrar tus pasos y sostenerte en los momentos más difíciles.\n\nNunca olvides que tienes la capacidad de iluminar la oscuridad, incluso en los días grises.\nQue tu corazón sigue floreciendo, que tu fuerza sigue creciendo, y que yo sigo aquí, orgullosa, feliz y tranquila solo por verte existir, por verte avanzar, por verte tú.\n\nTú eres suficiente. Tú eres fuerte. Tú eres luz.\nY yo tengo la suerte de acompañarte en cada instante.",
+    categoria: "Carta",
+    pista: "No es Konoha ni Namek: es una playa tranquila donde Steven creció entre gemas."
+  },
+  "templodelasgemas": {
+    type: "text",
+    texto: "Hoy quiero hablarte del futuro. No de un futuro lejano que parece inalcanzable, sino del que se construye paso a paso, día a día, incluso en los momentos más difíciles.\nSé que hay días que duelen, tropiezos que pesan, dudas que parecían no tener fin.\nY sé también que a veces parece que nada mejora.\nPero quiero que recuerdes algo muy importante: estos momentos no son permanentes.\nNada de lo que duele ahora define tu vida entera.\n\nCada dificultad, cada caída, es solo un capítulo, no el final del libro.\nY tú, amor mío, tienes la fuerza para escribir las páginas que vienen con valor, amor y esperanza.\nTienes la capacidad de levantarte una y otra vez, de aprender de cada tropiezo, de crecer con cada desafío.\nY yo estoy aquí, a tu lado, para caminar contigo, para sostenerte cuando los pasos se sientan pesados y para celebrar cada avance, aunque sea pequeño.\n\nEl futuro que te espera puede ser tan brillante como tú quieras que sea.\nPuedes imaginarlo lleno de logros, de risas, de días tranquilos y momentos felices. Y yo no solo quiero verlo contigo;\nestoy ansiosa por acompañarte en cada instante, por celebrar tu crecimiento, por aplaudir cada una de tus victorias y abrazarte en los momentos de aprendizaje.\n\nNo tengas miedo de los días difíciles ni de las dudas. Son solo parte del camino, no el camino completo.\nY mientras tú sigas caminando, yo sigo contigo, con mi amor, mi paciencia y mi admiración.\nPorque sé que eres capaz de construir un futuro lleno de luz, de paz y de todo lo que sueñas.\n\nAsí que respira, confía y sigue adelante. Estoy aquí, orgullosa, agradecida y feliz de ser testigo de tu fuerza, de tu valentía y de tu crecimiento.",
+    categoria: "Carta",
+    pista: "Un enorme rostro de piedra que observa Beach City y guarda secretos del pasado de Steven Universe."
+  },
 };
 
 export const logros = [
