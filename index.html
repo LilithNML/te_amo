@@ -28,7 +28,6 @@
 
   <div id="tsparticles"></div>
   <div class="background-overlay" aria-hidden="true"></div>
-  
   <div id="achievement-toast-container" aria-live="polite"></div>
 
   <button id="menuButton" class="menu-button" aria-label="Menú Principal">
@@ -39,11 +38,9 @@
     <button id="menuHome"><i class="fas fa-home"></i> Inicio</button>
     <button id="menuShowUnlocked"><i class="fas fa-lock-open"></i> Colección</button>
     <button id="menuFavorites"><i class="fas fa-heart"></i> Favoritos</button>
-    
     <a href="https://wikipedia.com" target="_blank" class="menu-link-button">
       <i class="fas fa-gamepad"></i> Love Arcade
     </a>
-    
     <button id="menuTools"><i class="fas fa-toolbox"></i> Herramientas</button>
     <div class="menu-divider"></div>
     <button id="menuDarkMode"><i class="fas fa-moon"></i> Modo Oscuro</button>
@@ -54,45 +51,6 @@
     <input type="file" id="importInput" accept=".json" style="display:none">
     <button id="menuReset" class="danger-text"><i class="fas fa-trash-alt"></i> Restablecer</button>
   </nav>
-
-  <main class="container">
-    <img src="assets/images/FullMoon.webp" alt="Luna Llena" class="header-img" />
-    <h1>Un Secreto Para Ti</h1>
-    <p class="intro-text">Bienvenido, mi amor. Introduce un código secreto para descubrir nuestras sorpresas.</p>
-
-    <div class="input-container">
-      <input type="text" id="codeInput" placeholder="Escribe aquí..." autocomplete="off" />
-      
-      <button id="checkBtn" class="button" title="Verificar">
-        <i class="fas fa-paper-plane"></i> Verificar
-      </button>
-      
-      <button id="hintBtn" class="button" title="Pedir una pista" aria-label="Pedir pista">
-        <i class="fas fa-lightbulb"></i>
-      </button>
-    </div>
-
-    <div id="contenido" class="contenido-container fade-in" hidden></div>
-
-    <div class="achievements-section">
-      <h2 class="section-title">Tu Progreso</h2>
-      <p id="progreso" class="progreso-text">Cargando...</p>
-      <div class="progress-bar-container">
-        <div class="progress-bar-fill" style="width: 0%;"></div>
-      </div>
-    </div>
-
-    <div class="unlocked-codes-section" id="unlockedSection" hidden>
-      <h2 class="section-title">Galería de Secretos</h2>
-      <div class="filter-controls">
-        <input type="text" id="searchUnlocked" placeholder="Buscar..." />
-        <select id="categoryFilter"><option value="">Todas</option></select>
-        <button id="filterFavBtn" class="button small-button"><i class="far fa-heart"></i> Solo Favoritos</button>
-      </div>
-      <ul id="unlockedList" class="lista-codigos"></ul>
-      <button id="closeUnlockedBtn" class="button small-button" style="margin-top: 20px;">Ocultar Lista</button>
-    </div>
-  </main>
 
   <aside id="audioPanel" class="side-panel">
     <div class="panel-header"><h3>Reproductor</h3><button id="closeAudioPanel" class="close-panel-btn"><i class="fas fa-times"></i></button></div>
@@ -116,6 +74,41 @@
     <div class="panel-header"><h3>Herramientas</h3><button id="closeToolsPanel" class="close-panel-btn"><i class="fas fa-times"></i></button></div>
     <div id="toolsListContainer" class="tools-container"></div>
   </aside>
+
+  <div id="app-scroll">
+    <main class="container">
+      <img src="assets/images/FullMoon.webp" alt="Luna Llena" class="header-img" />
+      <h1>Un Secreto Para Ti</h1>
+      <p class="intro-text">Bienvenido, mi amor. Introduce un código secreto para descubrir nuestras sorpresas.</p>
+
+      <div class="input-container">
+        <input type="text" id="codeInput" placeholder="Escribe aquí..." autocomplete="off" />
+        <button id="checkBtn" class="button" title="Verificar"><i class="fas fa-paper-plane"></i> Verificar</button>
+        <button id="hintBtn" class="button" title="Pedir una pista"><i class="fas fa-lightbulb"></i></button>
+      </div>
+
+      <div id="contenido" class="contenido-container fade-in" hidden></div>
+
+      <div class="achievements-section">
+        <h2 class="section-title">Tu Progreso</h2>
+        <p id="progreso" class="progreso-text">Cargando...</p>
+        <div class="progress-bar-container">
+          <div class="progress-bar-fill" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <div class="unlocked-codes-section" id="unlockedSection" hidden>
+        <h2 class="section-title">Galería de Secretos</h2>
+        <div class="filter-controls">
+          <input type="text" id="searchUnlocked" placeholder="Buscar..." />
+          <select id="categoryFilter"><option value="">Todas</option></select>
+          <button id="filterFavBtn" class="button small-button"><i class="far fa-heart"></i> Solo Favoritos</button>
+        </div>
+        <ul id="unlockedList" class="lista-codigos"></ul>
+        <button id="closeUnlockedBtn" class="button small-button" style="margin-top: 20px;">Ocultar Lista</button>
+      </div>
+    </main>
+  </div>
 
   <audio id="correctSound" src="assets/audio/correct.mp3" preload="auto"></audio>
   <audio id="incorrectSound" src="assets/audio/incorrect.mp3" preload="auto"></audio>
