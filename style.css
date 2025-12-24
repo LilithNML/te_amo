@@ -361,20 +361,80 @@ body.dark-mode .glass-card {
 @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
 
 /* 13. MEDIA QUERIES (RESPONSIVE) */
+/* =========================================
+   OPTIMIZACIÓN MÓVIL (ANDROID FINAL)
+   ========================================= */
 @media (max-width: 600px) {
-  h1 { font-size: 2.2em; }
-  .container { padding: 1.5rem; width: 95%; margin-top: 5rem; }
-  .contenido-container { padding: 1.2rem; }
-  .video-frame, .internal-frame { min-height: 250px; height: auto; aspect-ratio: 16/9; }
-  .input-container { flex-direction: column; }
-  #codeInput { width: 100%; max-width: none; font-size: 1.1em; }
-  .button { width: 100%; margin-top: 5px; }
-  .filter-controls input, .filter-controls select { width: 100%; }
+  /* 1. Tipografía y Espaciado */
+  h1 { font-size: 1.8em; margin-bottom: 1rem; }
+  .intro-text { font-size: 1em; padding: 0 10px; }
   
-  .glass-card { width: 90%; }
-  .media-content-container { max-width: 100%; }
-  .media-controls { flex-wrap: wrap; justify-content: center; }
+  /* 2. Contenedor Principal: Ganar espacio */
+  .container {
+    width: 95%;
+    margin-top: 4rem; /* Dejar espacio para la cabecera */
+    padding: 1.5rem 1rem;
+    padding-bottom: 6rem; /* Espacio extra abajo para scroll cómodo */
+  }
+
+  /* 3. Menú Hamburguesa: Lado derecho (más fácil para el pulgar) */
+  .menu-button {
+    left: auto; right: 15px; top: 15px;
+    width: 42px; height: 42px;
+  }
+  .dropdown-menu {
+    left: auto; right: 15px; top: 70px;
+    transform-origin: top right;
+  }
+
+  /* 4. Grid de Botones: Input arriba, Botones abajo alineados */
+  .input-container {
+    display: grid;
+    grid-template-columns: 1fr 54px; /* Botón Verificar | Botón Pista */
+    grid-template-rows: auto auto;
+    gap: 12px;
+  }
+  #codeInput {
+    grid-column: 1 / -1; /* Ocupa toda la primera fila */
+    width: 100%; max-width: none;
+    font-size: 1.1em;
+    padding: 12px;
+  }
+  #checkBtn {
+    grid-column: 1 / 2; /* Fila 2, Columna 1 */
+    width: 100%; margin: 0;
+  }
+  #hintBtn {
+    grid-column: 2 / 3; /* Fila 2, Columna 2 */
+    width: 100%; height: 100%;
+    margin: 0; padding: 0;
+    font-size: 1.2rem;
+  }
+
+  /* 5. Contenido y Lectura */
+  .contenido-container {
+    padding: 1.2rem;
+    font-size: 16px; /* Evita zoom automático en iOS inputs y mejora lectura */
+  }
+  .mensaje-texto { font-size: 1.1em; line-height: 1.6; }
+
+  /* 6. Ajustes de Video e Imágenes */
+  .video-frame, .internal-frame { 
+    min-height: 200px; 
+    border-radius: 8px;
+  }
+  
+  /* 7. Modales y Paneles */
+  .glass-card { width: 95%; padding: 20px; }
+  .side-panel { width: 85%; } /* Panel lateral no ocupa 100% para poder cerrar tocando fuera */
+  
+  /* 8. Toast Notification (Arriba del teclado) */
+  #achievement-toast-container {
+    top: 10px; /* Más arriba */
+    width: 95%;
+  }
 }
+
 
 /* --- BOTÓN DE PISTAS --- */
 #hintBtn {
