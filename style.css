@@ -1,105 +1,89 @@
 /* =========================================
-   STYLE.CSS - Versión Final Producción (Clean & Optimized)
+   STYLE.CSS - Versión "App Experience"
+   Descripción: Diseño Glassmorphism con optimización móvil nativa.
    ========================================= */
 
-/* 1. FUENTES */
+/* --- 1. IMPORTACIÓN DE FUENTES --- */
 @import url('https://fonts.googleapis.com/css2?family=Courgette&family=Montserrat:wght@300;400;500;600&display=swap');
 
-/* 2. VARIABLES (SISTEMA DE DISEÑO) */
+/* --- 2. VARIABLES Y SISTEMA DE DISEÑO --- */
 :root {
   /* Tipografía */
   --title-font: 'Courgette', cursive;
   --body-font: 'Montserrat', sans-serif;
 
-  /* Paleta Base (Tema Claro) */
+  /* Colores Base (Tema Claro) */
   --text-light: #CDD8D5;
   --text-medium: #AEA5A5;
   --text-dark: #E0CFC1;
   --header-color: #BCBDB9;
   
-  /* Capas y Fondos */
+  /* Fondos y Capas */
   --background-overlay: rgba(20, 18, 28, 0.75);
-  --container-bg: rgba(32, 30, 43, 0.65);
-  --content-bg: rgba(30, 32, 33, 0.8);
-  --modal-overlay-bg: rgba(0, 0, 0, 0.92);
-  
-  /* Interacción */
-  --border-color-input: #8E7383;
+  --container-bg: rgba(32, 30, 43, 0.75); /* Opacidad ajustada para legibilidad */
+  --content-bg: rgba(30, 32, 33, 0.85);
   --input-bg: rgba(107, 93, 116, 0.5);
+  --modal-bg: rgba(30, 30, 30, 0.95);
+  
+  /* Colores de Interacción */
+  --highlight-pink: #ff7aa8;       /* Color Principal */
+  --highlight-pink-light: #ffaed0;
+  --highlight-green: #7B9D8F;      /* Éxito */
+  --highlight-red: #E74C3C;        /* Error */
+  --highlight-gold: #FFD700;       /* Favoritos/Estrellas */
+  
+  /* Botones */
   --button-bg-initial: #9A8C8B;
   --button-bg-hover: #3F3938;
-  
-  /* Acentos y Estados */
-  --progress-color: #A3C3BD;
-  --highlight-pink: #ff7aa8;
-  --highlight-pink-light: #ffaed0;
-  --highlight-green: #7B9D8F;
-  --highlight-red: #E74C3C;
-  
-  /* Componentes */
-  --achievement-bg: #4A4A6A;
-  --achievement-text: #E0CFC1;
-  
-  /* Iconos */
-  --favorite-icon-default: #888;
-  --favorite-icon-active: #FFD700;
 
-  /* Z-Index (Arquitectura de Capas) */
+  /* Z-Index (Arquitectura de Profundidad) */
   --z-back: -1;
   --z-base: 10;
-  --z-menu: 1500;
+  --z-fab: 1500;    /* Floating Action Button */
+  --z-menu: 1499;   /* Menú desplegable (debajo del botón visualmente) */
   --z-toast: 2000;
   --z-modal: 3000;
   --z-overlay: 9999;
 }
 
-/* Modo Oscuro */
+/* Modo Oscuro (Override de variables) */
 body.dark-mode {
   --text-light: #f2e6df;
   --text-medium: #d8ccc3;
-  --background-overlay: rgba(5, 5, 5, 0.85);
-  --container-bg: rgba(20, 20, 20, 0.7);
-  --content-bg: rgba(17, 17, 17, 0.9);
-  --input-bg: rgba(44, 44, 44, 0.6);
+  --container-bg: rgba(20, 20, 20, 0.8);
+  --content-bg: rgba(17, 17, 17, 0.95);
   --button-bg-initial: #4A4A4A;
-  --button-bg-hover: #606060;
-  --progress-color: #8C82B5;
   --highlight-pink: #A860A8;
 }
 
-/* 3. RESET Y ESTRUCTURA BASE */
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-html { scroll-behavior: smooth; }
-
-/* Elimina el background del body y pásalo a un pseudo-elemento */
-body {
-  font-family: var(--body-font);
-  /* background: url(...) NO AQUÍ */
-  color: var(--text-light);
-  display: flex; flex-direction: column; min-height: 100vh;
-  /* Usar dvh (Dynamic Viewport Height) evita problemas con la barra de navegación */
-  min-height: 100dvh; 
-  align-items: center; justify-content: flex-start; /* Cambiar center por flex-start para permitir scroll */
-  position: relative; overflow-x: hidden;
+/* --- 3. RESET Y ESTRUCTURA BASE (Fix Android) --- */
+* { 
+  box-sizing: border-box; margin: 0; padding: 0; 
+  -webkit-tap-highlight-color: transparent; /* Elimina flash azul en tap */
 }
 
-/* Nuevo fondo estable para móviles */
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--body-font);
+  color: var(--text-light);
+  display: flex; flex-direction: column; 
+  /* DVH: Dynamic Viewport Height -> Soluciona el problema de la barra de URL en móviles */
+  min-height: 100vh; min-height: 100dvh;
+  align-items: center; justify-content: flex-start; /* flex-start permite scroll natural */
+  position: relative; overflow-x: hidden;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.6); /* Mejora contraste en fondos claros */
+}
+
+/* FIX FONDO SALTARÍN: El fondo va en un pseudo-elemento fijo */
 body::before {
   content: "";
-  position: fixed;
-  top: 0; left: 0; width: 100%; height: 100%;
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
   background: url('assets/images/fondo-romantico.webp') no-repeat center center;
   background-size: cover;
   z-index: var(--z-back);
-  will-change: transform; /* Optimización de GPU */
+  will-change: transform; /* Optimización GPU */
 }
-
-
-/* Scrollbar Premium */
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.3); }
-::-webkit-scrollbar-thumb { background: var(--button-bg-initial); border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: var(--highlight-pink); }
 
 .background-overlay {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -107,371 +91,210 @@ body::before {
   backdrop-filter: blur(4px); z-index: var(--z-back);
 }
 
-/* 4. CONTENEDOR PRINCIPAL (Glassmorphism) */
+/* Scrollbar Personalizado */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.3); }
+::-webkit-scrollbar-thumb { background: var(--button-bg-initial); border-radius: 4px; }
+
+/* --- 4. CONTENEDOR PRINCIPAL (GLASSMORPHISM) --- */
 .container {
   background-color: var(--container-bg);
   padding: 2.5rem; border-radius: 16px;
-  text-align: center; max-width: 900px; width: 90%;
-  margin: 5rem auto 3rem auto; position: relative;
+  text-align: center; 
+  max-width: 900px; width: 90%;
+  /* Margen inferior grande para que el FAB no tape contenido al hacer scroll final */
+  margin: 4rem auto 8rem auto; 
+  position: relative;
   
-  /* Efecto Cristal Optimizado */
+  /* Efecto Cristal */
   backdrop-filter: blur(12px) saturate(120%);
   -webkit-backdrop-filter: blur(12px) saturate(120%);
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: 0 15px 35px 0 rgba(0, 0, 0, 0.4);
-  
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
   z-index: var(--z-base);
 }
-.container:hover { transform: translateY(-2px); box-shadow: 0 20px 40px 0 rgba(0, 0, 0, 0.5); }
 
-/* 5. TIPOGRAFÍA Y CABECERA */
-h1 { font-family: var(--title-font); color: var(--header-color); font-weight: 400; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); margin-bottom: 1.5rem; font-size: 3em; letter-spacing: 1px; }
-h2, .section-title { font-family: var(--title-font); color: var(--header-color); font-weight: 400; }
-.intro-text { font-size: 1.1em; margin-bottom: 2rem; color: var(--text-medium); }
-
+/* --- 5. TIPOGRAFÍA Y CABECERA --- */
+h1 { 
+  font-family: var(--title-font); 
+  font-weight: 400; 
+  font-size: 3em; 
+  margin-bottom: 1.5rem; 
+  color: var(--header-color);
+}
 .header-img { 
   width: 140px; height: auto; margin-bottom: 1.5rem; 
   animation: float 6s ease-in-out infinite; 
   filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
 }
+.intro-text { font-size: 1.1em; margin-bottom: 2rem; color: var(--text-medium); }
 
-/* 6. FORMULARIOS E INTERACCIÓN */
+/* --- 6. FLOATING ACTION BUTTON (FAB) & MENÚ --- */
+.menu-button {
+  position: fixed; 
+  bottom: 25px; 
+  right: 25px; 
+  z-index: var(--z-fab);
+  background: var(--highlight-pink); 
+  color: white; 
+  border: none; border-radius: 50%;
+  width: 60px; height: 60px; /* Tamaño generoso para el dedo */
+  font-size: 1.5em; 
+  cursor: pointer; 
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5); 
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex; align-items: center; justify-content: center;
+}
+
+.menu-button:active { transform: scale(0.9); }
+.menu-button:hover { transform: scale(1.1); }
+
+/* Menú Desplegable (Sube desde el FAB) */
+.dropdown-menu {
+  position: fixed; 
+  bottom: 95px; /* Justo encima del FAB */
+  right: 25px; 
+  background: var(--modal-bg);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-radius: 16px; 
+  padding: 15px; min-width: 220px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6); 
+  
+  /* Estado Inicial: Oculto y pequeño */
+  opacity: 0; visibility: hidden;
+  transform: translateY(20px) scale(0.9);
+  transform-origin: bottom right;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+  z-index: var(--z-menu); 
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.dropdown-menu.show { 
+  opacity: 1; visibility: visible;
+  transform: translateY(0) scale(1); 
+}
+
+/* Items del menú */
+.dropdown-menu button, .menu-link-button {
+  display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px;
+  color: var(--text-light); background: none; border: none; text-align: left;
+  cursor: pointer; border-radius: 8px; 
+  font-family: var(--body-font); font-size: 1em; 
+  text-decoration: none; /* Para enlaces <a> */
+  transition: background 0.2s;
+}
+.dropdown-menu button:hover, .menu-link-button:hover { 
+  background: rgba(255,255,255,0.1); 
+  color: var(--highlight-pink); 
+}
+.danger-text { color: var(--highlight-red) !important; }
+.menu-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 8px 0; }
+
+/* --- 7. INPUTS Y BOTONES --- */
 .input-container { display: flex; gap: 12px; margin-bottom: 2rem; justify-content: center; }
 
 #codeInput {
   flex-grow: 1; max-width: 350px; padding: 15px 20px;
-  border: 2px solid var(--border-color-input); border-radius: 12px;
+  border: 2px solid #8E7383; border-radius: 12px;
   background-color: var(--input-bg); color: var(--text-light);
   font-family: var(--body-font); font-size: 1.1em; text-align: center;
   transition: all 0.3s ease;
 }
-#codeInput:focus { border-color: var(--highlight-pink); background-color: rgba(255, 255, 255, 0.1); outline: none; box-shadow: 0 0 15px rgba(255, 122, 168, 0.3); }
-#codeInput.success { border-color: var(--highlight-green); box-shadow: 0 0 15px rgba(39, 174, 96, 0.3); }
-#codeInput.error { border-color: var(--highlight-red); box-shadow: 0 0 15px rgba(231, 76, 60, 0.3); }
+#codeInput:focus { border-color: var(--highlight-pink); outline: none; box-shadow: 0 0 15px rgba(255, 122, 168, 0.3); }
 
 .button {
   background-color: var(--button-bg-initial); color: var(--text-light);
   border: none; border-radius: 12px; padding: 15px 25px;
-  font-family: var(--body-font); font-weight: 600; font-size: 1em;
-  cursor: pointer; transition: all 0.3s ease;
+  font-family: var(--body-font); font-weight: 600; cursor: pointer;
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  text-decoration: none; position: relative; overflow: hidden;
+  transition: all 0.2s; text-decoration: none;
 }
-.button:hover { background-color: var(--button-bg-hover); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-.button:active { transform: translateY(0); }
-.button.small-button { padding: 10px 18px; font-size: 0.9em; }
+/* Estado Active para feedback táctil */
+.button:active { transform: scale(0.95); }
 
-/* 7. CONTENIDO DINÁMICO */
+/* Botón de Pista Específico */
+#hintBtn { background-color: var(--highlight-gold); color: #333; width: 50px; padding: 0; font-size: 1.2rem; }
+#hintBtn:hover { background-color: #f39c12; color: #fff; }
+
+/* --- 8. CONTENIDO DINÁMICO (CARTAS) --- */
 .contenido-container {
   background-color: var(--content-bg); padding: 2.5rem; border-radius: 16px;
   margin-top: 2rem; text-align: left; line-height: 1.8; color: var(--text-medium);
   border: 1px solid rgba(255, 255, 255, 0.05);
+  animation: slideUp 0.5s ease-out;
 }
-.contenido-container img { max-width: 100%; border-radius: 12px; margin: 1.5em auto; display: block; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-.mensaje-texto { font-size: 1.2em; white-space: pre-wrap; color: var(--text-light); }
-
-/* Efecto Máquina de Escribir */
-.typewriter-cursor::after { content: '|'; animation: blink 1s step-start infinite; color: var(--highlight-pink); margin-left: 2px; }
-@keyframes blink { 50% { opacity: 0; } }
-
-/* 8. PROGRESO Y LOGROS */
-.achievements-section { margin-top: 3rem; padding-top: 2rem; border-top: 1px dashed rgba(255,255,255,0.2); }
-.progress-bar-container {
-  width: 100%; max-width: 400px; background-color: rgba(255,255,255,0.1);
-  border-radius: 20px; height: 16px; margin: 0 auto; overflow: hidden;
-  box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
-}
-.progress-bar-fill {
-  height: 100%; background: linear-gradient(90deg, var(--progress-color), var(--highlight-pink-light));
-  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 0 10px rgba(255, 122, 168, 0.5);
+.contenido-container img, .video-wrapper, .internal-frame {
+  max-width: 100%; border-radius: 12px; margin: 1.5em auto; display: block;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
-/* 9. PANELES Y LISTAS */
-.unlocked-codes-panel, .unlocked-codes-section { 
-  background-color: var(--content-bg); padding: 1.5rem; 
-  border-radius: 12px; margin-top: 1.5rem; border: 1px solid rgba(255,255,255,0.05);
-}
-.filter-controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 1.5rem; justify-content: center; }
-.filter-controls input, .filter-controls select { 
-  padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-color-input); 
-  background: var(--input-bg); color: var(--text-light); outline: none;
-}
-
-.lista-codigos { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; list-style: none; }
-.lista-codigo-item {
-  position: relative; background: rgba(255,255,255,0.08); 
-  padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);
-  display: flex; justify-content: space-between; align-items: center; 
-  cursor: pointer; transition: all 0.3s ease;
-}
-.lista-codigo-item:not(.locked):hover { background: rgba(255,255,255,0.15); transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
-.codigo-text { font-weight: 500; color: var(--text-dark); text-transform: capitalize; }
-.category { font-size: 0.75em; background: rgba(0,0,0,0.3); padding: 3px 8px; border-radius: 10px; margin-left: 8px; }
-
-/* Items Bloqueados */
-.lista-codigo-item.locked { background: rgba(0,0,0,0.2); border: 1px dashed rgba(255,255,255,0.1); color: var(--text-medium); cursor: default; opacity: 0.7; }
-.lista-codigo-item.locked .codigo-text { font-family: monospace; letter-spacing: 2px; }
-
-.favorite-toggle-btn { background: none; border: none; cursor: pointer; font-size: 1.2em; padding: 5px; transition: transform 0.2s; }
-.favorite-toggle-btn:hover { transform: scale(1.2); }
-.favorite-toggle-btn i { color: var(--favorite-icon-default); }
-.lista-codigo-item .favorite-toggle-btn.active i { color: var(--favorite-icon-active); filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.4)); }
-#filterFavBtn.active { background-color: var(--highlight-pink); color: white; border-color: var(--highlight-pink); }
-
-/* 10. MENÚ HAMBURGUESA Y SIDEBARS */
-.menu-button {
-  position: fixed; top: 20px; left: 20px; z-index: var(--z-menu);
-  background: var(--highlight-pink); color: white; border: none; border-radius: 50%;
-  width: 50px; height: 50px; font-size: 1.3em; cursor: pointer; 
-  box-shadow: 0 4px 15px rgba(0,0,0,0.4); transition: transform 0.3s;
-}
-.menu-button:hover { transform: scale(1.1) rotate(90deg); }
-
-.dropdown-menu {
-  position: fixed; top: 80px; left: 20px; background: rgba(30, 30, 30, 0.95);
-  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  border-radius: 16px; padding: 15px; min-width: 250px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.6); transform: translateX(-150%);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); z-index: calc(var(--z-menu) - 1); 
-  visibility: hidden; border: 1px solid rgba(255,255,255,0.1);
-}
-.dropdown-menu.show { transform: translateX(0); visibility: visible; }
-.dropdown-menu button, .menu-link-button {
-  display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px;
-  color: var(--text-light); background: none; border: none; text-align: left;
-  cursor: pointer; border-radius: 8px; font-family: var(--body-font); font-size: 1em; text-decoration: none; transition: background 0.2s;
-}
-.dropdown-menu button:hover { background: rgba(255,255,255,0.1); color: var(--highlight-pink); }
-
+/* --- 9. PANELES LATERALES (Audio/Tools) --- */
 .side-panel {
   position: fixed; top: 0; right: 0; width: 320px; height: 100vh;
-  background: rgba(20, 20, 25, 0.95); backdrop-filter: blur(20px);
+  background: var(--modal-bg); backdrop-filter: blur(20px);
   box-shadow: -10px 0 30px rgba(0,0,0,0.6); padding: 30px;
   transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 2500; display: flex; flex-direction: column; border-left: 1px solid rgba(255,255,255,0.1);
+  z-index: 2500; display: flex; flex-direction: column;
 }
 .side-panel.show { transform: translateX(0); }
-.panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); }
-.close-panel-btn { background: none; border: none; color: var(--text-light); font-size: 1.5em; cursor: pointer; transition: color 0.2s; }
-.close-panel-btn:hover { color: var(--highlight-pink); }
 
-/* Herramientas (Cards) */
-.tools-container { overflow-y: auto; flex-grow: 1; padding-right: 5px; }
-.tool-card { 
-  background: rgba(255,255,255,0.05); border-radius: 12px; padding: 15px; 
-  margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); transition: background 0.2s;
-}
-.tool-card:hover { background: rgba(255,255,255,0.1); }
-.tool-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; color: var(--highlight-pink); font-weight: 600; }
-.tool-desc { font-size: 0.9em; color: var(--text-medium); margin-bottom: 12px; }
-.tool-btn { display: block; text-align: center; background: var(--button-bg-initial); color: white; padding: 10px; border-radius: 8px; text-decoration: none; font-size: 0.9em; transition: background 0.2s; }
-.tool-btn:hover { background: var(--button-bg-hover); }
+.panel-header { display: flex; justify-content: space-between; margin-bottom: 20px; }
+.close-panel-btn { background: none; border: none; color: white; font-size: 1.5em; cursor: pointer; }
 
-/* 11. TOASTS, PARTICULAS, IFRAMES */
-#achievement-toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: var(--z-toast); pointer-events: none; width: 90%; max-width: 400px; display: flex; flex-direction: column; align-items: center; }
-.achievement-toast {
-  background: var(--achievement-bg); color: var(--achievement-text); padding: 12px 24px;
-  border-radius: 50px; margin-bottom: 10px; font-weight: 600; box-shadow: 0 5px 20px rgba(0,0,0,0.4);
-  animation: slideDown 0.5s ease-out, fadeOut 0.5s ease-in 3.5s forwards;
-  backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.1);
-}
-#tsparticles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: calc(var(--z-back) - 1); pointer-events: none; }
-
-.internal-wrapper { width: 100%; display: flex; flex-direction: column; align-items: center; margin-top: 15px; }
-.internal-frame {
-  width: 100%; height: 600px;
-  border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 20px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4); transition: all 0.3s ease;
-}
-
-/* ==========================================================================
-   12. ELEMENTOS ESPECIALES (Streaming & Glassmorphism)
-   ========================================================================== */
-
-/* --- VISOR MULTIMEDIA SEGURO --- */
-.media-modal-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: var(--modal-overlay-bg);
-    z-index: var(--z-overlay);
-    
-    /* ALINEACIÓN CORRECTA */
-    display: flex; flex-direction: column !important; 
-    justify-content: center; align-items: center;
-    
-    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-    animation: fadeIn 0.3s ease;
-}
-
-.media-content-container {
-    flex: 0 1 auto; display: flex; justify-content: center; align-items: center;
-    max-width: 95%; max-height: 80vh; 
-    margin-bottom: 25px; /* Espacio para los botones abajo */
-    position: relative;
-}
-
-.secure-media {
-    max-width: 100%; max-height: 75vh;
-    border-radius: 12px; box-shadow: 0 0 30px rgba(0,0,0,0.5); object-fit: contain;
-}
-.secure-media-audio { width: 300px; }
-
-.media-controls { display: flex; gap: 20px; z-index: 10001; }
-
-.media-btn {
-    background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3);
-    color: white; padding: 12px 25px; border-radius: 30px; cursor: pointer;
-    font-size: 1rem; transition: all 0.2s ease; display: flex; align-items: center; gap: 8px;
-    backdrop-filter: blur(5px);
-}
-.media-btn:hover { background: rgba(255,255,255,0.25); transform: scale(1.05); }
-.media-btn.close { border-color: #ff4d6d; color: #ff99ac; }
-.media-btn.close:hover { background: #ff4d6d; color: white; }
-
-/* Barra progreso en botón */
-.progress-btn-bg {
-    position: absolute; left: 0; top: 0; bottom: 0;
-    background: rgba(0, 0, 0, 0.2); width: 0%; transition: width 0.1s linear; z-index: 0;
-}
-.btn-text-layer { position: relative; z-index: 1; }
-
-/* Video Loaders */
-.video-wrapper { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; background: black; margin: 1.5em 0; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
-.video-loader { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 40px; height: 40px; border: 4px solid rgba(255, 255, 255, 0.3); border-top-color: var(--highlight-pink); border-radius: 50%; animation: spin 1s linear infinite; z-index: 1; }
-.video-frame { width: 100%; height: 100%; position: relative; z-index: 2; opacity: 0; transition: opacity 0.6s ease-in; border: none; }
-
-/* --- GLASSMORPHISM GENÉRICO (MODALES) --- */
-.glass-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-    z-index: var(--z-modal);
-    display: flex; justify-content: center; align-items: center; padding: 20px;
-    animation: fadeIn 0.3s ease;
-}
-
-.glass-card {
-    background: rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.6); 
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-    border-radius: 20px; padding: 30px; 
-    width: 100%; max-width: 340px; text-align: center;
-    color: #333; transition: all 0.3s ease;
-}
-body.dark-mode .glass-card {
-    background: rgba(30, 30, 30, 0.75);
-    border: 1px solid rgba(255, 255, 255, 0.15); color: #fff;
-}
-
-/* ANIMACIONES GLOBALES */
-@keyframes float { 0% {transform:translateY(0);} 50% {transform:translateY(-10px);} 100% {transform:translateY(0);} }
-@keyframes fadeIn { from {opacity:0; transform:translateY(10px);} to {opacity:1; transform:translateY(0);} }
-@keyframes slideDown { from {transform:translateY(-100%); opacity:0;} to {transform:translateY(0); opacity:1;} }
-@keyframes fadeOut { to {opacity:0;} }
+/* --- 10. ANIMACIONES --- */
+@keyframes float { 0%,100% {transform:translateY(0);} 50% {transform:translateY(-10px);} }
+@keyframes slideUp { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
 @keyframes shake { 0%,100%{transform:translateX(0);} 25%{transform:translateX(-5px);} 75%{transform:translateX(5px);} }
-.shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
-@keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+.shake { animation: shake 0.4s ease-in-out; }
 
-
-/* --- BOTÓN DE PISTAS --- */
-#hintBtn {
-    background-color: #f1c40f; /* Amarillo Pista */
-    color: #fff;
-    width: 50px; /* Cuadrado perfecto */
-    padding: 0; /* Centrar icono */
-    font-size: 1.2rem;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-#hintBtn:hover {
-    background-color: #f39c12; /* Naranja al pasar mouse */
-    box-shadow: 0 0 15px rgba(241, 196, 15, 0.6); /* Resplandor */
-    transform: translateY(-2px) scale(1.05);
-}
-
-#hintBtn:active {
-    transform: scale(0.95);
-}
-
-/* Modo Oscuro: Ajuste de brillo */
-body.dark-mode #hintBtn {
-    background-color: #d4ac0d;
-    color: #1a1a1a; /* Icono oscuro para contraste */
-}
-
-
-/* 13. MEDIA QUERIES (RESPONSIVE) */
 /* =========================================
-   OPTIMIZACIÓN MÓVIL (ANDROID FINAL)
+   11. OPTIMIZACIÓN MÓVIL (MEDIA QUERIES)
+   Diseño responsivo y ergonómico
    ========================================= */
 @media (max-width: 600px) {
-  /* 1. Tipografía y Espaciado */
-  h1 { font-size: 1.8em; margin-bottom: 1rem; }
+  /* Tipografía Ajustada */
+  h1 { font-size: 2em; margin-bottom: 1rem; }
   .intro-text { font-size: 1em; padding: 0 10px; }
   
-  /* 2. Contenedor Principal: Ganar espacio */
+  /* Contenedor: Más ancho, menos padding */
   .container {
     width: 95%;
-    margin-top: 4rem; /* Dejar espacio para la cabecera */
+    margin-top: 3rem; 
     padding: 1.5rem 1rem;
-    padding-bottom: 6rem; /* Espacio extra abajo para scroll cómodo */
+    padding-bottom: 7rem; /* Espacio crítico para el FAB */
   }
 
-  /* 3. Menú Hamburguesa: Lado derecho (más fácil para el pulgar) */
-  .menu-button {
-    left: auto; right: 15px; top: 15px;
-    width: 42px; height: 42px;
-  }
-  .dropdown-menu {
-    left: auto; right: 15px; top: 70px;
-    transform-origin: top right;
-  }
-
-  /* 4. Grid de Botones: Input arriba, Botones abajo alineados */
+  /* Grid Ergonómico para Input y Botones */
   .input-container {
     display: grid;
-    grid-template-columns: 1fr 54px; /* Botón Verificar | Botón Pista */
-    grid-template-rows: auto auto;
-    gap: 12px;
+    /* Columna 1: Verificar (Grande) | Columna 2: Pista (Cuadrado) */
+    grid-template-columns: 1fr 54px; 
+    grid-template-rows: auto auto; /* Fila 1: Input, Fila 2: Botones */
+    gap: 10px;
   }
+
   #codeInput {
-    grid-column: 1 / -1; /* Ocupa toda la primera fila */
+    grid-column: 1 / -1; /* Ocupa todo el ancho arriba */
     width: 100%; max-width: none;
-    font-size: 1.1em;
-    padding: 12px;
+    font-size: 1.1em; padding: 12px;
   }
+
   #checkBtn {
-    grid-column: 1 / 2; /* Fila 2, Columna 1 */
+    grid-column: 1 / 2;
     width: 100%; margin: 0;
   }
+
   #hintBtn {
-    grid-column: 2 / 3; /* Fila 2, Columna 2 */
-    width: 100%; height: 100%;
-    margin: 0; padding: 0;
-    font-size: 1.2rem;
+    grid-column: 2 / 3;
+    width: 100%; height: 100%; /* Llenar celda */
+    margin: 0;
   }
 
-  /* 5. Contenido y Lectura */
-  .contenido-container {
-    padding: 1.2rem;
-    font-size: 16px; /* Evita zoom automático en iOS inputs y mejora lectura */
-  }
-  .mensaje-texto { font-size: 1.1em; line-height: 1.6; }
-
-  /* 6. Ajustes de Video e Imágenes */
-  .video-frame, .internal-frame { 
-    min-height: 200px; 
-    border-radius: 8px;
-  }
+  /* Ajustes de Lectura */
+  .contenido-container { padding: 1.2rem; font-size: 16px; } /* 16px evita zoom en iOS */
   
-  /* 7. Modales y Paneles */
-  .glass-card { width: 95%; padding: 20px; }
-  .side-panel { width: 85%; } /* Panel lateral no ocupa 100% para poder cerrar tocando fuera */
-  
-  /* 8. Toast Notification (Arriba del teclado) */
-  #achievement-toast-container {
-    top: 10px; /* Más arriba */
-    width: 95%;
-  }
+  /* Ajustes de Paneles y Menús */
+  .side-panel { width: 85%; } 
+  .dropdown-menu { right: 15px; bottom: 85px; width: auto; }
+  .menu-button { right: 15px; bottom: 15px; width: 55px; height: 55px; }
 }
