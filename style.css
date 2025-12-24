@@ -1,88 +1,94 @@
 /* =========================================
-   STYLE.CSS - Versión "App Experience"
-   Descripción: Diseño Glassmorphism con optimización móvil nativa.
+   STYLE.CSS - Versión Restaurada & Optimizada
    ========================================= */
 
-/* --- 1. IMPORTACIÓN DE FUENTES --- */
+/* 1. FUENTES */
 @import url('https://fonts.googleapis.com/css2?family=Courgette&family=Montserrat:wght@300;400;500;600&display=swap');
 
-/* --- 2. VARIABLES Y SISTEMA DE DISEÑO --- */
+/* 2. VARIABLES (SISTEMA DE DISEÑO) */
 :root {
   /* Tipografía */
   --title-font: 'Courgette', cursive;
   --body-font: 'Montserrat', sans-serif;
 
-  /* Colores Base (Tema Claro) */
+  /* Paleta Base */
   --text-light: #CDD8D5;
   --text-medium: #AEA5A5;
   --text-dark: #E0CFC1;
   --header-color: #BCBDB9;
   
-  /* Fondos y Capas */
+  /* Capas y Fondos */
   --background-overlay: rgba(20, 18, 28, 0.75);
-  --container-bg: rgba(32, 30, 43, 0.75); /* Opacidad ajustada para legibilidad */
+  --container-bg: rgba(32, 30, 43, 0.75);
   --content-bg: rgba(30, 32, 33, 0.85);
   --input-bg: rgba(107, 93, 116, 0.5);
   --modal-bg: rgba(30, 30, 30, 0.95);
+  --modal-overlay-bg: rgba(0, 0, 0, 0.85);
   
-  /* Colores de Interacción */
-  --highlight-pink: #ff7aa8;       /* Color Principal */
-  --highlight-pink-light: #ffaed0;
-  --highlight-green: #7B9D8F;      /* Éxito */
-  --highlight-red: #E74C3C;        /* Error */
-  --highlight-gold: #FFD700;       /* Favoritos/Estrellas */
-  
-  /* Botones */
+  /* Interacción */
+  --border-color-input: #8E7383;
   --button-bg-initial: #9A8C8B;
   --button-bg-hover: #3F3938;
+  
+  /* Acentos y Estados */
+  --progress-color: #A3C3BD;
+  --highlight-pink: #ff7aa8;
+  --highlight-pink-light: #ffaed0;
+  --highlight-green: #7B9D8F;
+  --highlight-red: #E74C3C;
+  --highlight-gold: #FFD700;
+  
+  /* Componentes */
+  --achievement-bg: #4A4A6A;
+  --achievement-text: #E0CFC1;
+  
+  /* Iconos */
+  --favorite-icon-default: #888;
+  --favorite-icon-active: #FFD700;
 
-  /* Z-Index (Arquitectura de Profundidad) */
+  /* Z-Index (Arquitectura de Capas) */
   --z-back: -1;
   --z-base: 10;
-  --z-fab: 1500;    /* Floating Action Button */
-  --z-menu: 1499;   /* Menú desplegable (debajo del botón visualmente) */
+  --z-fab: 1500;
+  --z-menu: 1499;
   --z-toast: 2000;
-  --z-modal: 3000;
-  --z-overlay: 9999;
+  --z-modal: 9999; /* Máxima prioridad para modales */
 }
 
-/* Modo Oscuro (Override de variables) */
+/* Modo Oscuro */
 body.dark-mode {
   --text-light: #f2e6df;
   --text-medium: #d8ccc3;
+  --background-overlay: rgba(5, 5, 5, 0.85);
   --container-bg: rgba(20, 20, 20, 0.8);
   --content-bg: rgba(17, 17, 17, 0.95);
   --button-bg-initial: #4A4A4A;
   --highlight-pink: #A860A8;
 }
 
-/* --- 3. RESET Y ESTRUCTURA BASE (Fix Android) --- */
-* { 
-  box-sizing: border-box; margin: 0; padding: 0; 
-  -webkit-tap-highlight-color: transparent; /* Elimina flash azul en tap */
-}
-
+/* 3. RESET Y ESTRUCTURA BASE (Fix Android Background) */
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html { scroll-behavior: smooth; }
 
 body {
   font-family: var(--body-font);
   color: var(--text-light);
-  display: flex; flex-direction: column; 
-  /* DVH: Dynamic Viewport Height -> Soluciona el problema de la barra de URL en móviles */
-  min-height: 100vh; min-height: 100dvh;
-  align-items: center; justify-content: flex-start; /* flex-start permite scroll natural */
+  display: flex; flex-direction: column;
+  /* Usamos min-height: 100dvh para evitar saltos con la barra de navegación móvil */
+  min-height: 100vh; min-height: 100dvh; 
+  align-items: center; justify-content: flex-start;
   position: relative; overflow-x: hidden;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.6); /* Mejora contraste en fondos claros */
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
 
-/* FIX FONDO SALTARÍN: El fondo va en un pseudo-elemento fijo */
+/* FIX FONDO: Pseudo-elemento fijo que no salta al hacer scroll */
 body::before {
   content: "";
   position: fixed; top: 0; left: 0; width: 100%; height: 100%;
   background: url('assets/images/fondo-romantico.webp') no-repeat center center;
   background-size: cover;
-  z-index: var(--z-back);
-  will-change: transform; /* Optimización GPU */
+  z-index: calc(var(--z-back) - 1);
+  will-change: transform;
 }
 
 .background-overlay {
@@ -91,144 +97,178 @@ body::before {
   backdrop-filter: blur(4px); z-index: var(--z-back);
 }
 
-/* Scrollbar Personalizado */
+/* Scrollbar */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.3); }
 ::-webkit-scrollbar-thumb { background: var(--button-bg-initial); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--highlight-pink); }
 
-/* --- 4. CONTENEDOR PRINCIPAL (GLASSMORPHISM) --- */
+/* 4. CONTENEDOR PRINCIPAL */
 .container {
   background-color: var(--container-bg);
   padding: 2.5rem; border-radius: 16px;
-  text-align: center; 
-  max-width: 900px; width: 90%;
-  /* Margen inferior grande para que el FAB no tape contenido al hacer scroll final */
-  margin: 4rem auto 8rem auto; 
-  position: relative;
+  text-align: center; max-width: 900px; width: 90%;
+  /* Margen grande abajo para el FAB */
+  margin: 4rem auto 8rem auto; position: relative;
   
-  /* Efecto Cristal */
   backdrop-filter: blur(12px) saturate(120%);
   -webkit-backdrop-filter: blur(12px) saturate(120%);
   border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: 0 15px 35px 0 rgba(0, 0, 0, 0.4);
   z-index: var(--z-base);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* --- 5. TIPOGRAFÍA Y CABECERA --- */
-h1 { 
-  font-family: var(--title-font); 
-  font-weight: 400; 
-  font-size: 3em; 
-  margin-bottom: 1.5rem; 
-  color: var(--header-color);
-}
+/* 5. TIPOGRAFÍA */
+h1 { font-family: var(--title-font); color: var(--header-color); font-weight: 400; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); margin-bottom: 1.5rem; font-size: 3em; letter-spacing: 1px; }
+h2, .section-title { font-family: var(--title-font); color: var(--header-color); font-weight: 400; margin-bottom: 1rem; }
+.intro-text { font-size: 1.1em; margin-bottom: 2rem; color: var(--text-medium); }
+
 .header-img { 
   width: 140px; height: auto; margin-bottom: 1.5rem; 
   animation: float 6s ease-in-out infinite; 
   filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
 }
-.intro-text { font-size: 1.1em; margin-bottom: 2rem; color: var(--text-medium); }
 
-/* --- 6. FLOATING ACTION BUTTON (FAB) & MENÚ --- */
-.menu-button {
-  position: fixed; 
-  bottom: 25px; 
-  right: 25px; 
-  z-index: var(--z-fab);
-  background: var(--highlight-pink); 
-  color: white; 
-  border: none; border-radius: 50%;
-  width: 60px; height: 60px; /* Tamaño generoso para el dedo */
-  font-size: 1.5em; 
-  cursor: pointer; 
-  box-shadow: 0 4px 20px rgba(0,0,0,0.5); 
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  display: flex; align-items: center; justify-content: center;
-}
-
-.menu-button:active { transform: scale(0.9); }
-.menu-button:hover { transform: scale(1.1); }
-
-/* Menú Desplegable (Sube desde el FAB) */
-.dropdown-menu {
-  position: fixed; 
-  bottom: 95px; /* Justo encima del FAB */
-  right: 25px; 
-  background: var(--modal-bg);
-  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  border-radius: 16px; 
-  padding: 15px; min-width: 220px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.6); 
-  
-  /* Estado Inicial: Oculto y pequeño */
-  opacity: 0; visibility: hidden;
-  transform: translateY(20px) scale(0.9);
-  transform-origin: bottom right;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-  z-index: var(--z-menu); 
-  border: 1px solid rgba(255,255,255,0.1);
-}
-
-.dropdown-menu.show { 
-  opacity: 1; visibility: visible;
-  transform: translateY(0) scale(1); 
-}
-
-/* Items del menú */
-.dropdown-menu button, .menu-link-button {
-  display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px;
-  color: var(--text-light); background: none; border: none; text-align: left;
-  cursor: pointer; border-radius: 8px; 
-  font-family: var(--body-font); font-size: 1em; 
-  text-decoration: none; /* Para enlaces <a> */
-  transition: background 0.2s;
-}
-.dropdown-menu button:hover, .menu-link-button:hover { 
-  background: rgba(255,255,255,0.1); 
-  color: var(--highlight-pink); 
-}
-.danger-text { color: var(--highlight-red) !important; }
-.menu-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 8px 0; }
-
-/* --- 7. INPUTS Y BOTONES --- */
+/* 6. INPUTS Y BOTONES */
 .input-container { display: flex; gap: 12px; margin-bottom: 2rem; justify-content: center; }
 
 #codeInput {
   flex-grow: 1; max-width: 350px; padding: 15px 20px;
-  border: 2px solid #8E7383; border-radius: 12px;
+  border: 2px solid var(--border-color-input); border-radius: 12px;
   background-color: var(--input-bg); color: var(--text-light);
   font-family: var(--body-font); font-size: 1.1em; text-align: center;
   transition: all 0.3s ease;
 }
 #codeInput:focus { border-color: var(--highlight-pink); outline: none; box-shadow: 0 0 15px rgba(255, 122, 168, 0.3); }
+#codeInput.success { border-color: var(--highlight-green); box-shadow: 0 0 15px rgba(39, 174, 96, 0.3); }
+#codeInput.error { border-color: var(--highlight-red); box-shadow: 0 0 15px rgba(231, 76, 60, 0.3); }
 
 .button {
   background-color: var(--button-bg-initial); color: var(--text-light);
   border: none; border-radius: 12px; padding: 15px 25px;
-  font-family: var(--body-font); font-weight: 600; cursor: pointer;
+  font-family: var(--body-font); font-weight: 600; font-size: 1em;
+  cursor: pointer; transition: all 0.2s ease;
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  transition: all 0.2s; text-decoration: none;
+  text-decoration: none; position: relative; overflow: hidden;
 }
-/* Estado Active para feedback táctil */
+.button:hover { background-color: var(--button-bg-hover); transform: translateY(-2px); }
 .button:active { transform: scale(0.95); }
+.button.small-button { padding: 10px 18px; font-size: 0.9em; }
 
-/* Botón de Pista Específico */
 #hintBtn { background-color: var(--highlight-gold); color: #333; width: 50px; padding: 0; font-size: 1.2rem; }
-#hintBtn:hover { background-color: #f39c12; color: #fff; }
+#hintBtn:hover { background-color: #f39c12; color: #fff; box-shadow: 0 0 15px rgba(255,215,0,0.5); }
 
-/* --- 8. CONTENIDO DINÁMICO (CARTAS) --- */
+/* 7. CONTENIDO DINÁMICO (Cartas, Videos, Iframes) */
 .contenido-container {
   background-color: var(--content-bg); padding: 2.5rem; border-radius: 16px;
   margin-top: 2rem; text-align: left; line-height: 1.8; color: var(--text-medium);
   border: 1px solid rgba(255, 255, 255, 0.05);
   animation: slideUp 0.5s ease-out;
 }
-.contenido-container img, .video-wrapper, .internal-frame {
-  max-width: 100%; border-radius: 12px; margin: 1.5em auto; display: block;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+.contenido-container img { max-width: 100%; border-radius: 12px; margin: 1.5em auto; display: block; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+.mensaje-texto { font-size: 1.2em; white-space: pre-wrap; color: var(--text-light); }
+
+/* --- FIX VIDEOS --- */
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9; /* Forzar relación de aspecto */
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 1.5em 0;
+  background: #000;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+}
+.video-frame {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  border: none; opacity: 0; transition: opacity 0.6s ease-in;
 }
 
-/* --- 9. PANELES LATERALES (Audio/Tools) --- */
+/* --- FIX IFRAMES EXTERNOS --- */
+.internal-wrapper { width: 100%; display: flex; flex-direction: column; align-items: center; margin-top: 15px; }
+.internal-frame {
+  width: 100%; 
+  height: 600px; /* Altura base PC */
+  border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 20px;
+  background: white; /* Fondo blanco para páginas que lo necesiten */
+}
+
+/* 8. PROGRESO Y LOGROS (Estilo Restaurado) */
+.achievements-section { margin-top: 3rem; padding-top: 2rem; border-top: 1px dashed rgba(255,255,255,0.2); }
+.progress-bar-container {
+  width: 100%; max-width: 400px; background-color: rgba(255,255,255,0.1);
+  border-radius: 20px; height: 16px; margin: 0 auto; overflow: hidden;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+}
+.progress-bar-fill {
+  height: 100%;
+  /* Gradiente Multicolor Restaurado */
+  background: linear-gradient(90deg, var(--progress-color), var(--highlight-pink-light), var(--highlight-pink));
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 10px rgba(255, 122, 168, 0.5);
+}
+
+/* 9. LISTAS Y PANELES (Estilos Restaurados) */
+.unlocked-codes-panel, .unlocked-codes-section { 
+  background-color: var(--content-bg); padding: 1.5rem; 
+  border-radius: 12px; margin-top: 1.5rem; border: 1px solid rgba(255,255,255,0.05);
+}
+.filter-controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 1.5rem; justify-content: center; }
+.filter-controls input, .filter-controls select { 
+  padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-color-input); 
+  background: var(--input-bg); color: var(--text-light); outline: none;
+}
+
+.lista-codigos { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; list-style: none; }
+.lista-codigo-item {
+  position: relative; background: rgba(255,255,255,0.08); 
+  padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);
+  display: flex; justify-content: space-between; align-items: center; 
+  cursor: pointer; transition: all 0.3s ease;
+}
+.lista-codigo-item:hover { background: rgba(255,255,255,0.15); transform: translateY(-3px); }
+.lista-codigo-item.locked { background: rgba(0,0,0,0.2); border: 1px dashed rgba(255,255,255,0.1); opacity: 0.7; }
+.codigo-text { font-weight: 500; color: var(--text-dark); text-transform: capitalize; }
+.category { font-size: 0.75em; background: rgba(0,0,0,0.3); padding: 3px 8px; border-radius: 10px; margin-left: 8px; }
+
+.favorite-toggle-btn { background: none; border: none; cursor: pointer; font-size: 1.2em; padding: 5px; color: var(--favorite-icon-default); }
+.favorite-toggle-btn.active { color: var(--favorite-icon-active); }
+#filterFavBtn.active { background-color: var(--highlight-pink); color: white; }
+
+/* 10. MENÚ FAB Y SIDEBARS */
+.menu-button {
+  position: fixed; bottom: 25px; right: 25px; z-index: var(--z-fab);
+  background: var(--highlight-pink); color: white; border: none; border-radius: 50%;
+  width: 60px; height: 60px; font-size: 1.5em; cursor: pointer; 
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.menu-button:active { transform: scale(0.9); }
+
+.dropdown-menu {
+  position: fixed; bottom: 95px; right: 25px; 
+  background: var(--modal-bg); backdrop-filter: blur(20px);
+  border-radius: 16px; padding: 15px; min-width: 220px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6); 
+  opacity: 0; visibility: hidden; transform: translateY(20px) scale(0.9);
+  transform-origin: bottom right; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+  z-index: var(--z-menu); border: 1px solid rgba(255,255,255,0.1);
+}
+.dropdown-menu.show { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+
+/* Items menú */
+.dropdown-menu button, .menu-link-button {
+  display: flex; align-items: center; gap: 12px; width: 100%; padding: 12px;
+  color: var(--text-light); background: none; border: none; text-align: left;
+  cursor: pointer; border-radius: 8px; font-family: var(--body-font); font-size: 1em; 
+  text-decoration: none; transition: background 0.2s;
+}
+.dropdown-menu button:hover, .menu-link-button:hover { background: rgba(255,255,255,0.1); color: var(--highlight-pink); }
+.menu-divider { height: 1px; background: rgba(255,255,255,0.1); margin: 8px 0; }
+.danger-text { color: var(--highlight-red) !important; }
+
+/* Paneles Laterales (Tools / Audio) */
 .side-panel {
   position: fixed; top: 0; right: 0; width: 320px; height: 100vh;
   background: var(--modal-bg); backdrop-filter: blur(20px);
@@ -237,64 +277,89 @@ h1 {
   z-index: 2500; display: flex; flex-direction: column;
 }
 .side-panel.show { transform: translateX(0); }
-
-.panel-header { display: flex; justify-content: space-between; margin-bottom: 20px; }
+.panel-header { display: flex; justify-content: space-between; margin-bottom: 20px; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
 .close-panel-btn { background: none; border: none; color: white; font-size: 1.5em; cursor: pointer; }
 
-/* --- 10. ANIMACIONES --- */
-@keyframes float { 0%,100% {transform:translateY(0);} 50% {transform:translateY(-10px);} }
+/* Estilos de las Herramientas (Tool Cards) */
+.tools-container { overflow-y: auto; flex-grow: 1; }
+.tool-card { 
+  background: rgba(255,255,255,0.05); border-radius: 12px; padding: 15px; 
+  margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); 
+}
+.tool-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; color: var(--highlight-pink); font-weight: 600; }
+.tool-desc { font-size: 0.9em; color: var(--text-medium); margin-bottom: 12px; }
+.tool-btn { display: block; text-align: center; background: var(--button-bg-initial); color: white; padding: 10px; border-radius: 8px; text-decoration: none; font-size: 0.9em; }
+
+/* Estilos de Audio */
+.audio-controls { display: flex; justify-content: center; gap: 20px; margin: 20px 0; }
+.audio-btn { background: rgba(255,255,255,0.1); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2em; }
+.audio-btn.small { width: 30px; height: 30px; font-size: 0.9em; }
+
+/* 11. TOASTS Y MODALES (Restaurado) */
+#achievement-toast-container { 
+  position: fixed; top: 20px; left: 50%; transform: translateX(-50%); 
+  z-index: var(--z-toast); pointer-events: none; width: 90%; max-width: 400px; 
+  display: flex; flex-direction: column; align-items: center; 
+}
+.achievement-toast {
+  background: var(--achievement-bg); color: var(--achievement-text); padding: 12px 24px;
+  border-radius: 50px; margin-bottom: 10px; font-weight: 600; box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+  animation: slideDown 0.5s ease-out, fadeOut 0.5s ease-in 3.5s forwards;
+  backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* --- FIX MODALES CENTRADOS --- */
+.glass-overlay, .media-modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--modal-overlay-bg);
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    z-index: var(--z-modal);
+    /* Flexbox crucial para centrado vertical y horizontal */
+    display: flex; justify-content: center; align-items: center; flex-direction: column;
+    padding: 20px; animation: fadeIn 0.3s ease;
+}
+
+.glass-card {
+    background: var(--content-bg);
+    border: 1px solid rgba(255, 255, 255, 0.2); 
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+    border-radius: 20px; padding: 30px; 
+    width: 100%; max-width: 340px; text-align: center;
+    color: var(--text-light);
+}
+
+.media-content-container { max-width: 95%; max-height: 80vh; display: flex; justify-content: center; align-items: center; margin-bottom: 20px; }
+.secure-media { max-width: 100%; max-height: 70vh; border-radius: 12px; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
+.media-controls { display: flex; gap: 15px; }
+.media-btn { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: white; padding: 10px 20px; border-radius: 30px; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+
+/* 12. ANIMACIONES */
+@keyframes slideDown { from {transform:translateY(-100%); opacity:0;} to {transform:translateY(0); opacity:1;} }
+@keyframes fadeOut { to {opacity:0;} }
 @keyframes slideUp { from {opacity:0; transform:translateY(20px);} to {opacity:1; transform:translateY(0);} }
-@keyframes shake { 0%,100%{transform:translateX(0);} 25%{transform:translateX(-5px);} 75%{transform:translateX(5px);} }
-.shake { animation: shake 0.4s ease-in-out; }
+@keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+@keyframes float { 0%,100% {transform:translateY(0);} 50% {transform:translateY(-10px);} }
 
-/* =========================================
-   11. OPTIMIZACIÓN MÓVIL (MEDIA QUERIES)
-   Diseño responsivo y ergonómico
-   ========================================= */
+/* 13. OPTIMIZACIÓN MÓVIL (MEDIA QUERIES FINALES) */
 @media (max-width: 600px) {
-  /* Tipografía Ajustada */
-  h1 { font-size: 2em; margin-bottom: 1rem; }
-  .intro-text { font-size: 1em; padding: 0 10px; }
+  /* Contenedor */
+  .container { width: 95%; margin-top: 3rem; padding: 1.5rem 1rem; padding-bottom: 7rem; }
+  h1 { font-size: 2em; }
   
-  /* Contenedor: Más ancho, menos padding */
-  .container {
-    width: 95%;
-    margin-top: 3rem; 
-    padding: 1.5rem 1rem;
-    padding-bottom: 7rem; /* Espacio crítico para el FAB */
-  }
-
-  /* Grid Ergonómico para Input y Botones */
+  /* GRID TÁCTIL para Inputs */
   .input-container {
-    display: grid;
-    /* Columna 1: Verificar (Grande) | Columna 2: Pista (Cuadrado) */
-    grid-template-columns: 1fr 54px; 
-    grid-template-rows: auto auto; /* Fila 1: Input, Fila 2: Botones */
-    gap: 10px;
+    display: grid; grid-template-columns: 1fr 54px; grid-template-rows: auto auto; gap: 10px;
   }
+  #codeInput { grid-column: 1 / -1; width: 100%; max-width: none; font-size: 1.1em; padding: 12px; }
+  #checkBtn { grid-column: 1 / 2; width: 100%; margin: 0; }
+  #hintBtn { grid-column: 2 / 3; width: 100%; height: 100%; margin: 0; }
 
-  #codeInput {
-    grid-column: 1 / -1; /* Ocupa todo el ancho arriba */
-    width: 100%; max-width: none;
-    font-size: 1.1em; padding: 12px;
-  }
-
-  #checkBtn {
-    grid-column: 1 / 2;
-    width: 100%; margin: 0;
-  }
-
-  #hintBtn {
-    grid-column: 2 / 3;
-    width: 100%; height: 100%; /* Llenar celda */
-    margin: 0;
-  }
-
-  /* Ajustes de Lectura */
-  .contenido-container { padding: 1.2rem; font-size: 16px; } /* 16px evita zoom en iOS */
+  /* Ajustes Visuales */
+  .contenido-container { padding: 1.2rem; font-size: 16px; }
+  .internal-frame { height: 75vh; } /* Iframe grande en móvil */
   
-  /* Ajustes de Paneles y Menús */
-  .side-panel { width: 85%; } 
-  .dropdown-menu { right: 15px; bottom: 85px; width: auto; }
-  .menu-button { right: 15px; bottom: 15px; width: 55px; height: 55px; }
+  /* Paneles y Menú */
+  .side-panel { width: 90%; }
+  .menu-button { width: 55px; height: 55px; bottom: 15px; right: 15px; }
+  .dropdown-menu { bottom: 85px; right: 15px; }
 }
