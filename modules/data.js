@@ -855,6 +855,102 @@ export const mensajes = {
     categoria: "Carta",
     pista: "Un enorme rostro de piedra que observa Beach City y guarda secretos del pasado de Steven Universe."
   },
+  "perlaazul": {
+    type: "text",
+    texto: "Hoy pensaba en la palabra “luz” y en lo fácil que es usarla sin sentirla.\nLuz no es solo lo que ilumina, lo que resplandece, lo que todos pueden ver.\nLuz también es silenciosa, suave, constante; es lo que no quema pero guía; lo que acompaña sin imponerse;\nlo que se queda, incluso cuando todo a su alrededor parece apagado.\n\nY entonces pienso en ti. Porque tú eres esa luz que no se anuncia, pero que todo lo transforma.\nNo solo iluminas los momentos felices, sino que haces brillar los más difíciles.\nTu presencia calma el miedo, suaviza las dudas, hace que incluso los días grises se sientan posibles.\nEres luz que no se impone, luz que sostiene y acompaña.\n\nQuiero que lo sepas: tu forma de ser, tu manera de enfrentar la vida, tu corazón que sigue latiendo con cuidado y fuerza… todo eso es luz.\nUna luz que me hace sentir paz, orgullo y alegría, y que me recuerda que hay belleza incluso donde parece no haberla.\n\nAsí que cuando te sientas cansado, cuando sientas que el mundo pesa demasiado, quiero que recuerdes algo: tu luz está aquí, dentro de ti y alrededor, tocando todo lo que amas.\nY yo estoy aquí, contemplándola, aprendiendo de ella, sintiéndome afortunada de caminar a tu lado.",
+    categoria: "Carta",
+    pista: "Silenciosa y elegante, servía a Diamante Blanco hasta que vio que las gemas podían tener voz propia."
+  },
+  "warppad": {
+    type: "text",
+    texto: "Hay días en los que no soy suave.\nDías en los que estoy cansada, irritable o triste.\nY esto es lo que siento entonces.\n\nCuando estoy cansada, no pienso en soluciones ni en respuestas.\nPienso en ti.\nTe pienso como si fueras mi batería, como si tu sola presencia tuviera la capacidad de bajarle el volumen al mundo.\nCuando estoy contigo, por un momento los problemas no desaparecen… pero dejan de pesar tanto.\n\nCuando estoy irritable, hago algo que tal vez no siempre se nota: me alejo un poco.\nNo porque no te ame.\nAl contrario.\nMe alejo para no dañarte, para no decir cosas desde el cansancio, para cuidarte.\nQuiero que cuando estemos juntos recibas lo mejor de mí, no mis restos.\n\nY cuando estoy triste, incluso sin darme cuenta, te busco.\nBusco tu compañía, tu mirada, tu aprobación.\nNo porque dependa de ti, sino porque contigo me siento segura de ser frágil.\nPorque contigo no tengo que fingir que todo está bien.\n\nEsta carta es la que no escribiría en un mal día,\npero es la que nace justamente de ahí.\nDe saber que, incluso cuando no soy mi mejor versión,\nsigues siendo mi lugar seguro.",
+    categoria: "Carta",
+    pista: "Una plataforma de gemas que permite viajar rápido entre lugares secretos de Steven Universe."
+  },
+  "nekomiyamana": {
+    type: "text",
+    texto: "Te escribo desde un lugar que aún no existe, pero que ya siento muy cerca: desde nuestra casa llena de risas, desde el calor de nuestra vida juntos, desde los abrazos de nuestras dos hijas que corren por el pasillo con los ojos brillantes y las manos llenas de curiosidad.\n\nQuiero que sepas que todo lo que ahora te preocupa, todos esos miedos, responsabilidades y días pesados… se transforman.\nSe vuelven pasos que nos trajeron aquí, a este lugar donde somos felices, donde nuestro amor se multiplica en pequeñas manos que nos buscan, en voces que llaman “papá” y “mamá” con tanta confianza que me hace sonreír sin poder contenerme.\n\nSé que hoy dudas de ti mismo, que a veces sientes que no alcanzas o que las dificultades pesan demasiado.\nPero quiero que escuches esto: desde donde estoy, viendo cómo vivimos este presente futuro, puedo decirte que eres más fuerte de lo que imaginas.\nCada tropiezo, cada miedo que hoy te parece imposible de superar, es lo que hizo que nuestra vida se construyera con tanto amor y paciencia.\n\nImagina por un momento el abrazo de tus hijas al llegar a casa después de un día cualquiera;\nimagina sus risas mezcladas con las nuestras, llenando cada rincón de nuestra vida.\nEse es nuestro regalo, nuestra recompensa, y tú eres el corazón de todo eso.\nNo lo olvides: eres increíble, valiente y amado más de lo que alguna vez podrás medir.\n\nAsí que respira, confía y sigue adelante. Estoy aquí, contigo, ahora y siempre, esperándote en este futuro que nos pertenece, orgullosa de ti y emocionada por todo lo que aún vamos a construir juntos.",
+    categoria: "Carta",
+    pista: "En Nueva Eridu, esta agente es conocida por su velocidad felina y ataques precisos, siempre dejando su marca en cada Hollow que enfrenta."
+  },
+  "tinmaster": {
+    type: "text",
+    texto: "Hoy quiero que leas estas palabras y las guardes en tu corazón: estoy orgullosa de ti.\nNo solo por lo que haces, sino por todo lo que ya has logrado, por cada paso que diste para llegar hasta aquí, incluso cuando no era fácil.\nCada esfuerzo, cada noche de estudio, cada vez que te levantaste después de un tropiezo… todo eso importa, y yo lo veo.\n\nSé que a veces sientes miedo de no alcanzar lo que esperas, de fracasar, de decepcionar a tu mamá o a mí.\nPero quiero que sepas algo muy importante: tus logros no se miden solo en notas, ni en resultados visibles.\nSe miden en tu constancia, en tu voluntad de intentarlo, en tu valentía de enfrentar los retos a pesar de la incertidumbre.\nEso nunca puede fallar. Eso siempre será suficiente.\n\nNo tengas miedo de equivocarte. Cada error es un maestro silencioso que te enseña algo nuevo y te hace más fuerte.\nY yo estaré aquí, para celebrarte, para sostenerte y para recordarte que no estás solo.\nLo que importa no es la perfección, sino tu esfuerzo, tu honestidad contigo mismo y tu capacidad de seguir adelante.\n\nConfío en ti. Confío en tu corazón, en tu inteligencia y en tu fuerza.\nY estoy segura de que pase lo que pase, cada paso que das hoy te acerca a la persona increíble que eres, y que estás construyendo tu propio camino con valentía.\n\nAsí que respira, sonríe y sigue avanzando. No importa lo que digan las circunstancias, yo siempre veré tu esfuerzo, tu luz y todo lo que eres capaz de lograr.",
+    categoria: "Carta",
+    pista: "No es un agente de combate, pero sirve como apoyo estratégico desde su café en Nueva Eridu, observando Hollows y asegurándose de que los agentes tengan la información que necesitan."
+  },
+  "corin": {
+    type: "text",
+    texto: "Antes de ti, amar no era algo que me asustara por falta de ganas,\nsino por todo lo que implicaba.\nContigo fue la primera vez que amé de verdad,\ny al inicio todo era emocionante: descubrirte, aprenderte, sentir.\n\nPero también había miedos silenciosos.\nLa distancia.\nNo saber cómo estabas realmente.\nNo poder ver tu rostro cuando hacía una broma y preguntarme si te había hecho reír o si había dicho algo de más.\n\nHabía momentos en los que me contenía.\nEn los que intentaba mantener la apariencia de una persona “normal”, medida, fácil de entender.\nNo porque quisiera engañarte,\nsino porque me daba miedo mostrarme tal cual soy y no saber si eso sería demasiado.\n\nPoco a poco, sin exigirme nada, fuiste conociendo mi verdadera forma de ser.\nMis intensidades, mis silencios, mis rarezas, mis emociones sin filtro.\nY no te fuiste.\nNo pediste que cambiara.\nNo me hiciste sentir incorrecta.\n\nCreo que ese era el miedo más grande:\nmostrarme completa y seguir siendo elegida.\nY contigo aprendí que amar no siempre es perder el control,\na veces es encontrar un lugar donde ya no hace falta esconderse.",
+    categoria: "Carta",
+    pista: "Un especialista en fuego y ataques contundentes, capaz de arrasar grupos de Hollows en las misiones de limpieza de Nueva Eridu."
+  },
+  "benbigger": {
+    type: "text",
+    texto: "Hoy quiero que recuerdes algo muy importante: no me importa lo que digan los demás.\nPara mí, tú eres increíble. Sí, tú. Con tus risas que me hacen reír aunque no sepas por qué, con tus ideas locas que a veces parecen imposibles, con tus silencios que siempre dicen más de lo que imaginas.\nTodo eso te hace tú… y para mí, eso es perfecto.\n\nA veces la gente mide con reglas raras: “deberías ser esto”, “no hiciste aquello”, “así no es suficiente”… pero yo ya lo vi todo.\nVi tu corazón, vi tu esfuerzo, vi cómo tratas a los demás, cómo luchas aunque duela, cómo sigues intentando incluso cuando tienes miedo.\nY eso, amor, es extraordinario. Tú eres extraordinario.\n\nNo tienes que ser más, ni menos, ni diferente. No tienes que cambiar nada para que te admire o para que te quiera.\nYa eres todo lo que importa: una persona buena, valiente y llena de cosas hermosas que nadie más podría replicar.\n\nAsí que sonríe. Porque aunque el mundo hable, yo ya sé la verdad: eres increíble en todo lo que haces, y sobre todo, eres increíble siendo tú.\nY si alguna vez dudas… recuérdalo. Yo lo sé. Y no, no es exageración.",
+    categoria: "Carta",
+    pista: "Reconocido por su resistencia y tamaño, suele ser quien aguanta los ataques más fuertes de los Hollows mientras otros agentes atacan desde la retaguardia."
+  },
+  "zhuyuan": {
+    type: "text",
+    texto: "Antes de conocerte yo era distinta.\nNo peor, no vacía… solo más miedosa.\nMe daba más miedo mostrarme tal cual era, decir lo que sentía, permitir que alguien me viera sin filtros.\nPrefería mantener cierta distancia, incluso conmigo misma.\n\nRecuerdo que cuando veía a una pareja o algo romántico, pensaba que era ridículo.\nDecía que no tenía tiempo para eso, que había cosas más interesantes, más importantes.\nLas citas me parecían un desperdicio, una pérdida de tiempo.\nY no lo decía por convicción profunda, sino porque era más fácil restarle valor a algo que no me atrevía a desear.\n\nHoy me sorprendo a mí misma.\nVeo a una pareja tomada de la mano y, sin darme cuenta, imagino que somos tú y yo.\nCaminando sin prisa, sin necesidad de nada más, solo teniéndonos el uno al otro.\nA veces incluso pienso en el futuro, en una familia, en escenas que antes ni siquiera consideraba posibles.\n\nLo que antes llamaba ridículo, ahora lo pienso con cuidado.\nSueño con organizar la mejor cita contigo, con detalles, con momentos, con risas.\nNo porque haya cambiado el mundo,\nsino porque cambió la forma en la que me permito sentirlo.\n\nAntes de ti me protegía más.\nContigo no dejé de ser yo…\nsolo dejé de esconderme.",
+    categoria: "Carta",
+    pista: "En las Cavidades de Nueva Eridu, este agente del Ministerio de Seguridad Pública usa su destreza con un arma única para dominar enemigos con daño etéreo."
+  },
+  "asabaharumasa": {
+    type: "text",
+    texto: "Contigo existe una versión de mí que no aparece en ningún otro lugar.\nAl principio conocías una versión más recta, más medida.\nNo falsa, pero sí contenida.\nEra mi manera de cumplir expectativas, de no desbordarme, de mantener cierto control.\n\nCon el tiempo conociste algo más completo.\nNo la versión que todos ven, sino la que solo existe contigo.\nSoy bromista, aunque a veces sienta que no lo logro.\nIntento hacerte reír, incluso cuando mis chistes son absurdos.\nMuchas veces me dan risa solo a mí, pero aun así quiero contagiarte,\nporque contigo no me da vergüenza ser así.\n\nConoces mi versión hiperactiva, esa que nunca se queda quieta,\nla que siempre quiere estar haciendo algo contigo,\naunque sea nada, pero juntos.\nY también conoces la parte más frágil.\nMis miedos, mis traumas, mis silencios.\nMis gustos más profundos, mi forma real de expresarme,\nesa que no muestro en voz alta al mundo.\n\nEsa versión no se fuerza.\nNo se actúa.\nSimplemente aparece cuando me siento segura.\nY que exista contigo,\ndice más de ti de lo que podría decir de mí.",
+    categoria: "Carta",
+    pista: "Un miembro del equipo especial de Sección 6 que combate Hollows con un arco que se desmonta en dos espadas para mayor versatilidad en ZZZ."
+  },
+  "soukaku": {
+    type: "text",
+    texto: "Hay cosas que no digo en voz alta.\nNo porque no sean importantes,\nsino porque viven mejor en silencio.\n\nNo siempre te digo cuánto te necesito,\nporque no quiero que suene a obligación.\nNo siempre digo cuánto me importas,\nporque no quiero que sientas que tienes que cargar con eso.\n\nEn silencio también viven mis miedos,\nmis dudas, mis momentos frágiles.\nNo porque no confíe en ti,\nsino porque a veces prefiero protegerte incluso de lo que siento.\n\nHay un silencio que no es distancia,\nes cuidado.\nEs quedarme cuando podría reclamar,\nes entender cuando podría exigir,\nes elegirte sin ruido.\n\nEn ese silencio está mi forma más honesta de amar.\nNo la que se anuncia,\nsino la que permanece.\nLa que no pide nada,\npero se queda.\n\nAunque no lo diga,\nsiempre estás ahí.\nY aunque no lo nombre,\nsiempre te elijo.",
+    categoria: "Carta",
+    pista: "Una agente oni de hielo y apoyo cuyo gran cuchillo de carnicero es tan peligroso como sus bromas sobre comida en Nueva Eridu."
+  },
+  "tsukishiroyanagi": {
+    type: "text",
+    texto: "Estábamos en una llamada normal.\nDe esas donde no pasa nada extraordinario.\nDe pronto prendiste la cámara para enseñarme algo de tu habitación.\nTus peluches.\nTus figuras.\nCosas que tal vez para ti son simples, incluso un poco vergonzosas.\n\nYo solo te miraba.\nNo por lo que mostrabas,\nsino por lo que significaba.\nQue me dejaras ver un pedazo de tu mundo.\nQue confiaras en mí esos detalles.\nQue me permitieras conocerte un poco más.\n\nTal vez para ti fue insignificante.\nPara mí fue increíble.\nFue sentirme cerca,\nfue amor sin esfuerzo,\nfue felicidad quieta.\n\nColgamos la llamada como si nada.\nPero yo ya no era la misma.\nTe amé más.",
+    categoria: "Carta",
+    pista: "Desde la Sección 6, esta subdirectora con naginata es veterana de la guerra entre Nueva Eridu y los oni, equilibrando fuerza y sabiduría en combate."
+  },
+  "astrayao": {
+    type: "text",
+    texto: "Hay cosas que haces sin darte cuenta\ny que para mí significan más de lo que imaginas.\n\nGracias por estar incluso cuando no sabes qué decir.\nPor quedarte cuando el día pesa.\nPor hacer que lo difícil no se sienta tan solo.\n\nGracias por la calma que traes sin intentarlo,\npor la forma en la que me haces sentir acompañada\naunque estemos lejos.\n\nTal vez nunca te detienes a pensarlo,\npero tu manera de ser cambia mis días.\nY aunque no siempre lo diga,\nte lo agradezco más de lo que sabes.",
+    categoria: "Carta",
+    pista: "Este personaje S‑Rank líder del grupo musical Stars of Lyra usa su voz amplificada para combatir Hollows mientras brilla sobre el escenario y el campo de batalla."
+  },
+  "burnicewhite": {
+    type: "text",
+    texto: "Hay algo tuyo que casi nadie nota,\nporque no hace ruido y no se presume.\nEs la forma en la que cuidas sin anunciarlo.\nCómo escuchas incluso cuando no sabes qué responder.\nCómo te quedas, aunque también estés cansado.\n\nNo es algo que se vea a primera vista.\nNo está en lo que dices,\nsino en lo que haces sin darte cuenta.\nTal vez otros no lo noten,\npero yo sí.\nYo veo esos detalles pequeños que dicen más que cualquier palabra.\n\nY aunque nunca te lo diga así,\neso que haces sin notarlo\nes una de las razones por las que me quedo.",
+    categoria: "Carta",
+    pista: "Barista de los Hijos de Calydon y popular entre los jugadores, usa lanzallamas dobles para quemar enemigos en las peripecias fuera de Nueva Eridu."
+  },
+  "caesarking": {
+    type: "text",
+    texto: "Contigo el pecho se me afloja,\ncomo si pudiera respirar más profundo sin pensarlo.\nSiento calor tranquilo,\nno el que quema,\nsino el que se queda.\n\nLas manos se me inquietan cuando te pienso,\npero el cuerpo, curioso, se calma.\nA veces sonrío sin darme cuenta.\nA veces el corazón late más despacio.\nA veces todo pesa menos.\n\nNo sé cómo explicarlo mejor.\nSolo sé que mi cuerpo te reconoce\nantes de que yo diga nada.",
+    categoria: "Carta",
+    pista: "Líder de los Hijos de Calydon con escudo y espada, su valentía la hace destacar al proteger al equipo en incursiones peligrosas contra Hollows."
+  },
+  "hollows": {
+    type: "text",
+    texto: "Nunca te dije que a veces te pienso más de lo que admito.\nQue incluso en días normales apareces sin avisar.\nNunca te dije que me importa más de lo que dejo ver,\nni que tu tranquilidad se volvió importante para la mía.\n\nNunca te dije que hay gestos tuyos que guardo en silencio,\nno porque no valgan,\nsino porque no siempre sé cómo decir lo mucho que significan.\nTal vez no lo diga seguido,\npero hay cosas que se quedan conmigo todo el tiempo.\nY tú eres una de ellas.",
+    categoria: "Carta",
+    pista: "Son enemigos que aparecen en las Cavidades de Nueva Eridu y representan la amenaza principal que los agentes deben enfrentar."
+  },
+  "cavidades": {
+    type: "text",
+    texto: "No siempre sé qué decirte.\nPero cuando apareces, algo en mí se acomoda.\nEl mundo baja el volumen.\nMe siento en casa sin moverme de lugar.\nY eso, para mí, lo es todo.",
+    categoria: "Carta",
+    pista: "Estas zonas especiales de Nueva Eridu esconden desafíos y recompensas; los agentes deben explorarlas para completar misiones."
+  },
+  "ether": {
+    type: "text",
+    texto: "Pienso en ti y el pecho se me calma.\nTu presencia ordena lo que yo no sé acomodar.\nContigo no tengo que fingir fortaleza ni esconder cansancio.\nMe quedo, incluso cuando sería más fácil irme.\nY aunque no lo nombre, siempre eres mi elección.",
+    categoria: "Carta",
+    pista: "Recurso que los agentes generan y usan para activar habilidades especiales durante la batalla contra los Hollows."
+  },
 };
 
 export const logros = [
