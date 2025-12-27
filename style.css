@@ -238,103 +238,31 @@ h2, .section-title { font-family: var(--title-font); color: var(--header-color);
   box-shadow: 0 0 10px rgba(255, 122, 168, 0.5);
 }
 
-/* 10. LISTAS Y COLECCIÓN (Optimizado para 200+ items) */
+/* 10. LISTAS Y COLECCIÓN */
 .unlocked-codes-panel, .unlocked-codes-section { 
   background-color: var(--content-bg); padding: 1.5rem; 
   border-radius: 12px; margin-top: 1.5rem; border: 1px solid rgba(255,255,255,0.05);
 }
-
 .filter-controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 1.5rem; justify-content: center; }
 .filter-controls input, .filter-controls select { 
-  flex-grow: 1; /* Ocupar espacio disponible */
   padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-color-input); 
   background: var(--input-bg); color: var(--text-light); outline: none;
-  min-width: 120px;
 }
-
-.lista-codigos { 
-  display: flex; flex-direction: column; gap: 10px; /* Mejor lista vertical que grid para nombres largos */
-  list-style: none; margin-bottom: 1.5rem;
-}
-
-/* --- FIX DESBORDAMIENTO DE TEXTO --- */
+.lista-codigos { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; list-style: none; }
 .lista-codigo-item {
-  position: relative; 
-  background: rgba(255,255,255,0.08); 
-  padding: 12px 15px; 
-  border-radius: 10px; 
-  border: 1px solid rgba(255,255,255,0.05);
-  display: grid; 
-  /* Estructura: Icono | Texto (flexible) | Categoría | Corazón */
-  grid-template-columns: 24px 1fr auto auto; 
-  align-items: center; 
-  gap: 12px;
+  position: relative; background: rgba(255,255,255,0.08); 
+  padding: 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);
+  display: flex; justify-content: space-between; align-items: center; 
   cursor: pointer;
-  transition: background 0.2s;
 }
+.lista-codigo-item:hover { background: rgba(255,255,255,0.15); transform: translateY(-3px); }
+.lista-codigo-item.locked { background: rgba(0,0,0,0.2); border: 1px dashed rgba(255,255,255,0.1); opacity: 0.7; }
+.codigo-text { font-weight: 500; color: var(--text-dark); text-transform: capitalize; }
+.category { font-size: 0.75em; background: rgba(0,0,0,0.3); padding: 3px 8px; border-radius: 10px; margin-left: 8px; }
 
-.lista-codigo-item:hover { background: rgba(255,255,255,0.15); }
-.lista-codigo-item.locked { opacity: 0.6; }
-
-/* Contenedor del texto para forzar los "..." */
-.codigo-info {
-  display: flex; flex-direction: column;
-  min-width: 0; /* TRUCO DE ORO: Permite al flex/grid encogerse más allá del contenido */
-}
-
-.codigo-text { 
-  font-weight: 600; color: var(--text-dark); text-transform: capitalize;
-  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; /* Cortar texto largo */
-  font-size: 1rem;
-}
-
-.category { 
-  font-size: 0.7em; background: rgba(0,0,0,0.3); padding: 4px 8px; 
-  border-radius: 8px; white-space: nowrap; color: var(--text-medium);
-}
-
-.favorite-toggle-btn { 
-  background: none; border: none; font-size: 1.2em; padding: 5px; 
-  color: var(--favorite-icon-default); cursor: pointer; display: flex;
-}
+.favorite-toggle-btn { background: none; border: none; font-size: 1.2em; padding: 5px; color: var(--favorite-icon-default); }
 .favorite-toggle-btn.active { color: var(--favorite-icon-active); }
-
-/* --- ESTILOS DE PAGINACIÓN --- */
-.pagination-container {
-  display: flex; justify-content: center; align-items: center; gap: 20px;
-  margin-top: 10px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.1);
-}
-.pagination-btn {
-  background: var(--button-bg-initial); color: white; border: none;
-  width: 40px; height: 40px; border-radius: 50%; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: background 0.2s;
-}
-.pagination-btn:disabled { opacity: 0.5; cursor: not-allowed; background: #555; }
-.pagination-btn:hover:not(:disabled) { background: var(--highlight-pink); }
-.page-indicator { font-weight: 600; color: var(--text-medium); }
-
-/* Ajuste Móvil Específico */
-@media (max-width: 480px) {
-  .lista-codigo-item {
-    /* En pantallas muy pequeñas, la categoría baja una línea */
-    grid-template-columns: 24px 1fr auto; 
-    grid-template-rows: auto auto;
-    row-gap: 5px;
-  }
-  .favorite-toggle-btn {
-    grid-column: 3; grid-row: 1 / span 2; /* Corazón a la derecha centrado verticalmente */
-    align-self: center;
-  }
-  .category {
-    grid-column: 2; grid-row: 2; /* Categoría debajo del nombre */
-    justify-self: start;
-    font-size: 0.65em;
-  }
-  .codigo-info { grid-column: 2; grid-row: 1; }
-  .lock-icon { grid-row: 1 / span 2; }
-}
-
+#filterFavBtn.active { background-color: var(--highlight-pink); color: white; }
 
 /* 11. MENÚ FAB */
 .menu-button {
