@@ -1,6 +1,6 @@
 /**
  * modules/uiManager.js
- * Versión Final Producción: Streaming Seguro + Glassmorphism (Sin Easter Eggs)
+ * Versión Final: Con Paginación y CSS Grid fix
  */
 
 import { normalizeText } from './utils.js';
@@ -28,429 +28,440 @@ export class UIManager {
             searchUnlocked: document.getElementById("searchUnlocked"),
             categoryFilter: document.getElementById("categoryFilter"),
             filterFavBtn: document.getElementById("filterFavBtn"),
-            closeUnlockedBtn: document.getElementById("closeUnlockedBtn")
+            closeUnlockedBtn: document.getElementById("closeUnlockedBtn"),
+            // Elementos de Paginación
+            paginationControls: document.getElementById("paginationControls"),
+            prevPageBtn: document.getElementById("prevPageBtn"),
+            nextPageBtn: document.getElementById("nextPageBtn"),
+            pageIndicator: document.getElementById("pageIndicator")
         };
 
-        this.cachedPassword = null; 
-        this.showingFavoritesOnly = false;
-        this.typewriterTimeout = null;
+        // Estado de Paginación
+        this.currentPage = 1;
+        this.itemsPerPage = 10; // Mostrar 10 por página
+        this.currentFilteredData = []; // Datos filtrados actuales
 
-        this.initTheme();
-        this.setupMenuListeners();
-        this.setupListListeners();
-        this.initDynamicPlaceholder();
-        setTimeout(() => this.initParticles(), 100); 
+        this.onToggleFavorite = null;
+        this.onCodeSelected = null;
+        this.onImportData = null;
+
+        this.setupInternalEvents();
     }
 
-    dismissKeyboard() { if (this.elements.input) this.elements.input.blur(); }
-
-    initTheme() {
-        const savedTheme = localStorage.getItem("theme");
-        if (savedTheme === "dark") document.body.classList.add("dark-mode");
-    }
-
-    toggleDarkMode() {
-        document.body.classList.toggle("dark-mode");
-        const isDark = document.body.classList.contains("dark-mode");
-        localStorage.setItem("theme", isDark ? "dark" : "light");
-        this.showToast(isDark ? "Modo Oscuro Activado" : "Modo Claro Activado");
-    }
-
-    // --- VISUALES ---
-    async initParticles() {
-        // @ts-ignore
-        if (typeof tsParticles === 'undefined') return;
-        // @ts-ignore
-        await tsParticles.load('tsparticles', {
-            fpsLimit: 60, fullScreen: { enable: false },
-            particles: {
-                number: { value: 30, density: { enable: true, area: 800 } },
-                color: { value: ["#ffffff", "#ff7aa8", "#ffd700"] },
-                shape: { type: "circle" },
-                opacity: { value: 0.7, random: true, animation: { enable: true, speed: 1, minimumValue: 0.3 } },
-                size: { value: 3, random: true, animation: { enable: true, speed: 2 } },
-                move: { enable: true, speed: 0.6, direction: "none", random: true, outModes: "out" }
-            },
-            interactivity: { events: { onHover: { enable: true, mode: "bubble" }, onClick: { enable: true, mode: "push" } } },
-            detectRetina: true
+    setupInternalEvents() {
+        // Toggle Menú
+        this.elements.menuButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.elements.dropdownMenu.classList.toggle('show');
         });
+        document.addEventListener('click', (e) => {
+            if (!this.elements.dropdownMenu.contains(e.target) && e.target !== this.elements.menuButton) {
+                this.elements.dropdownMenu.classList.remove('show');
+            }
+        });
+
+        // Toggle Favoritos Filtro
+        this.elements.filterFavBtn.addEventListener('click', () => {
+            this.elements.filterFavBtn.classList.toggle('active');
+            // Disparar evento de renderizado externo (se maneja en GameEngine o aquí mismo al filtrar)
+            this.triggerRenderUpdate();
+        });
+
+        // Inputs de búsqueda
+        this.elements.searchUnlocked.addEventListener('input', () => { this.currentPage = 1; this.triggerRenderUpdate(); });
+        this.elements.categoryFilter.addEventListener('change', () => { this.currentPage = 1; this.triggerRenderUpdate(); });
+        
+        // Botón cerrar lista
+        this.elements.closeUnlockedBtn.addEventListener('click', () => {
+            this.elements.unlockedSection.hidden = true;
+        });
+
+        // Eventos Paginación
+        this.elements.prevPageBtn.addEventListener('click', () => this.changePage(-1));
+        this.elements.nextPageBtn.addEventListener('click', () => this.changePage(1));
+
+        // Paneles Laterales
+        document.getElementById("menuAudio").addEventListener('click', () => this.togglePanel(this.elements.audioPanel, true));
+        this.elements.closeAudioPanel.addEventListener('click', () => this.togglePanel(this.elements.audioPanel, false));
+        
+        document.getElementById("menuTools").addEventListener('click', () => {
+            this.renderTools();
+            this.togglePanel(this.elements.toolsPanel, true);
+        });
+        this.elements.closeToolsPanel.addEventListener('click', () => this.togglePanel(this.elements.toolsPanel, false));
     }
 
-    initDynamicPlaceholder() {
-        const frases = ["Escribe aquí...", "Una fecha especial...", "¿Nuestro lugar?", "Un apodo...", "Nombre de canción..."];
-        let index = 0;
-        setInterval(() => {
-            index = (index + 1) % frases.length;
-            if(this.elements.input) this.elements.input.setAttribute("placeholder", frases[index]);
-        }, 3500);
-    }
-
-    triggerConfetti() {
-        // @ts-ignore
-        if (typeof confetti === 'undefined') return;
-        const count = 200; const defaults = { origin: { y: 0.7 }, zIndex: 1500 };
-        function fire(r, opts) { 
-            // @ts-ignore
-            confetti(Object.assign({}, defaults, opts, { particleCount: Math.floor(count * r) })); 
+    // Método auxiliar para forzar actualización desde GameEngine
+    triggerRenderUpdate() {
+        // Este método será llamado indirectamente. 
+        // En GameEngine deberías llamar a renderUnlockedList cada vez que cambie un filtro.
+        // Pero para simplificar, guardaremos referencias en renderUnlockedList.
+        if (this.lastRenderArgs) {
+            this.renderUnlockedList(...this.lastRenderArgs);
         }
-        fire(0.25, { spread: 26, startVelocity: 55 });
-        fire(0.2, { spread: 60 });
-        fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
     }
 
-    typeWriterEffect(element, text) {
-        if (this.typewriterTimeout) clearTimeout(this.typewriterTimeout);
-        element.innerHTML = ""; element.classList.add("typewriter-cursor");
-        let i = 0; const slow=60; const fast=30; const accel=50;
-        const type = () => {
-            if (i >= text.length) { element.classList.remove("typewriter-cursor"); return; }
-            const char = text.charAt(i);
-            if (char === '\n') element.appendChild(document.createElement('br'));
-            else element.appendChild(document.createTextNode(char));
-            let speed = i < accel ? slow : fast;
-            if (['.','!','?'].includes(char)) speed += 300;
-            if (char === '\n') speed += 400;
-            i++; this.typewriterTimeout = setTimeout(type, speed);
-        };
-        type();
-    }
+    // =========================================================
+    // LÓGICA DE LISTA Y PAGINACIÓN
+    // =========================================================
+    renderUnlockedList(unlockedSet, favoritesSet, mensajesDB) {
+        // Guardar argumentos para refrescar filtros
+        this.lastRenderArgs = [unlockedSet, favoritesSet, mensajesDB];
 
-    // --- RENDERIZADO ---
-    renderContent(data, key) {
-        if (this.typewriterTimeout) clearTimeout(this.typewriterTimeout);
-        const container = this.elements.contentDiv; 
-        container.hidden = false; container.innerHTML = "";
+        const searchText = normalizeText(this.elements.searchUnlocked.value);
+        const catFilter = this.elements.categoryFilter.value;
+        const onlyFav = this.elements.filterFavBtn.classList.contains('active');
 
-        const h2 = document.createElement("h2");
-        h2.textContent = key ? `Descubierto: ${key}` : "¡Sorpresa!";
-        h2.style.textTransform = "capitalize";
-        container.appendChild(h2);
+        // 1. Preparar datos
+        const allCodes = Object.keys(mensajesDB).sort();
+        let results = [];
 
-        if (data.texto && data.type !== 'text' && data.type !== 'internal') {
-            const p = document.createElement("p"); p.textContent = data.texto; container.appendChild(p);
+        // Llenar select de categorías (solo una vez o si está vacío)
+        if (this.elements.categoryFilter.options.length <= 1) {
+            const cats = new Set();
+            allCodes.forEach(c => {
+                if (mensajesDB[c].categoria) cats.add(mensajesDB[c].categoria);
+            });
+            cats.forEach(c => {
+                const op = document.createElement("option");
+                op.value = c; op.textContent = c;
+                this.elements.categoryFilter.appendChild(op);
+            });
         }
 
-        switch (data.type) {
-            case "text":
-                const pText = document.createElement("p");
-                pText.className = "mensaje-texto";
-                if (data.categoria && ['pensamiento','carta'].includes(data.categoria.toLowerCase())) {
-                    this.typeWriterEffect(pText, data.texto);
-                } else {
-                    pText.textContent = data.texto;
-                }
-                container.appendChild(pText);
-                break;
-            case "image":
-                const img = document.createElement("img");
-                img.src = data.imagen; img.alt = "Secreto"; img.style.cursor = "zoom-in";
-                img.onclick = () => {
-                    // @ts-ignore
-                    const v = new Viewer(img, { hidden(){v.destroy()}, navbar:0, title:0, toolbar: {zoomIn:1, zoomOut:1, reset:1, rotateLeft:1} });
-                    v.show();
-                };
-                container.appendChild(img);
-                break;
-            case "video":
-                if (data.videoEmbed) {
-                    const w = document.createElement("div"); w.className="video-wrapper";
-                    w.innerHTML = `<div class="video-loader"></div><iframe src="${data.videoEmbed}" class="video-frame" allow="autoplay; encrypted-media; fullscreen" onload="this.style.opacity=1;this.previousElementSibling.style.display='none'"></iframe>`;
-                    container.appendChild(w);
-                }
-                break;
-            case "internal":
-                const dest = data.archivo || data.link;
-                if(!dest) { container.innerHTML += "<p style='color:red'>Error: Sin ruta.</p>"; break; }
-                const divInt = document.createElement("div"); divInt.className="internal-wrapper";
-                divInt.innerHTML = `<a href="${dest}" target="_blank" class="button small-button" style="margin-bottom:10px"><i class="fas fa-expand"></i> Pantalla Completa</a><iframe src="${dest}" class="internal-frame" style="border:none;background:transparent" allowtransparency="true"></iframe>`;
-                container.appendChild(divInt);
-                break;
-            case "link":
-                const aLink = document.createElement("a"); aLink.href=data.link; aLink.target="_blank"; aLink.className="button"; aLink.innerHTML='Abrir Enlace <i class="fas fa-external-link-alt"></i>'; container.appendChild(aLink);
-                break;
-            
-            // --- MANEJO DE DESCARGAS Y STREAMING ---
-            case "download":
-                const dlBtn = document.createElement("button");
-                dlBtn.className = "button";
-                dlBtn.style.position = "relative"; 
-                dlBtn.style.overflow = "hidden";
+        // 2. Filtrar
+        allCodes.forEach(code => {
+            const data = mensajesDB[code];
+            const isUnlocked = unlockedSet.has(code);
+            const isFav = favoritesSet.has(code);
 
-                const urlF = data.descarga.url||"";
-                const esCifrado = data.encrypted || urlF.endsWith(".enc") || urlF.endsWith(".wenc");
-                
-                // Limpiar nombre visualmente
-                const nombreLimpio = data.descarga.nombre.replace(/\.(wenc|enc)$/i, "");
+            // Si está bloqueado y no buscamos nada específico, no lo mostramos en la lista general 
+            // (Opcional: puedes mostrar bloqueados si quieres)
+            if (!isUnlocked && searchText === "") return; 
 
-                const btnContent = esCifrado 
-                    ? `<i class="fas fa-lock"></i> Desbloquear ${nombreLimpio}`
-                    : `<i class="fas fa-download"></i> Descargar ${nombreLimpio}`;
-                
-                dlBtn.innerHTML = `<span class="btn-text-layer">${btnContent}</span>`;
+            // Filtros
+            if (onlyFav && !isFav) return;
+            if (catFilter && data.categoria !== catFilter) return;
+            if (searchText) {
+                const matchCode = code.includes(searchText);
+                const matchTitle = data.titulo && normalizeText(data.titulo).includes(searchText);
+                const matchCat = data.categoria && normalizeText(data.categoria).includes(searchText);
+                if (!matchCode && !matchTitle && !matchCat) return;
+            }
 
-                dlBtn.onclick = () => {
-                    if (esCifrado) {
-                        const iniciarProceso = async (password) => {
-                            // UI Carga
-                            dlBtn.disabled = true;
-                            const progressBg = document.createElement("div");
-                            progressBg.className = "progress-btn-bg";
-                            dlBtn.prepend(progressBg);
-                            const textLayer = dlBtn.querySelector(".btn-text-layer");
-                            const originalText = textLayer.innerHTML;
+            results.push({ code, data, isUnlocked, isFav });
+        });
 
-                            try {
-                                const blobDescifrado = await descifrarArchivo(
-                                    data.descarga.url, 
-                                    data.descarga.nombre, 
-                                    password,
-                                    (percent, statusText) => {
-                                        progressBg.style.width = `${percent}%`;
-                                        if (percent < 100) {
-                                            textLayer.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> ${percent}% Cargando...`;
-                                        } else {
-                                            textLayer.innerHTML = `<i class="fas fa-cog fa-spin"></i> ${statusText || 'Abriendo...'}`;
-                                        }
-                                    }
-                                );
-
-                                dlBtn.disabled = false;
-                                progressBg.remove();
-                                textLayer.innerHTML = originalText;
-
-                                if (blobDescifrado) {
-                                    this.cachedPassword = password; 
-                                    this.showToast("¡Acceso concedido!");
-                                    this.triggerConfetti();
-                                    
-                                    // Abrir Visor Multimedia (con nombre limpio)
-                                    const nombreFinal = data.descarga.nombre.replace(/\.(wenc|enc)$/i, "");
-                                    this.renderMediaModal(blobDescifrado, nombreFinal);
-                                } else {
-                                    this.cachedPassword = null; 
-                                    this.showError();
-                                    alert("Contraseña incorrecta.");
-                                }
-                            } catch (err) {
-                                dlBtn.disabled = false;
-                                if(progressBg) progressBg.remove();
-                                textLayer.innerHTML = originalText;
-                                console.error(err);
-                                if(err.message.includes("ERROR_404")) {
-                                    alert("Error 404: Archivo no encontrado.");
-                                } else {
-                                    alert("Error técnico: " + err.message);
-                                }
-                            }
-                        };
-
-                        if (this.cachedPassword) {
-                            iniciarProceso(this.cachedPassword);
-                        } else {
-                            this.askPassword(nombreLimpio, (pass) => iniciarProceso(pass));
-                        }
-                    } else {
-                        // Descarga directa
-                        const a = document.createElement("a"); a.href=data.descarga.url; a.download=data.descarga.nombre; a.click();
-                    }
-                };
-                container.appendChild(dlBtn);
-                break;
-        }
-        container.classList.remove("fade-in"); void container.offsetWidth; container.classList.add("fade-in");
+        this.currentFilteredData = results;
+        this.updatePaginationUI();
     }
 
-    /**
-     * VISOR MULTIMEDIA SEGURO (Alineado)
-     */
-    renderMediaModal(blob, filename) {
-        const ext = filename.split('.').pop().toLowerCase();
-        let mimeType = "application/octet-stream";
-        let type = "unknown";
+    updatePaginationUI() {
+        const totalItems = this.currentFilteredData.length;
+        const totalPages = Math.ceil(totalItems / this.itemsPerPage) || 1;
 
-        if (['jpg','jpeg','png','gif','webp'].includes(ext)) { mimeType = `image/${ext}`; type = "image"; }
-        else if (['mp4','webm','mov'].includes(ext)) { mimeType = `video/${ext === 'mov' ? 'mp4' : ext}`; type = "video"; }
-        else if (['mp3','wav','ogg'].includes(ext)) { mimeType = `audio/${ext}`; type = "audio"; }
+        // Asegurar página válida
+        if (this.currentPage > totalPages) this.currentPage = totalPages;
+        if (this.currentPage < 1) this.currentPage = 1;
 
-        if (type === "unknown") {
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement("a"); a.href = url; a.download = filename; a.click();
-            setTimeout(() => URL.revokeObjectURL(url), 100);
+        // Calcular slice
+        const start = (this.currentPage - 1) * this.itemsPerPage;
+        const end = start + this.itemsPerPage;
+        const pageItems = this.currentFilteredData.slice(start, end);
+
+        // Renderizar lista
+        this.elements.unlockedList.innerHTML = '';
+        
+        if (pageItems.length === 0) {
+            this.elements.unlockedList.innerHTML = '<p style="text-align:center;width:100%;opacity:0.7;padding:20px;">No se encontraron secretos.</p>';
+            this.elements.paginationControls.hidden = true;
             return;
         }
 
-        const safeBlob = new Blob([blob], { type: mimeType });
-        const objectUrl = URL.createObjectURL(safeBlob);
+        pageItems.forEach(({ code, data, isUnlocked, isFav }) => {
+            const li = document.createElement("li");
+            li.className = isUnlocked ? "lista-codigo-item" : "lista-codigo-item locked";
+            
+            // Icono Izquierda
+            const iconClass = isUnlocked 
+                ? (data.type === 'video' ? 'fa-video' : data.type === 'image' ? 'fa-image' : 'fa-file-alt')
+                : 'fa-lock';
+            
+            // Texto (Nombre o ?????)
+            const displayText = isUnlocked 
+                ? (data.titulo || code) // Usar título si existe, sino código
+                : "??????";
 
-        // --- DOM ---
-        const overlay = document.createElement("div");
-        overlay.className = "media-modal-overlay"; 
-        
-        const contentContainer = document.createElement("div");
-        contentContainer.className = "media-content-container";
+            // HTML Estructura Grid
+            li.innerHTML = `
+                <i class="fas ${iconClass} lock-icon" style="opacity:0.7"></i>
+                
+                <div class="codigo-info">
+                    <span class="codigo-text">${displayText}</span>
+                </div>
+                
+                ${isUnlocked ? `<span class="category">${data.categoria || 'Varios'}</span>` : ''}
+                
+                ${isUnlocked ? `
+                <button class="favorite-toggle-btn ${isFav ? 'active' : ''}" title="Favorito">
+                    <i class="${isFav ? 'fas' : 'far'} fa-heart"></i>
+                </button>` : ''}
+            `;
 
-        let mediaElement;
-        if (type === "image") {
-            mediaElement = document.createElement("img");
-            mediaElement.className = "secure-media";
-        } else if (type === "video") {
-            mediaElement = document.createElement("video");
-            mediaElement.className = "secure-media";
-            mediaElement.controls = true;
-            mediaElement.autoplay = true;
-            mediaElement.oncontextmenu = (e) => e.preventDefault();
-        } else if (type === "audio") {
-            mediaElement = document.createElement("audio");
-            mediaElement.className = "secure-media-audio";
-            mediaElement.controls = true;
-            mediaElement.autoplay = true;
-            contentContainer.style.height = "auto";
-            contentContainer.style.padding = "20px";
-            contentContainer.style.background = "rgba(255,255,255,0.1)";
-            contentContainer.style.borderRadius = "50px";
+            // Eventos
+            if (isUnlocked) {
+                // Click en el item abre el contenido
+                li.addEventListener('click', (e) => {
+                    // Si el click fue en el corazón, no abrir contenido
+                    if (e.target.closest('.favorite-toggle-btn')) return;
+                    
+                    if (this.onCodeSelected) {
+                        this.onCodeSelected(code);
+                        this.elements.contentDiv.hidden = false;
+                        this.elements.contentDiv.scrollIntoView({ behavior: 'smooth' });
+                        // En móvil, ocultar la lista al seleccionar para dar espacio
+                        if (window.innerWidth < 768) {
+                            this.elements.unlockedSection.hidden = true;
+                        }
+                    }
+                });
+
+                // Click en Corazón
+                const favBtn = li.querySelector('.favorite-toggle-btn');
+                favBtn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // No abrir carta
+                    if (this.onToggleFavorite) {
+                        this.onToggleFavorite(code);
+                        // No repintamos toda la lista para no perder la animación, solo el icono
+                        // Pero GameEngine llamará a renderUnlockedList, así que se actualizará solo.
+                    }
+                });
+            } else {
+                li.onclick = () => this.showToast("🔒 ¡Sigue buscando!");
+            }
+
+            this.elements.unlockedList.appendChild(li);
+        });
+
+        // Actualizar Controles de Paginación
+        this.elements.paginationControls.hidden = totalPages <= 1;
+        this.elements.pageIndicator.textContent = `${this.currentPage} / ${totalPages}`;
+        this.elements.prevPageBtn.disabled = this.currentPage === 1;
+        this.elements.nextPageBtn.disabled = this.currentPage === totalPages;
+    }
+
+    changePage(delta) {
+        this.currentPage += delta;
+        this.updatePaginationUI();
+    }
+
+    // ... [Resto de métodos existentes: showToast, updateProgress, clearContent, etc.] ...
+    
+    showToast(msg) {
+        const toast = document.createElement("div");
+        toast.className = "achievement-toast";
+        toast.innerHTML = `<i class="fas fa-info-circle"></i> ${msg}`;
+        this.elements.toastContainer.appendChild(toast);
+        // Audio feedback sutil
+        const audio = new Audio("data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YU"); // Silent placeholder or real beep
+        // setTimeout(() => toast.remove(), 4000); // Animation handles removal via CSS usually
+        toast.addEventListener('animationend', (e) => {
+            if (e.animationName === 'fadeOut') toast.remove();
+        });
+    }
+
+    updateProgress(unlockedCount, totalCount) {
+        const percent = Math.floor((unlockedCount / totalCount) * 100);
+        this.elements.progressBar.style.width = `${percent}%`;
+        this.elements.progressText.textContent = `${unlockedCount} de ${totalCount} secretos encontrados`;
+    }
+
+    clearContent() {
+        this.elements.contentDiv.innerHTML = '';
+        this.elements.contentDiv.hidden = true;
+        this.elements.input.value = '';
+        this.elements.input.focus();
+    }
+
+    displayContent(data, code) {
+        this.elements.contentDiv.hidden = false;
+        this.elements.contentDiv.innerHTML = '';
+
+        const title = document.createElement('h2');
+        title.className = 'section-title';
+        title.style.marginBottom = '10px';
+        title.textContent = data.titulo || code; // Usar título si existe
+        this.elements.contentDiv.appendChild(title);
+
+        if (data.type === "text") {
+            const p = document.createElement("p");
+            p.className = "mensaje-texto";
+            p.innerText = data.texto;
+            this.elements.contentDiv.appendChild(p);
+        } 
+        else if (data.type === "image") {
+            const img = document.createElement("img");
+            img.src = data.url;
+            img.alt = "Secreto desbloqueado";
+            img.onload = () => {
+                // ViewerJS para zoom
+                new Viewer(img, { toolbar: false, navbar: false, title: false });
+            };
+            this.elements.contentDiv.appendChild(img);
+        } 
+        else if (data.type === "video") {
+            const wrapper = document.createElement("div");
+            wrapper.className = "video-wrapper";
+            
+            const loader = document.createElement("div");
+            loader.className = "video-loader";
+            
+            const iframe = document.createElement("iframe");
+            iframe.className = "video-frame";
+            iframe.src = data.url; 
+            iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture";
+            iframe.allowFullscreen = true;
+            iframe.onload = () => {
+                iframe.style.opacity = "1";
+                loader.style.display = "none";
+            };
+
+            wrapper.appendChild(loader);
+            wrapper.appendChild(iframe);
+            this.elements.contentDiv.appendChild(wrapper);
         }
+        else if (data.type === "download") { // WENC o Archivo
+            this.renderDownloadCard(data);
+        }
+    }
 
-        mediaElement.src = objectUrl;
-        contentContainer.appendChild(mediaElement);
+    // Render de herramientas y wenc (se mantiene igual o similar)
+    renderDownloadCard(data) {
+        const card = document.createElement("div");
+        card.className = "glass-card";
+        card.style.margin = "0 auto";
+        
+        card.innerHTML = `
+            <i class="fas fa-file-lock" style="font-size:3em; margin-bottom:15px; color:var(--highlight-pink);"></i>
+            <h3>Archivo Protegido</h3>
+            <p>${data.descarga.nombre}</p>
+            <div class="input-container" style="margin-top:15px;">
+                <input type="password" id="wencPassword" placeholder="Contraseña..." style="width:100%; margin-bottom:10px;">
+                <button id="btnDecrypt" class="button" style="width:100%">Desbloquear</button>
+            </div>
+            <div id="decryptProgress" style="width:100%; background:#333; height:5px; margin-top:10px; border-radius:3px;" hidden>
+                <div id="decryptBar" style="width:0%; height:100%; background:var(--highlight-pink); transition:width 0.2s;"></div>
+            </div>
+        `;
+
+        const btn = card.querySelector("#btnDecrypt");
+        const passInput = card.querySelector("#wencPassword");
+        
+        btn.onclick = async () => {
+            const pass = passInput.value;
+            if(!pass) return this.showToast("Introduce la contraseña");
+            
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            card.querySelector("#decryptProgress").hidden = false;
+            const bar = card.querySelector("#decryptBar");
+
+            try {
+                const blob = await descifrarArchivo(data.descarga.url, data.descarga.nombre, pass, (percent) => {
+                    bar.style.width = percent + "%";
+                });
+                this.showMediaModal(blob, data.descarga.nombre);
+                btn.innerHTML = "Desbloquear";
+                btn.disabled = false;
+            } catch (e) {
+                this.showToast("Error: Contraseña incorrecta");
+                btn.innerHTML = "Reintentar";
+                btn.disabled = false;
+            }
+        };
+
+        this.elements.contentDiv.appendChild(card);
+    }
+
+    showMediaModal(blob, filename) {
+        const url = URL.createObjectURL(blob);
+        const type = blob.type;
+        const overlay = document.createElement("div");
+        overlay.className = "media-modal-overlay";
+        
+        const container = document.createElement("div");
+        container.className = "glass-card";
+        container.style.width = "95%";
+        container.style.maxWidth = "600px";
+        container.style.maxHeight = "90vh";
+        container.style.display = "flex";
+        container.style.flexDirection = "column";
+        
+        let content;
+        if (type.startsWith("image/")) {
+            content = document.createElement("img");
+            content.src = url;
+            content.className = "secure-media";
+        } else if (type.startsWith("video/")) {
+            content = document.createElement("video");
+            content.src = url;
+            content.controls = true;
+            content.className = "secure-media";
+        } else if (type.startsWith("audio/")) {
+            content = document.createElement("audio");
+            content.src = url;
+            content.controls = true;
+            content.style.width = "100%";
+            content.style.marginTop = "20px";
+        } else {
+            content = document.createElement("div");
+            content.innerHTML = `<p>Archivo descifrado listo.</p>`;
+        }
 
         const controls = document.createElement("div");
         controls.className = "media-controls";
+        controls.style.marginTop = "20px";
+        controls.style.justifyContent = "center";
 
-        const btnDownload = document.createElement("button");
+        const btnDownload = document.createElement("a");
+        btnDownload.href = url;
+        btnDownload.download = filename.replace(".wenc", "");
         btnDownload.className = "media-btn";
-        btnDownload.innerHTML = '<i class="fas fa-save"></i> Guardar';
-        btnDownload.onclick = () => {
-            const a = document.createElement("a");
-            a.href = objectUrl;
-            a.download = filename;
-            a.click();
-        };
+        btnDownload.innerHTML = '<i class="fas fa-download"></i> Guardar';
 
         const btnClose = document.createElement("button");
-        btnClose.className = "media-btn close";
+        btnClose.className = "media-btn";
         btnClose.innerHTML = '<i class="fas fa-times"></i> Cerrar';
-        
-        const closeFn = () => {
-            document.body.removeChild(overlay);
-            URL.revokeObjectURL(objectUrl);
+        btnClose.onclick = () => {
+            URL.revokeObjectURL(url);
+            overlay.remove();
         };
-        btnClose.onclick = closeFn;
 
         controls.appendChild(btnDownload);
         controls.appendChild(btnClose);
-
-        // Orden: Imagen arriba, Botones abajo
-        overlay.appendChild(contentContainer);
-        overlay.appendChild(controls);
         
+        container.appendChild(content);
+        container.appendChild(controls);
+        overlay.appendChild(container);
         document.body.appendChild(overlay);
     }
-
-    /**
-     * MODAL PASSWORD (Glassmorphism)
-     */
-    askPassword(filename, callback) {
-        const overlay = document.createElement("div");
-        overlay.className = "glass-overlay";
-        
-        const card = document.createElement("div");
-        card.className = "glass-card";
-        card.innerHTML = `<h3 style="margin-top:0;">Desbloquear Archivo</h3><p style="font-size:0.9em;margin-bottom:15px;opacity:0.8">Introduce la contraseña para:<br><b>${filename}</b></p>`;
-
-        const input = document.createElement("input");
-        input.type = "password"; input.placeholder = "Contraseña...";
-        input.style.cssText = "width:100%;padding:12px;margin-bottom:15px;border:1px solid rgba(0,0,0,0.1);border-radius:8px;font-size:16px;box-sizing:border-box;background:rgba(255,255,255,0.9);";
-        input.setAttribute("autocomplete", "off"); input.setAttribute("autocorrect", "off"); input.setAttribute("autocapitalize", "off");
-
-        const btnContainer = document.createElement("div");
-        btnContainer.style.display = "flex"; btnContainer.style.gap = "10px";
-
-        const btnCancel = document.createElement("button");
-        btnCancel.textContent = "Cancelar";
-        btnCancel.style.cssText = "flex:1;padding:10px;border:none;background:rgba(0,0,0,0.1);border-radius:6px;cursor:pointer;color:inherit;";
-        
-        const btnConfirm = document.createElement("button");
-        btnConfirm.textContent = "Desbloquear";
-        btnConfirm.style.cssText = "flex:1;padding:10px;border:none;background:var(--primary-color, #ff4d6d);color:white;border-radius:6px;cursor:pointer;font-weight:bold;box-shadow:0 4px 15px rgba(255, 77, 109, 0.4);";
-
-        btnContainer.appendChild(btnCancel); btnContainer.appendChild(btnConfirm);
-        card.appendChild(input); card.appendChild(btnContainer); overlay.appendChild(card);
-        document.body.appendChild(overlay);
-        input.focus();
-
-        const close = () => document.body.removeChild(overlay);
-        btnCancel.onclick = close;
-        const submit = () => { const pass = input.value; if(pass){ close(); callback(pass); } else { input.style.border = "1px solid red"; input.focus(); } };
-        btnConfirm.onclick = submit; input.onkeydown = (e) => { if(e.key === 'Enter') submit(); };
-    }
-
-    // --- HELPERS (Toast, Menú, Audio) ---
-    renderMessage(t,b){const c=this.elements.contentDiv;c.hidden=0;c.innerHTML=`<h2>${t}</h2><p>${b}</p>`;c.classList.remove("fade-in");void c.offsetWidth;c.classList.add("fade-in");}
-    showError(){this.elements.input.classList.add("shake","error");setTimeout(()=>this.elements.input.classList.remove("shake"),500);}
-    showSuccess(){this.elements.input.classList.remove("error");this.elements.input.classList.add("success");}
-    clearInput(){this.elements.input.value="";}
-    updateProgress(u,t){const p=t>0?Math.round((u/t)*100):0;this.elements.progressBar.style.width=`${p}%`;this.elements.progressText.textContent=`Descubiertos: ${u} / ${t}`;}
-    showToast(m){const t=document.createElement("div");t.className="achievement-toast";t.textContent=m;this.elements.toastContainer.appendChild(t);setTimeout(()=>t.remove(),4000);}
-    updateAudioUI(play,name){const b=document.getElementById("audioPlayPause"); const l=document.getElementById("trackName");if(b)b.innerHTML=play?'<i class="fas fa-pause"></i>':'<i class="fas fa-play"></i>';if(l&&name)l.textContent=name.replace(/_/g," ").replace(/\.[^/.]+$/,"");}
     
-    setupMenuListeners(){
-        this.elements.menuButton.addEventListener("click",(e)=>{e.stopPropagation();this.elements.dropdownMenu.classList.toggle("show");});
-        document.addEventListener("click",(e)=>{if(!this.elements.menuButton.contains(e.target)&&!this.elements.dropdownMenu.contains(e.target))this.elements.dropdownMenu.classList.remove("show");});
-        this.bindMenuAction("menuHome",()=>{this.toggleUnlockedPanel(0);window.scrollTo({top:0,behavior:'smooth'});});
-        this.bindMenuAction("menuShowUnlocked",()=>this.toggleUnlockedPanel(1));
-        this.bindMenuAction("menuFavorites",()=>{this.toggleUnlockedPanel(1);this.showingFavoritesOnly=1;this.updateFilterUI();this.triggerListFilter();});
-        this.bindMenuAction("menuDarkMode",()=>this.toggleDarkMode());
-        this.bindMenuAction("menuAudio",()=>this.openPanel(this.elements.audioPanel));
-        this.bindMenuAction("menuTools",()=>{this.renderTools();this.openPanel(this.elements.toolsPanel);});
-        this.bindMenuAction("menuExport",()=>this.exportProgress());
-        this.bindMenuAction("menuImport",()=>this.elements.importInput.click());
-        this.elements.importInput.addEventListener("change",(e)=>{if(e.target.files.length)this.handleImportFile(e.target.files[0]);this.elements.importInput.value="";});
-        if(this.elements.closeAudioPanel)this.elements.closeAudioPanel.addEventListener("click",()=>this.closePanel(this.elements.audioPanel));
-        if(this.elements.closeToolsPanel)this.elements.closeToolsPanel.addEventListener("click",()=>this.closePanel(this.elements.toolsPanel));
+    togglePanel(panel, show) {
+        if(show) panel.classList.add('show');
+        else panel.classList.remove('show');
     }
-    bindMenuAction(id,fn){const b=document.getElementById(id);if(b)b.addEventListener("click",()=>{fn();this.elements.dropdownMenu.classList.remove("show");});}
-    openPanel(p){if(p){p.classList.add("show");p.setAttribute("aria-hidden","false");}}
-    closePanel(p){if(p){p.classList.remove("show");p.setAttribute("aria-hidden","true");}}
-    renderTools(){const c=this.elements.toolsListContainer;if(!c)return;c.innerHTML="";herramientasExternas.forEach(t=>{const d=document.createElement("div");d.className="tool-card";d.innerHTML=`<div class="tool-header"><i class="${t.icono}"></i> ${t.nombre}</div><div class="tool-desc">${t.descripcion}</div><a href="${t.url}" target="_blank" class="tool-btn">Abrir <i class="fas fa-external-link-alt"></i></a>`;c.appendChild(d);});}
-    
-    setupListListeners(){
-        this.elements.searchUnlocked.addEventListener("input",()=>this.triggerListFilter());
-        this.elements.categoryFilter.addEventListener("change",()=>this.triggerListFilter());
-        this.elements.filterFavBtn.addEventListener("click",()=>{this.showingFavoritesOnly=!this.showingFavoritesOnly;this.updateFilterUI();this.triggerListFilter();});
-        this.elements.closeUnlockedBtn.addEventListener("click",()=>this.toggleUnlockedPanel(0));
-    }
-    toggleUnlockedPanel(s){this.elements.unlockedSection.hidden=!s;if(s)this.elements.unlockedSection.scrollIntoView({behavior:'smooth'});}
-    updateFilterUI(){const b=this.elements.filterFavBtn;b.classList.toggle("active",this.showingFavoritesOnly);b.innerHTML=this.showingFavoritesOnly?'<i class="fas fa-heart"></i> Favoritos':'<i class="far fa-heart"></i> Favoritos';}
-    renderUnlockedList(u,f,m){
-        this.currentData={u,f,m}; const cats=new Set();Object.values(m).forEach(v=>{if(v.categoria)cats.add(v.categoria)});
-        const cur=this.elements.categoryFilter.value; this.elements.categoryFilter.innerHTML='<option value="">Todas</option>';
-        cats.forEach(c=>{const o=document.createElement("option");o.value=c;o.textContent=c;if(c===cur)o.selected=1;this.elements.categoryFilter.appendChild(o)});
-        this.triggerListFilter();
-    }
-    triggerListFilter(){
-        if(!this.currentData)return; const {u,f,m}=this.currentData;
-        const s=normalizeText(this.elements.searchUnlocked.value); const cat=this.elements.categoryFilter.value;
-        this.elements.unlockedList.innerHTML=""; let vc=0;
-        Object.keys(m).sort().forEach(code=>{
-            const d=m[code]; const isU=u.has(code);
-            if(this.showingFavoritesOnly&&!f.has(code))return;
-            if(s&&isU&&!normalizeText(code).includes(s))return;
-            if(cat&&d.categoria!==cat)return;
-            vc++; const li=document.createElement("li");
-            if(isU){
-                li.className="lista-codigo-item"; li.innerHTML=`<div style="flex-grow:1"><span class="codigo-text">${code}</span><span class="category">${d.categoria}</span></div>`;
-                const fb=document.createElement("button");fb.className=`favorite-toggle-btn ${f.has(code)?'active':''}`;fb.innerHTML=`<i class="${f.has(code)?'fas':'far'} fa-heart"></i>`;
-                fb.onclick=(e)=>{e.stopPropagation();if(this.onToggleFavorite)this.onToggleFavorite(code);};
-                li.onclick=()=>{if(this.onCodeSelected)this.onCodeSelected(code);this.elements.contentDiv.scrollIntoView({behavior:'smooth'});}; li.appendChild(fb);
-            }else{
-                li.className="lista-codigo-item locked"; li.innerHTML=`<div style="flex-grow:1;display:flex;align-items:center;"><i class="fas fa-lock lock-icon"></i><div><span class="codigo-text">??????</span><span class="category" style="opacity:0.5">${d.categoria||'Secreto'}</span></div></div>`;
-                li.onclick=()=>this.showToast("🔒 ¡Sigue buscando!");
-            }
-            this.elements.unlockedList.appendChild(li);
+
+    renderTools() {
+        this.elements.toolsListContainer.innerHTML = '';
+        herramientasExternas.forEach(tool => {
+            const card = document.createElement("div");
+            card.className = "tool-card";
+            card.innerHTML = `
+                <div class="tool-header"><i class="${tool.icono}"></i> ${tool.nombre}</div>
+                <div class="tool-desc">${tool.descripcion}</div>
+                <a href="${tool.url}" target="_blank" class="tool-btn">Abrir</a>
+            `;
+            this.elements.toolsListContainer.appendChild(card);
         });
-        if(vc===0)this.elements.unlockedList.innerHTML='<p style="text-align:center;width:100%;opacity:0.7">Sin resultados.</p>';
     }
-    
-    exportProgress(){const d={unlocked:JSON.parse(localStorage.getItem("desbloqueados")||"[]"),favorites:JSON.parse(localStorage.getItem("favoritos")||"[]"),achievements:JSON.parse(localStorage.getItem("logrosAlcanzados")||"[]"),timestamp:new Date().toISOString()};const b=new Blob([JSON.stringify(d,null,2)],{type:"application/json"});const u=URL.createObjectURL(b);const a=document.createElement("a");a.href=u;a.download=`progreso_${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(u);this.showToast("Progreso exportado");}
-    handleImportFile(f){const r=new FileReader();r.onload=(e)=>{try{const d=JSON.parse(e.target.result);if(this.onImportData)this.onImportData(d);}catch(z){this.showToast("Archivo inválido");}};r.readAsText(f);}
 }
