@@ -951,6 +951,564 @@ export const mensajes = {
     categoria: "Carta",
     pista: "Recurso que los agentes generan y usan para activar habilidades especiales durante la batalla contra los Hollows."
   },
+  "skipper": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/MR-KS-HS-E82969.jpg.wenc",
+      nombre: "MR-KS-HS-E82969.jpg.wenc"
+    },
+    categoria: "Cosplay",
+    pista: "El pingüino líder, bajito, que siempre dice: “Sonrían y saluden, muchachos”."
+  },
+  "rico": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/MR-KS-HS-3B0534.jpg.wenc",
+      nombre: "MR-KS-HS-3B0534.jpg.wenc"
+    },
+    categoria: "Cosplay",
+    pista: "El pingüino experto del equipo en explosivos, sarcasmo y soluciones extremas."
+  },
+  "kowalski": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/MR-KS-HS-9627FD.jpg.wenc",
+      nombre: "MR-KS-HS-9627FD.jpg.wenc"
+    },
+    categoria: "Cosplay",
+    pista: "Es el pingüino más inteligente del grupo, encargado de los planes, computadoras y análisis táctico."
+  },
+  "cabo": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/MR-KS-HS-79D6A2.jpg.wenc",
+      nombre: "MR-KS-HS-79D6A2.jpg.wenc"
+    },
+    categoria: "Cosplay",
+    pista: "Pingüino fanático de los Lunacornios."
+  },
+  "julien": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/MR-KS-HS-0D526F.jpg.wenc",
+      nombre: "MR-KS-HS-0D526F.jpg.wenc"
+    },
+    categoria: "Cosplay",
+    pista: "Un lémur egocéntrico que se autoproclama rey y vive obsesionado con su corona."
+  },
+  "maurice": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/MR-KS-HS-8505C4.jpg.wenc",
+      nombre: "MR-KS-HS-8505C4.jpg.wenc"
+    },
+    categoria: "Cosplay",
+    pista: "El leal, algo torpe pero adorable guardaespaldas del rey lémur."
+  },
+  "mort": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/MR-KS-NT-8CDF38.jpg.wenc",
+      nombre: "MR-KS-NT-8CDF38.jpg.wenc"
+    },
+    categoria: "Cosplay",
+    pista: "El pequeño lémur nervioso que siempre entra en pánico."
+  },
+  "clasificado": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/MR-KS-NT-4C6332.jpg.wenc",
+      nombre: "MR-KS-NT-4C6332.jpg.wenc"
+    },
+    categoria: "Cosplay",
+    pista: "Un lobo elegante, con acento refinado, que lidera un equipo de agentes encubiertos (Los Pingüinos de Madagascar)."
+  },
+  "eva": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/MR-KS-NT-FC1213.jpg.wenc",
+      nombre: "MR-KS-NT-FC1213.jpg.wenc"
+    },
+    categoria: "Cosplay",
+    pista: "Una lechuza experta en tecnología y operaciones aéreas. Pertenece a La Ráfaga Polar."
+  },
+  "dave": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/MR-KS-NT-3401DB.jpg.wenc",
+      nombre: "MR-KS-NT-3401DB.jpg.wenc"
+    },
+    categoria: "Cosplay",
+    pista: "Un pulpo que odia a los pingüinos por robarse la atención del público."
+  },
+  "slimerancher": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/MR-KS-NT-B0FD60.jpg.wenc",
+      nombre: "MR-KS-NT-B0FD60.jpg.wenc"
+    },
+    categoria: "Cosplay",
+    pista: "Juego en primera persona donde no disparas armas, sino que crías criaturas gelatinosas en un rancho espacial."
+  },
+  "beatrixlebeau": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/MR-KS-NT-149BB5.jpg.wenc",
+      nombre: "MR-KS-NT-149BB5.jpg.wenc"
+    },
+    categoria: "Cosplay",
+    pista: "Ranchera espacial que llega sola a la Lejana, Lejana Pradera para comenzar una nueva vida criando slimes."
+  },
+  "lalejanalejanapradera": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/MR-KS-NT-52F3C0.jpg.wenc",
+      nombre: "MR-KS-NT-52F3C0.jpg.wenc"
+    },
+    categoria: "Cosplay",
+    pista: "Planeta lejano y colorido donde ocurre toda la aventura del rancho de slimes."
+  },
+  "vacpack": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-2ACA96.jpg.wenc",
+      nombre: "NF-IZ-DS-2ACA96.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Herramienta tipo aspiradora que sirve para capturar slimes, recolectar recursos y disparar agua."
+  },
+  "slimes": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-B3FEBF.jpg.wenc",
+      nombre: "NF-IZ-DS-B3FEBF.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Criaturas gelatinosas, rebotonas y sonrientes que son el corazón del juego."
+  },
+  "slimerosa": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-7C4D83.jpg.wenc",
+      nombre: "NF-IZ-DS-7C4D83.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "El slime más común; aparece en casi todas las zonas y come prácticamente cualquier cosa."
+  },
+  "plorts": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-0BAF7B.jpg.wenc",
+      nombre: "NF-IZ-DS-0BAF7B.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Cristales que producen los slimes al comer y que se venden para ganar dinero."
+  },
+  "slimeslargo": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-270CD9.jpg.wenc",
+      nombre: "NF-IZ-DS-270CD9.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Criatura grande creada al combinar dos tipos distintos de slimes."
+  },
+  "eltarr": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-DDE790.jpg.wenc",
+      nombre: "NF-IZ-DS-DDE790.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Resultado peligroso de mezclar demasiados tipos de slimes; destruye todo a su paso."
+  },
+  "agua": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-8F74C5.jpg.wenc",
+      nombre: "NF-IZ-DS-8F74C5.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "El método más efectivo para eliminar slimes Tarr y evitar el caos."
+  },
+  "slimeatigrado": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-A99164.jpg.wenc",
+      nombre: "NF-IZ-DS-A99164.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Su comida favorita es la Gallina Petreo."
+  },
+  "slimegordo": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-DC3BB8.jpg.wenc",
+      nombre: "NF-IZ-DS-DC3BB8.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Es una rara variante de slime que contiene objetos en su interior."
+  },
+  "slimebomba": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-20164B.jpg.wenc",
+      nombre: "NF-IZ-DS-20164B.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "¿Qué slimes se escuchan con frecuencia antes de ser vistos?"
+  },
+  "slimecharco": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-D2D9AB.jpg.wenc",
+      nombre: "NF-IZ-DS-D2D9AB.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Estos slimes no comen vegetales, frutas o carne como otros slimes. ¿Acaso están a dieta?"
+  },
+  "slimefosforescente": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-A14A86.jpg.wenc",
+      nombre: "NF-IZ-DS-A14A86.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Los rancheros a veces se refieren a ellos como “estrellas descendientes”. Su comida favorita es la cubaya."
+  },
+  "slimederoca": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-7AB069.jpg.wenc",
+      nombre: "NF-IZ-DS-7AB069.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "A este slime le encanta la Remolacha Corazón."
+  },
+  "slimedemiel": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-997791.jpg.wenc",
+      nombre: "NF-IZ-DS-997791.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Son una extraña raza de slimes formados por un compuesto slime hiperdulce."
+  },
+  "newbucks": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-AF8F75.jpg.wenc",
+      nombre: "NF-IZ-DS-AF8F75.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "¿Cuál es la moneda de Slime Rancher?"
+  },
+  "slimecazador": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-D59CA9.jpg.wenc",
+      nombre: "NF-IZ-DS-D59CA9.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Es el primo salvaje del slime atigrado."
+  },
+  "slimemeteoro": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-28F2BD.jpg.wenc",
+      nombre: "NF-IZ-DS-28F2BD.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Un slime en particular fue retirado de Slime Rancher debido a problemas de funcionamiento.\nA pesar de su eliminación, los archivos del juego revelan que su comida favorita era Silver Parsnip."
+  },
+  "fuego": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-253891.jpg.wenc",
+      nombre: "NF-IZ-DS-253891.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Descubrimiento que permitió cocinar, protegerse y cambiar el destino humano."
+  },
+  "escritura": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-249D50.jpg.wenc",
+      nombre: "NF-IZ-DS-249D50.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "La forma de hacer que las ideas sobrevivan al tiempo."
+  },
+  "dinero": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-D42098.jpg.wenc",
+      nombre: "NF-IZ-DS-D42098.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Un acuerdo social que convirtió el trueque en economía."
+  },
+  "guerra": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-6687F4.jpg.wenc",
+      nombre: "NF-IZ-DS-6687F4.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Conflicto organizado que ha definido fronteras e imperios."
+  },
+  "religion": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-E45582.jpg.wenc",
+      nombre: "NF-IZ-DS-E45582.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Sistema de creencias que intenta explicar el origen y el sentido de la vida."
+  },
+  "democracia": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-D350DF.jpg.wenc",
+      nombre: "NF-IZ-DS-D350DF.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Sistema donde el poder nace del voto colectivo."
+  },
+  "imperioromano": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-BB4300.jpg.wenc",
+      nombre: "NF-IZ-DS-BB4300.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Civilización que influyó en leyes, arquitectura y lenguas modernas."
+  },
+  "revolucion": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-9172A0.jpg.wenc",
+      nombre: "NF-IZ-DS-9172A0.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Cambio radical que rompe con el orden establecido."
+  },
+  "ciencia": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-C31DF2.jpg.wenc",
+      nombre: "NF-IZ-DS-C31DF2.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Método para entender la realidad mediante observación y prueba."
+  },
+  "filosofia": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-A23448.jpg.wenc",
+      nombre: "NF-IZ-DS-A23448.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "El arte de hacerse preguntas antes de aceptar respuestas."
+  },
+  "renacimiento": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-BC1257.jpg.wenc",
+      nombre: "NF-IZ-DS-BC1257.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Época donde el arte y el conocimiento despertaron tras siglos de oscuridad."
+  },
+  "colonialismo": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-D6D0A3.jpg.wenc",
+      nombre: "NF-IZ-DS-D6D0A3.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Expansión territorial que mezcló culturas… y también las destruyó."
+  },
+  "ilustracion": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-DD86C8.jpg.wenc",
+      nombre: "NF-IZ-DS-DD86C8.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Movimiento que puso la razón por encima de la tradición."
+  },
+  "capitalismo": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-4959FB.jpg.wenc",
+      nombre: "NF-IZ-DS-4959FB.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Sistema económico basado en propiedad privada y mercado."
+  },
+  "derechoshumanos": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-F5C51C.jpg.wenc",
+      nombre: "NF-IZ-DS-F5C51C.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Principios que afirman que todas las personas tienen dignidad inherente."
+  },
+  "tiempo": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-4E756A.jpg.wenc",
+      nombre: "NF-IZ-DS-4E756A.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Dimensión que ordena el cambio, aunque nadie puede detenerla."
+  },
+  "totalitarismo": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-5F0582.jpg.wenc",
+      nombre: "NF-IZ-DS-5F0582.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Sistema donde el Estado controla casi todos los aspectos de la vida."
+  },
+  "posverdad": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-0BCB97.jpg.wenc",
+      nombre: "NF-IZ-DS-0BCB97.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Contexto donde la emoción pesa más que el hecho."
+  },
+  "existencialismo": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-F4913F.jpg.wenc",
+      nombre: "NF-IZ-DS-F4913F.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Corriente que afirma que el sentido de la vida no está dado, se construye."
+  },
+  "antropocentrismo": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-F98C94.jpg.wenc",
+      nombre: "NF-IZ-DS-F98C94.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Visión que coloca al ser humano como centro del universo."
+  },
+  "incidentederoswell": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-4A1CC4.jpg.wenc",
+      nombre: "NF-IZ-DS-4A1CC4.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Un objeto cayó del cielo en Nuevo México; el ejército primero habló de un “platillo volador” y luego se retractó."
+  },
+  "proyectobluebook": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-DA9541.jpg.wenc",
+      nombre: "NF-IZ-DS-DA9541.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Investigación oficial de la Fuerza Aérea de EE. UU. sobre miles de avistamientos de objetos voladores no identificados."
+  },
+  "wow": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-1755EC.jpg.wenc",
+      nombre: "NF-IZ-DS-1755EC.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Una señal de radio extremadamente potente y breve, detectada por un radiotelescopio, nunca volvió a repetirse (1977)."
+  },
+  "manuscritovoynich": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-F9E462.jpg.wenc",
+      nombre: "NF-IZ-DS-F9E462.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Un libro ilustrado escrito en un idioma desconocido que nadie ha logrado descifrar completamente."
+  },
+  "zonadelsilencio": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-4ACBDC.jpg.wenc",
+      nombre: "NF-IZ-DS-4ACBDC.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Región donde se reportan fallas en señales de radio y fenómenos inusuales, investigada incluso por la NASA (México)."
+  },
+  "experimentofiladelfia": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-C481C8.jpg.wenc",
+      nombre: "NF-IZ-DS-C481C8.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Relatos de un experimento naval real que dio origen a informes de efectos físicos inexplicables."
+  },
+  "tunguska": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-300790.jpg.wenc",
+      nombre: "NF-IZ-DS-300790.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Explosión masiva en Siberia que arrasó kilómetros de bosque sin dejar cráter ni restos claros."
+  },
+  "skyquakes": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-3B7052.jpg.wenc",
+      nombre: "NF-IZ-DS-3B7052.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Ruidos metálicos o explosivos registrados en distintas partes del mundo sin causa confirmada."
+  },
+  "proyectomkultra": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-F6D90D.jpg.wenc",
+      nombre: "NF-IZ-DS-F6D90D.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Programa real y desclasificado de la CIA que experimentó con control mental y sustancias psicoactivas."
+  },
+  "efectohutchison": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-CF3A41.jpg.wenc",
+      nombre: "NF-IZ-DS-CF3A41.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Conjunto de fenómenos físicos extraños observados durante experimentos electromagnéticos documentados."
+  },
+  "evp": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-838970.jpg.wenc",
+      nombre: "NF-IZ-DS-838970.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Grabaciones de sonidos o voces captadas en ambientes sin fuente sonora identificable."
+  },
+  "cronovisor": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-IZ-DS-366270.jpg.wenc",
+      nombre: "NF-IZ-DS-366270.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Dispositivo mencionado en archivos históricos que supuestamente permitía observar eventos del pasado."
+  },
 };
 
 export const logros = [
