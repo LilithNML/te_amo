@@ -1509,15 +1509,6 @@ export const mensajes = {
     categoria: "Fotos",
     pista: "Dispositivo mencionado en archivos históricos que supuestamente permitía observar eventos del pasado."
   },
-  "testeo": {
-    type: "download",
-    descarga: {
-      url: "assets/unlocked_content/encrypted/rsbspa.mp4.wenc",
-      nombre: "rsbspa.mp4.wenc"
-    },
-    categoria: "testeo",
-    pista: "testeo"
-  },
 };
 
 export const logros = [
