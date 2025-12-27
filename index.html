@@ -97,16 +97,26 @@
         </div>
       </div>
 
-      <div class="unlocked-codes-section" id="unlockedSection" hidden>
-        <h2 class="section-title">Galería de Secretos</h2>
-        <div class="filter-controls">
-          <input type="text" id="searchUnlocked" placeholder="Buscar..." />
-          <select id="categoryFilter"><option value="">Todas</option></select>
-          <button id="filterFavBtn" class="button small-button"><i class="far fa-heart"></i> Solo Favoritos</button>
-        </div>
-        <ul id="unlockedList" class="lista-codigos"></ul>
-        <button id="closeUnlockedBtn" class="button small-button" style="margin-top: 20px;">Ocultar Lista</button>
+          <div class="unlocked-codes-section" id="unlockedSection" hidden>
+      <h2 class="section-title">Galería de Secretos</h2>
+      
+      <div class="filter-controls">
+        <input type="text" id="searchUnlocked" placeholder="Buscar..." />
+        <select id="categoryFilter"><option value="">Todas</option></select>
+        <button id="filterFavBtn" class="button small-button"><i class="far fa-heart"></i> Solo Favoritos</button>
       </div>
+
+      <ul id="unlockedList" class="lista-codigos"></ul>
+
+      <div id="paginationControls" class="pagination-container" hidden>
+        <button id="prevPageBtn" class="pagination-btn"><i class="fas fa-chevron-left"></i></button>
+        <span id="pageIndicator" class="page-indicator">1 / 1</span>
+        <button id="nextPageBtn" class="pagination-btn"><i class="fas fa-chevron-right"></i></button>
+      </div>
+
+      <button id="closeUnlockedBtn" class="button small-button" style="margin-top: 20px;">Ocultar Lista</button>
+          </div>
+      
     </main>
   </div>
 
