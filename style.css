@@ -240,7 +240,7 @@ h2, .section-title { font-family: var(--title-font); color: var(--header-color);
 
 /* 10. LISTAS Y COLECCIÓN */
 
-/* --- REGLA CRÍTICA: Hace que el botón "Ocultar" funcione --- */
+/* Regla para ocultar correctamente */
 .unlocked-codes-section[hidden] {
   display: none !important;
 }
@@ -249,7 +249,7 @@ h2, .section-title { font-family: var(--title-font); color: var(--header-color);
   background-color: var(--content-bg); padding: 1.5rem; 
   border-radius: 12px; margin-top: 1.5rem; border: 1px solid rgba(255,255,255,0.05);
   display: flex; flex-direction: column;
-  max-height: 85vh; /* Evita scroll infinito en la página principal */
+  max-height: 85vh; 
 }
 
 .filter-controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 1.5rem; justify-content: center; }
@@ -263,17 +263,18 @@ h2, .section-title { font-family: var(--title-font); color: var(--header-color);
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
   gap: 12px; 
   list-style: none; 
-  overflow-y: auto; /* Scroll interno si hay muchos códigos */
+  overflow-y: auto; 
 }
 
-/* --- ITEM DE LISTA REDISEÑADO (Grid) --- */
+/* --- ITEM DE LISTA --- */
 .lista-codigo-item {
   position: relative; background: rgba(255,255,255,0.08); 
   padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);
   
-  /* GRID: Icono (fijo) | Texto (flexible) | Favorito (fijo) */
+  /* CAMBIO CLAVE AQUÍ: minmax(0, 1fr) 
+     Esto obliga al Grid a respetar el overflow hidden en lugar de expandirse o colapsar mal */
   display: grid;
-  grid-template-columns: 24px 1fr auto; 
+  grid-template-columns: 24px minmax(0, 1fr) auto; 
   align-items: center;
   gap: 12px;
   
@@ -284,40 +285,38 @@ h2, .section-title { font-family: var(--title-font); color: var(--header-color);
 .lista-codigo-item:hover { background: rgba(255,255,255,0.15); transform: translateY(-2px); }
 .lista-codigo-item.locked { background: rgba(0,0,0,0.2); border: 1px dashed rgba(255,255,255,0.1); opacity: 0.7; }
 
-/* --- SOLUCIÓN ERROR "1 LETRA" Y PUNTOS SUSPENSIVOS (...) --- */
-/* Apunta al contenedor del texto (el segundo hijo del grid) */
+/* --- CONTENEDOR DE TEXTO --- */
 .lista-codigo-item > div:nth-child(2) {
-  min-width: 0;       /* Permite encogerse */
-  width: 100%;        /* Ocupar ancho disponible */
-  overflow: hidden;   
-  display: flex;
-  flex-direction: column;
+  /* se elimino 'display: flex' aquí para evitar colapsos extraños en textos cortos */
+  min-width: 0;
+  width: 100%;
+  overflow: hidden; 
 }
 
 .codigo-text { 
   font-weight: 500; color: var(--text-dark); text-transform: capitalize;
-  display: block;
+  display: block; /* Asegura comportamiento de bloque */
+  width: 100%;
   white-space: nowrap;      
   overflow: hidden;         
-  text-overflow: ellipsis;  /* Agrega los ... si es muy largo */
+  text-overflow: ellipsis; 
 }
 
 .category { 
   font-size: 0.75em; background: rgba(0,0,0,0.3); padding: 2px 8px; 
   border-radius: 10px; color: var(--text-medium);
-  align-self: flex-start; margin-top: 4px;
+  display: inline-block; /* Para que no ocupe todo el ancho */
+  margin-top: 4px;
 }
 
-/* --- SOLUCIÓN CLICS FANTASMA EN FAVORITOS --- */
+/* --- BOTÓN FAVORITOS --- */
 .favorite-toggle-btn { 
   background: none; border: none; font-size: 1.2em; padding: 8px; 
   color: var(--favorite-icon-default); 
-  
-  /* Restringe el tamaño para no tapar el texto */
   width: auto; 
   justify-self: end;
   position: relative; 
-  z-index: 5; /* Prioridad de clic */
+  z-index: 5; 
   cursor: pointer;
 }
 
