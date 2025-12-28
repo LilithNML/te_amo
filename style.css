@@ -240,149 +240,129 @@ h2, .section-title { font-family: var(--title-font); color: var(--header-color);
 
 /* 10. LISTAS Y COLECCIÓN */
 
-/* 10. LISTAS Y COLECCIÓN - DISEÑO CLEAN & PERFORMANCE (FINAL) */
-
 /* --- CONTENEDOR PRINCIPAL --- */
 .unlocked-codes-section[hidden] { display: none !important; }
 
 .unlocked-codes-panel, .unlocked-codes-section { 
-  background: var(--content-bg); /* Fondo sólido eficiente */
-  padding: 1rem; /* Padding reducido */
-  border-radius: 16px; 
+  /* CAMBIO: Quitamos backdrop-filter y usamos un fondo más sólido */
+  background: var(--content-bg); /* Usa el color sólido definido en tus variables */
+  padding: 1.5rem; 
+  border-radius: 16px; /* Bajamos un poco el radio para suavizar bordes de píxeles */
   margin-top: 1.5rem; 
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Borde simple */
+  /* Sin box-shadow pesado */
   display: flex; flex-direction: column;
-  max-height: 80vh; /* Un poco más compacto */
+  max-height: 85vh; 
 }
 
-/* --- FILTROS (Más modernos y alineados) --- */
-.filter-controls { 
-  display: flex; flex-wrap: wrap; gap: 8px; 
-  margin-bottom: 1rem; justify-content: center; 
-}
-
+/* --- FILTROS --- */
+.filter-controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 1.5rem; justify-content: center; }
 .filter-controls input, .filter-controls select { 
-  padding: 8px 12px; 
-  border-radius: 8px; 
-  border: 1px solid rgba(255, 255, 255, 0.1); 
-  background: rgba(0, 0, 0, 0.25); 
+  padding: 12px 15px; 
+  border-radius: 10px; 
+  border: 1px solid rgba(255, 255, 255, 0.15); 
+  background: rgba(0, 0, 0, 0.2); 
   color: var(--text-light); 
-  font-size: 0.9em;
   outline: none;
 }
 
 /* --- LISTA --- */
 .lista-codigos { 
-  display: flex; flex-direction: column; gap: 8px; /* Menos espacio entre items */
+  display: flex; flex-direction: column; gap: 10px; 
   list-style: none; overflow-y: auto; padding: 2px;
+  /* Rendimiento: will-change avisa al navegador que esto se moverá */
   will-change: scroll-position;
 }
 
-/* --- TARJETA DE CÓDIGO (Compacta y Alineada) --- */
+/* --- TARJETA DE CÓDIGO (OPTIMIZADA) --- */
 .lista-codigo-item {
   position: relative; 
-  background: rgba(255,255,255,0.03); 
-  /* Padding vertical reducido para ser más compacto */
-  padding: 10px 12px; 
-  border-radius: 10px; 
-  border: 1px solid rgba(255,255,255,0.03);
+  /* CAMBIO: Color plano en vez de degradado complejo */
+  background: rgba(255,255,255,0.05); 
+  padding: 12px 15px; 
+  border-radius: 12px; 
+  border: 1px solid rgba(255,255,255,0.05);
   
-  /* GRID es mejor para alineación estricta que Flexbox en este caso */
-  display: grid; 
-  /* Columnas: Icono(20px) | Espacio | Texto(Auto) | Botón(36px) */
-  grid-template-columns: 20px 1fr 36px; 
-  align-items: center; /* Alineación vertical perfecta */
-  gap: 12px;
+  /* Flexbox eficiente */
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between;
+  gap: 15px;
   
   cursor: pointer; 
-  transition: background 0.15s ease, transform 0.1s;
+  /* Solo animamos opacidad y transform, que son baratos para la GPU */
+  transition: background 0.2s, transform 0.1s; 
 }
 
 .lista-codigo-item:hover { 
-  background: rgba(255,255,255,0.08); 
-  transform: translateX(2px); /* Pequeño empuje a la derecha */
+  background: rgba(255,255,255,0.1); /* Cambio simple de color al hover */
+  transform: translateY(-1px); /* Movimiento mínimo */
 }
 
-.lista-codigo-item:active { transform: scale(0.99); }
+.lista-codigo-item:active { transform: scale(0.98); }
 
 .lista-codigo-item.locked { 
-  opacity: 0.5; 
-  background: rgba(0,0,0,0.15);
-  border-style: dashed;
+  background: rgba(0,0,0,0.2); 
+  border: 1px dashed rgba(255,255,255,0.1); 
+  opacity: 0.6; 
 }
 
-/* --- ICONO (Si existe) O PRIMER ELEMENTO --- */
-.lista-codigo-item > *:first-child {
-  display: flex; justify-content: center; /* Centrar icono en su celda */
-  color: var(--text-medium);
-  font-size: 0.9em;
-}
-
-/* --- TEXTO Y CATEGORÍA (Columna Central) --- */
-.lista-codigo-item > div:nth-child(2) {
+/* --- TEXTO (Mantiene la corrección de desbordamiento) --- */
+.lista-codigo-item > div {
   min-width: 0;         
   overflow: hidden;     
   display: flex;        
-  flex-direction: column; /* Apilados verticalmente */
+  flex-direction: column;
   justify-content: center;
-  gap: 2px; /* Espacio mínimo entre Título y Categoría */
+  gap: 2px;
 }
 
 .codigo-text { 
   font-family: var(--body-font);
   font-weight: 600; 
-  font-size: 1rem; /* Tamaño de fuente equilibrado (ni muy grande ni muy chico) */
+  font-size: 1.1em;
   color: var(--text-light); 
   text-transform: capitalize;
   display: block;
   white-space: nowrap;      
   overflow: hidden;         
   text-overflow: ellipsis; 
-  line-height: 1.2; /* Importante para la alineación */
 }
 
 /* --- ETIQUETA --- */
 .category { 
-  font-size: 0.7em; 
-  color: var(--text-medium);
-  /* Estilo minimalista sin fondo pesado para ahorrar ruido visual */
-  display: flex; align-items: center;
-  gap: 4px;
-  opacity: 0.8;
+  font-size: 0.75em; 
+  /* Fondo semitransparente simple */
+  background: rgba(163, 195, 189, 0.1); 
+  color: var(--progress-color);
+  padding: 2px 8px; 
+  border-radius: 6px; /* Menos radio es más fácil de dibujar */
+  align-self: flex-start; 
+  max-width: 100%; 
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
-/* Agregamos un pequeño punto de color antes de la categoría */
-.category::before {
-  content: '';
-  display: inline-block;
-  width: 6px; height: 6px;
-  background-color: var(--progress-color);
-  border-radius: 50%;
-}
-
-/* --- BOTÓN FAVORITOS (Columna Derecha) --- */
+/* --- BOTÓN FAVORITOS --- */
 .favorite-toggle-btn { 
-  width: 36px; height: 36px; /* Compacto pero tocable */
+  flex: 0 0 auto; 
+  width: 40px; height: 40px; 
+  /* Quitamos el borde y fondo complejo, dejamos solo área táctil */
   background: transparent; 
-  border-radius: 8px; /* Ligeramente cuadrado es más moderno hoy día */
+  border-radius: 50%;
   border: none;
   display: flex; align-items: center; justify-content: center;
   
-  font-size: 1.1em; 
+  font-size: 1.2em; 
   color: var(--favorite-icon-default); 
   cursor: pointer;
   z-index: 5;
-  transition: color 0.2s, background 0.2s;
 }
 
-/* Feedback al tocar el botón */
+/* Feedback visual simple al tocar */
 .favorite-toggle-btn:active { background: rgba(255,255,255,0.1); }
 
-.favorite-toggle-btn.active { color: var(--highlight-gold); /* Usamos dorado para resaltar */ }
-.favorite-toggle-btn.active i { filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.4)); /* Brillo barato (GPU friendly) */ }
-
-#filterFavBtn.active { background-color: var(--highlight-pink); color: white; border-color: transparent; }
+.favorite-toggle-btn.active { color: var(--favorite-icon-active); }
+#filterFavBtn.active { background-color: var(--highlight-pink); color: white; }
 
 /* 11. MENÚ FAB */
 .menu-button {
