@@ -168,6 +168,40 @@ export class UIManager {
                 };
                 container.appendChild(img);
                 break;
+            case "image_audio":
+                const imgMixed = document.createElement("img");
+                imgMixed.src = data.imagen; 
+                imgMixed.alt = "Momento Especial";
+                
+                
+                imgMixed.style.maxWidth = "100%";
+                imgMixed.style.borderRadius = "12px";
+                imgMixed.style.boxShadow = "0 5px 15px rgba(0,0,0,0.3)";
+                imgMixed.style.cursor = "zoom-in"; 
+                
+                // Funcionalidad de Zoom (ViewerJS)
+                imgMixed.onclick = () => {
+                    // @ts-ignore
+                    const v = new Viewer(imgMixed, { hidden(){v.destroy()}, navbar:0, title:0, toolbar: {zoomIn:1, zoomOut:1, reset:1, rotateLeft:1} });
+                    v.show();
+                };
+                container.appendChild(imgMixed);
+
+                const audioMixed = document.createElement("audio");
+                audioMixed.src = data.audio;
+                audioMixed.autoplay = true;
+                audioMixed.controls = false;
+                audioMixed.style.display = "none";
+                container.appendChild(audioMixed);
+                
+                if (data.texto) {
+                    const p = document.createElement("p");
+                    p.className = "mensaje-texto"; 
+                    p.style.marginTop = "15px";
+                    p.innerText = data.texto;
+                    container.appendChild(p);
+                }
+                break;
             case "video":
                 if (data.videoEmbed) {
                     const w = document.createElement("div"); w.className="video-wrapper";
