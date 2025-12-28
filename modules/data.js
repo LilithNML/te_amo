@@ -1689,6 +1689,12 @@ export const mensajes = {
     categoria: "Cosplay",
     pista: "Nombre de la primera canción que lanzó Robleis."
   },
+  "batman": {
+    type: "audio",
+    audio: "assets/unlocked_content/audio/el-señor-de-la-noche.ogg",
+    categoria: "Audio",
+    pista: "El señor de la noche."
+  },
 };
 
 export const logros = [
