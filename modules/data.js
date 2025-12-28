@@ -1690,7 +1690,7 @@ export const mensajes = {
     pista: "Nombre de la primera canción que lanzó Robleis."
   },
   "batman": {
-    type: "audio",
+    type: "image_audio",
     audio: "assets/unlocked_content/audio/el-señor-de-la-noche.ogg",
     imagen: "assets/unlocked_content/images/no_se_rian.jpeg",
     categoria: "Audio",
