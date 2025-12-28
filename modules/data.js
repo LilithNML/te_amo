@@ -1692,6 +1692,7 @@ export const mensajes = {
   "batman": {
     type: "audio",
     audio: "assets/unlocked_content/audio/el-señor-de-la-noche.ogg",
+    imagen: "assets/unlocked_content/images/ramonxmiku.webp",
     categoria: "Audio",
     pista: "El señor de la noche."
   },
