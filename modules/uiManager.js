@@ -141,6 +141,23 @@ export class UIManager {
                 }
                 container.appendChild(pText);
                 break;
+            case "audio":
+                const audio = document.createElement("audio");
+                audio.src = data.audio;
+                audio.autoplay = true; // Se reproduce al instante
+                audio.controls = false; // Sin controles
+                audio.style.display = "none"; // Oculto visualmente
+
+                container.appendChild(audio);
+
+                if (data.texto) {
+                    const p = document.createElement("p");
+                    p.className = "mensaje-texto";
+                    p.style.textAlign = "center";
+                    p.innerText = data.texto;
+                    container.appendChild(p);
+                }
+                break;
             case "image":
                 const img = document.createElement("img");
                 img.src = data.imagen; img.alt = "Secreto"; img.style.cursor = "zoom-in";
