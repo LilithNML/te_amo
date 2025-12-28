@@ -240,87 +240,141 @@ h2, .section-title { font-family: var(--title-font); color: var(--header-color);
 
 /* 10. LISTAS Y COLECCIÓN */
 
-/* Regla para ocultar correctamente */
-.unlocked-codes-section[hidden] {
-  display: none !important;
-}
+/* --- CONTENEDOR PRINCIPAL --- */
+.unlocked-codes-section[hidden] { display: none !important; }
 
 .unlocked-codes-panel, .unlocked-codes-section { 
-  background-color: var(--content-bg); padding: 1.5rem; 
-  border-radius: 12px; margin-top: 1.5rem; border: 1px solid rgba(255,255,255,0.05);
+  background: rgba(30, 32, 33, 0.4); /* Fondo más transparente */
+  backdrop-filter: blur(10px);        /* Efecto cristal fuerte */
+  -webkit-backdrop-filter: blur(10px);
+  padding: 1.5rem; 
+  border-radius: 20px;                /* Bordes más redondeados */
+  margin-top: 1.5rem; 
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2); /* Sombra suave */
   display: flex; flex-direction: column;
   max-height: 85vh; 
 }
 
+/* --- FILTROS Y BUSCADOR --- */
 .filter-controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 1.5rem; justify-content: center; }
 .filter-controls input, .filter-controls select { 
-  padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-color-input); 
-  background: var(--input-bg); color: var(--text-light); outline: none;
+  padding: 12px 18px; 
+  border-radius: 12px; 
+  border: 1px solid rgba(255, 255, 255, 0.1); 
+  background: rgba(0, 0, 0, 0.3); 
+  color: var(--text-light); 
+  outline: none;
+  font-size: 0.95em;
+  transition: border 0.3s, background 0.3s;
 }
+.filter-controls input:focus { border-color: var(--highlight-pink); background: rgba(0, 0, 0, 0.5); }
 
+/* --- LISTA (SCROLL SUAVE) --- */
 .lista-codigos { 
   display: flex; flex-direction: column; gap: 12px; 
-  list-style: none; overflow-y: auto; padding-right: 5px; /* Espacio para scrollbar */
+  list-style: none; overflow-y: auto; padding: 5px; /* Padding interno para que no se corten las sombras */
 }
 
-/* --- ITEM DE LISTA (FLEXBOX) --- */
+/* --- TARJETA DE CÓDIGO --- */
 .lista-codigo-item {
-  position: relative; background: rgba(255,255,255,0.08); 
-  padding: 12px 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);
+  position: relative; 
+  /* Degradado sutil para dar volumen */
+  background: linear-gradient(145deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%);
+  padding: 15px 18px; 
+  border-radius: 16px; /* Bordes suaves */
+  border: 1px solid rgba(255,255,255,0.05);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Sombra sutil de elevación */
   
-  /* Usam Flex para alinear el Div de texto y el Botón */
   display: flex; 
   align-items: center; 
   justify-content: space-between;
-  gap: 15px; /* Separación entre el texto y el corazón */
+  gap: 15px;
   
-  cursor: pointer; transition: background 0.2s, transform 0.2s;
+  cursor: pointer; 
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); /* Animación fluida */
 }
 
-.lista-codigo-item:hover { background: rgba(255,255,255,0.15); transform: translateY(-2px); }
-.lista-codigo-item.locked { background: rgba(0,0,0,0.2); border: 1px dashed rgba(255,255,255,0.1); opacity: 0.7; }
+.lista-codigo-item:hover { 
+  background: linear-gradient(145deg, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0.06) 100%);
+  transform: translateY(-3px) scale(1.01); /* Efecto flotante al tocar/pasar mouse */
+  box-shadow: 0 8px 15px rgba(0,0,0,0.2); 
+  border-color: rgba(255,255,255,0.15);
+}
 
+.lista-codigo-item:active { transform: scale(0.98); } /* Feedback táctil al presionar */
 
+.lista-codigo-item.locked { 
+  background: rgba(0,0,0,0.2); 
+  border: 1px dashed rgba(255,255,255,0.1); 
+  opacity: 0.6; 
+  box-shadow: none;
+}
+
+/* --- TEXTO Y CONTENIDO --- */
 .lista-codigo-item > div {
-  min-width: 0;         /* CRÍTICO: Permite encogerse menos que su contenido */
-  overflow: hidden;     /* Necesario para cortar el texto */
-  display: flex;        /* Para organizar título y categoría verticalmente */
+  min-width: 0;         
+  overflow: hidden;     
+  display: flex;        
   flex-direction: column;
   justify-content: center;
+  gap: 4px; /* Espacio entre nombre y categoría */
 }
 
 .codigo-text { 
-  font-weight: 500; color: var(--text-dark); text-transform: capitalize;
+  font-family: var(--body-font);
+  font-weight: 600; 
+  font-size: 1.15em; /* Texto más grande */
+  color: var(--text-light); 
+  text-transform: capitalize;
   display: block;
   white-space: nowrap;      
   overflow: hidden;         
-  text-overflow: ellipsis; /* Puntos suspensivos al final */
-  font-size: 1.1em;
+  text-overflow: ellipsis; 
+  letter-spacing: 0.5px;
 }
 
+/* --- ETIQUETA DE CATEGORÍA (ESTILO PILL/PASTILLA) --- */
 .category { 
-  font-size: 0.75em; background: rgba(0,0,0,0.3); padding: 2px 8px; 
-  border-radius: 10px; color: var(--text-medium);
-  align-self: flex-start; /* Alineado a la izquierda */
-  margin-top: 4px;
-  max-width: 100%; /* Asegura que la categoría tampoco rompa el layout */
+  font-size: 0.75em; 
+  background: rgba(163, 195, 189, 0.15); /* Fondo suave basado en la paleta */
+  color: var(--progress-color);          /* Color de acento */
+  padding: 4px 10px; 
+  border-radius: 20px; /* Forma de pastilla */
+  align-self: flex-start; 
+  max-width: 100%; 
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  border: 1px solid rgba(163, 195, 189, 0.2);
+  font-weight: 500;
 }
 
-/* --- BOTÓN DE FAVORITOS --- */
+/* --- BOTÓN DE FAVORITOS (CIRCULAR Y TÁCTIL) --- */
 .favorite-toggle-btn { 
-  /* flex-shrink: 0 evita que el botón sea aplastado por un texto largo */
   flex: 0 0 auto; 
-  background: none; border: none; font-size: 1.3em; padding: 10px; 
+  width: 42px; height: 42px; /* Área de toque generosa para móvil */
+  background: rgba(0,0,0,0.2); /* Círculo oscuro de fondo */
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.05);
+  display: flex; align-items: center; justify-content: center;
+  
+  font-size: 1.1em; 
   color: var(--favorite-icon-default); 
   cursor: pointer;
   z-index: 5;
-  transition: transform 0.2s;
+  transition: all 0.3s ease;
 }
 
-.favorite-toggle-btn:active { transform: scale(0.8); }
-.favorite-toggle-btn.active { color: var(--favorite-icon-active); }
-#filterFavBtn.active { background-color: var(--highlight-pink); color: white; }
+.favorite-toggle-btn:hover { background: rgba(255,255,255,0.1); }
+.favorite-toggle-btn:active { transform: scale(0.9); }
+
+.favorite-toggle-btn.active { 
+  color: var(--favorite-icon-active); 
+  background: rgba(255, 215, 0, 0.15); /* Fondo dorado suave al activar */
+  border-color: rgba(255, 215, 0, 0.3);
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+}
+
+#filterFavBtn.active { background-color: var(--highlight-pink); color: white; border: none; }
 
 /* 11. MENÚ FAB */
 .menu-button {
