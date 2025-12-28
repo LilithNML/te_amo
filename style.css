@@ -239,110 +239,91 @@ h2, .section-title { font-family: var(--title-font); color: var(--header-color);
 }
 
 /* 10. LISTAS Y COLECCIÓN */
-/* 10. LISTAS Y COLECCIÓN (Scroll Interno & Layout Blindado) */
+
+/* --- REGLA CRÍTICA: Hace que el botón "Ocultar" funcione --- */
+.unlocked-codes-section[hidden] {
+  display: none !important;
+}
+
 .unlocked-codes-panel, .unlocked-codes-section { 
   background-color: var(--content-bg); padding: 1.5rem; 
   border-radius: 12px; margin-top: 1.5rem; border: 1px solid rgba(255,255,255,0.05);
-  /* Aseguramos que el contenedor principal no se expanda infinitamente */
   display: flex; flex-direction: column;
-  max-height: 85vh; /* Ocupa máximo el 85% de la altura de la pantalla */
+  max-height: 85vh; /* Evita scroll infinito en la página principal */
 }
 
-.filter-controls { 
-  display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 1rem; justify-content: center;
-  flex-shrink: 0; /* Evita que el buscador se aplaste */
-}
+.filter-controls { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 1.5rem; justify-content: center; }
 .filter-controls input, .filter-controls select { 
-  flex: 1; min-width: 120px;
   padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-color-input); 
   background: var(--input-bg); color: var(--text-light); outline: none;
 }
 
-/* --- SCROLL INTERNO PARA LA LISTA --- */
 .lista-codigos { 
-  display: flex; flex-direction: column; gap: 8px; 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+  gap: 12px; 
   list-style: none; 
-  
-  /* AQUÍ ESTÁ LA MAGIA DEL SCROLL */
-  overflow-y: auto;       /* Habilita scroll vertical */
-  max-height: 50vh;       /* Altura máxima (50% del viewport) */
-  padding-right: 5px;     /* Espacio para evitar solapamiento con scrollbar */
-  margin-bottom: 1rem;
-  
-  /* Scrollbar fina para este contenedor */
-  scrollbar-width: thin;
-  scrollbar-color: var(--button-bg-initial) rgba(0,0,0,0.1);
+  overflow-y: auto; /* Scroll interno si hay muchos códigos */
 }
 
-/* Estilo de scrollbar webkit (Chrome/Android) */
-.lista-codigos::-webkit-scrollbar { width: 6px; }
-.lista-codigos::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); border-radius: 3px; }
-.lista-codigos::-webkit-scrollbar-thumb { background: var(--button-bg-initial); border-radius: 3px; }
-
-/* --- ITEMS BLINDADOS CONTRA DESBORDAMIENTO --- */
+/* --- ITEM DE LISTA REDISEÑADO (Grid) --- */
 .lista-codigo-item {
   position: relative; background: rgba(255,255,255,0.08); 
   padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);
   
-  /* GRID: Icono | Texto Flexible | Categoría | Corazón */
+  /* GRID: Icono (fijo) | Texto (flexible) | Favorito (fijo) */
   display: grid;
-  grid-template-columns: 24px 1fr auto auto; 
+  grid-template-columns: 24px 1fr auto; 
   align-items: center;
   gap: 12px;
   
-  cursor: pointer; transition: background 0.2s;
+  cursor: pointer; 
+  transition: background 0.2s, transform 0.2s;
 }
 
-.lista-codigo-item:hover { background: rgba(255,255,255,0.15); }
-.lista-codigo-item.locked { background: rgba(0,0,0,0.2); border: 1px dashed rgba(255,255,255,0.1); opacity: 0.6; }
+.lista-codigo-item:hover { background: rgba(255,255,255,0.15); transform: translateY(-2px); }
+.lista-codigo-item.locked { background: rgba(0,0,0,0.2); border: 1px dashed rgba(255,255,255,0.1); opacity: 0.7; }
 
-/* Contenedor del texto para manejar el corte */
+/* --- SOLUCIÓN ERROR "1 LETRA" Y PUNTOS SUSPENSIVOS (...) --- */
+/* Apunta al contenedor del texto (el segundo hijo del grid) */
 .lista-codigo-item > div:nth-child(2) {
-  min-width: 0; /* Crucial para que el texto truncate funcione en Grid */
+  min-width: 0;       /* Permite encogerse */
+  width: 100%;        /* Ocupar ancho disponible */
+  overflow: hidden;   
+  display: flex;
+  flex-direction: column;
 }
 
 .codigo-text { 
   font-weight: 500; color: var(--text-dark); text-transform: capitalize;
   display: block;
-  white-space: nowrap;      /* No saltar línea */
-  overflow: hidden;         /* Ocultar lo que sobra */
-  text-overflow: ellipsis;  /* Poner "..." al final */
+  white-space: nowrap;      
+  overflow: hidden;         
+  text-overflow: ellipsis;  /* Agrega los ... si es muy largo */
 }
 
 .category { 
-  font-size: 0.7em; background: rgba(0,0,0,0.3); padding: 4px 8px; 
-  border-radius: 8px; white-space: nowrap; color: var(--text-medium);
+  font-size: 0.75em; background: rgba(0,0,0,0.3); padding: 2px 8px; 
+  border-radius: 10px; color: var(--text-medium);
+  align-self: flex-start; margin-top: 4px;
 }
 
+/* --- SOLUCIÓN CLICS FANTASMA EN FAVORITOS --- */
 .favorite-toggle-btn { 
-  background: none; border: none; font-size: 1.2em; padding: 5px; 
-  color: var(--favorite-icon-default); cursor: pointer; display: flex;
+  background: none; border: none; font-size: 1.2em; padding: 8px; 
+  color: var(--favorite-icon-default); 
+  
+  /* Restringe el tamaño para no tapar el texto */
+  width: auto; 
+  justify-self: end;
+  position: relative; 
+  z-index: 5; /* Prioridad de clic */
+  cursor: pointer;
 }
-.favorite-toggle-btn.active { color: var(--favorite-icon-active); }
 
+.favorite-toggle-btn.active { color: var(--favorite-icon-active); }
 #filterFavBtn.active { background-color: var(--highlight-pink); color: white; }
 
-/* AJUSTE MÓVIL ESPECÍFICO */
-@media (max-width: 480px) {
-  .lista-codigo-item {
-    padding: 10px; gap: 8px;
-    /* En móvil muy pequeño: Icono | Texto | Corazón (La categoría baja o se oculta si prefieres) */
-    grid-template-columns: 20px 1fr auto; 
-    grid-template-rows: auto auto;
-  }
-  
-  /* Icono candado/tipo */
-  .lista-codigo-item > i:first-child { grid-row: 1 / span 2; align-self: center; }
-  
-  /* Texto nombre */
-  .lista-codigo-item > div:nth-child(2) { grid-column: 2; grid-row: 1; }
-  
-  /* Categoría (baja a segunda línea) */
-  .category { grid-column: 2; grid-row: 2; justify-self: start; font-size: 0.65em; margin-top: 2px; }
-  
-  /* Corazón (se queda a la derecha centrado verticalmente ocupando 2 filas) */
-  .favorite-toggle-btn { grid-column: 3; grid-row: 1 / span 2; align-self: center; }
-}
 /* 11. MENÚ FAB */
 .menu-button {
   position: fixed; bottom: 25px; right: 25px; z-index: var(--z-fab);
