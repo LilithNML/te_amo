@@ -1509,6 +1509,186 @@ export const mensajes = {
     categoria: "Fotos",
     pista: "Dispositivo mencionado en archivos históricos que supuestamente permitía observar eventos del pasado."
   },
+  "samueldeluquebatuecas": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/NF-KS-DS-988F7B.png.wenc",
+      nombre: "NF-KS-DS-988F7B.png.wenc"
+    },
+    categoria: "Fotos",
+    pista: "¿Cuál es el nombre completo real que se esconde detrás del Youtuber conocido como Vegetta777?"
+  },
+  "12041989": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/HF-YV-DS-F620A3.jpg.wenc",
+      nombre: "HF-YV-DS-F620A3.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Fecha exacta en la que nació Vegetta777, escrita en formato ddmmaaaa."
+  },
+  "planetavegeta": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/HF-YV-DS-9CDECF.jpg.wenc",
+      nombre: "HF-YV-DS-9CDECF.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "El mundo más emblemático y recordado de Vegetta777 dentro de Minecraft."
+  },
+  "vicente": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/HF-YV-DS-214EFA.jpg.wenc",
+      nombre: "HF-YV-DS-214EFA.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "¿Cómo se llama el caballo más querido de Vegetta777 en Minecraft?"
+  },
+  "kira": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/HF-YV-DS-60FF4B.jpg.wenc",
+      nombre: "HF-YV-DS-60FF4B.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Nombre de la pequeña gatita que acompaña la vida de Vegetta777."
+  },
+  "wigetta": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/HF-YV-DS-F53959.jpg.wenc",
+      nombre: "HF-YV-DS-F53959.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Serie animada protagonizada por la unión de Willyrex y Vegetta777."
+  },
+  "2008": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/HF-YV-DS-8545B1.jpg.wenc",
+      nombre: "HF-YV-DS-8545B1.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Año en el que Vegetta777 creó su canal de YouTube."
+  },
+  "gameboy": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/HF-YV-DS-EA1FE6.jpg.wenc",
+      nombre: "HF-YV-DS-EA1FE6.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "¿Cuál fue la primera consola que marcó los inicios gamer de Vegetta777?"
+  },
+  "2012": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/HF-YV-DS-60C3AA.jpg.wenc",
+      nombre: "HF-YV-DS-60C3AA.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Año en el que Vegetta777 subió su primer video a YouTube."
+  },
+  "losangeles": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/HF-YV-DS-798697.jpg.wenc",
+      nombre: "HF-YV-DS-798697.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Ciudad en la que Vegetta777 vivió junto a Willyrex durante el año 2014."
+  },
+  "marzo": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/HF-YV-DS-349531.jpg.wenc",
+      nombre: "HF-YV-DS-349531.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Mes del año en el que nació el canal de YouTube de Vegetta777."
+  },
+  "uncharted3": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/HF-YV-DS-CFFB37.jpg.wenc",
+      nombre: "HF-YV-DS-CFFB37.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Videojuego que aparece en el primer video publicado por Vegetta777."
+  },
+  "2015": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/HF-YV-DS-3FE76A.jpg.wenc",
+      nombre: "HF-YV-DS-3FE76A.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Año en el que Vegetta777 consiguió el botón de diamante de YouTube."
+  },
+  "karmarun": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/HF-YV-DS-127F4E.jpg.wenc",
+      nombre: "HF-YV-DS-127F4E.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "¿Cómo se llama el videojuego que lanzó Vegetta777?"
+  },
+  "antonio": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/HF-YV-DS-4AE241.jpg.wenc",
+      nombre: "HF-YV-DS-4AE241.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "¿Cuál es el primer nombre real del youtuber conocido como Robleis?"
+  },
+  "mrtuco08": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/HF-YV-DS-389E27.jpg.wenc",
+      nombre: "HF-YV-DS-389E27.jpg.wenc"
+    },
+    categoria: "Fotos",
+    pista: "Nombre del primer canal de YouTube creado por Robleis."
+  },
+  "elcsenreal": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/MR-KS-ZQ-DE2BDC.png.wenc",
+      nombre: "MR-KS-ZQ-DE2BDC.png.wenc"
+    },
+    categoria: "Cosplay",
+    pista: "Título del primer video subido por Robleis en su canal mrtuco08."
+  },
+  "neca808": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/MR-KS-ZQ-2E37BC.png.wenc",
+      nombre: "MR-KS-ZQ-2E37BC.png.wenc"
+    },
+    categoria: "Cosplay",
+    pista: "Nombre del segundo canal de YouTube perteneciente a Robleis."
+  },
+  "estrenateunarisa": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/MR-KS-ZQ-B25746.png.wenc",
+      nombre: "MR-KS-ZQ-B25746.png.wenc"
+    },
+    categoria: "Cosplay",
+    pista: "¿Cuál fue el nombre del tercer canal de YouTube creado por Robleis?"
+  },
+  "dejaloatras": {
+    type: "download",
+    descarga: {
+      url: "assets/unlocked_content/encrypted/MR-KS-ZQ-F92BBD.png.wenc",
+      nombre: "MR-KS-ZQ-F92BBD.png.wenc"
+    },
+    categoria: "Cosplay",
+    pista: "Nombre de la primera canción que lanzó Robleis."
+  },
 };
 
 export const logros = [
