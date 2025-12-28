@@ -259,67 +259,66 @@ h2, .section-title { font-family: var(--title-font); color: var(--header-color);
 }
 
 .lista-codigos { 
-  display: grid; 
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
-  gap: 12px; 
-  list-style: none; 
-  overflow-y: auto; 
+  display: flex; flex-direction: column; gap: 12px; 
+  list-style: none; overflow-y: auto; padding-right: 5px; /* Espacio para scrollbar */
 }
 
-/* --- ITEM DE LISTA --- */
+/* --- ITEM DE LISTA (FLEXBOX) --- */
 .lista-codigo-item {
   position: relative; background: rgba(255,255,255,0.08); 
-  padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);
+  padding: 12px 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05);
   
-  /* CAMBIO CLAVE AQUÍ: minmax(0, 1fr) 
-     Esto obliga al Grid a respetar el overflow hidden en lugar de expandirse o colapsar mal */
-  display: grid;
-  grid-template-columns: 24px minmax(0, 1fr) auto; 
-  align-items: center;
-  gap: 12px;
+  /* Usam Flex para alinear el Div de texto y el Botón */
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between;
+  gap: 15px; /* Separación entre el texto y el corazón */
   
-  cursor: pointer; 
-  transition: background 0.2s, transform 0.2s;
+  cursor: pointer; transition: background 0.2s, transform 0.2s;
 }
 
 .lista-codigo-item:hover { background: rgba(255,255,255,0.15); transform: translateY(-2px); }
 .lista-codigo-item.locked { background: rgba(0,0,0,0.2); border: 1px dashed rgba(255,255,255,0.1); opacity: 0.7; }
 
-/* --- CONTENEDOR DE TEXTO --- */
-.lista-codigo-item > div:nth-child(2) {
-  /* se elimino 'display: flex' aquí para evitar colapsos extraños en textos cortos */
-  min-width: 0;
-  width: 100%;
-  overflow: hidden; 
+
+.lista-codigo-item > div {
+  min-width: 0;         /* CRÍTICO: Permite encogerse menos que su contenido */
+  overflow: hidden;     /* Necesario para cortar el texto */
+  display: flex;        /* Para organizar título y categoría verticalmente */
+  flex-direction: column;
+  justify-content: center;
 }
 
 .codigo-text { 
   font-weight: 500; color: var(--text-dark); text-transform: capitalize;
-  display: block; /* Asegura comportamiento de bloque */
-  width: 100%;
+  display: block;
   white-space: nowrap;      
   overflow: hidden;         
-  text-overflow: ellipsis; 
+  text-overflow: ellipsis; /* Puntos suspensivos al final */
+  font-size: 1.1em;
 }
 
 .category { 
   font-size: 0.75em; background: rgba(0,0,0,0.3); padding: 2px 8px; 
   border-radius: 10px; color: var(--text-medium);
-  display: inline-block; /* Para que no ocupe todo el ancho */
+  align-self: flex-start; /* Alineado a la izquierda */
   margin-top: 4px;
+  max-width: 100%; /* Asegura que la categoría tampoco rompa el layout */
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
-/* --- BOTÓN FAVORITOS --- */
+/* --- BOTÓN DE FAVORITOS --- */
 .favorite-toggle-btn { 
-  background: none; border: none; font-size: 1.2em; padding: 8px; 
+  /* flex-shrink: 0 evita que el botón sea aplastado por un texto largo */
+  flex: 0 0 auto; 
+  background: none; border: none; font-size: 1.3em; padding: 10px; 
   color: var(--favorite-icon-default); 
-  width: auto; 
-  justify-self: end;
-  position: relative; 
-  z-index: 5; 
   cursor: pointer;
+  z-index: 5;
+  transition: transform 0.2s;
 }
 
+.favorite-toggle-btn:active { transform: scale(0.8); }
 .favorite-toggle-btn.active { color: var(--favorite-icon-active); }
 #filterFavBtn.active { background-color: var(--highlight-pink); color: white; }
 
