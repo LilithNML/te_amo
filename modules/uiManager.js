@@ -77,7 +77,7 @@ export class UIManager {
     }
 
     initDynamicPlaceholder() {
-        const frases = ["Escribe aquí...", "Una fecha especial...", "¿Nuestro lugar?", "Un apodo...", "Nombre de canción..."];
+        const frases = ["Escribe aquí...", "Una fecha especial...", "¿Nuestro lugar?", "Un apodo...", "Nombre de canción...", "Batman"];
         let index = 0;
         setInterval(() => {
             index = (index + 1) % frases.length;
