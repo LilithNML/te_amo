@@ -134,7 +134,7 @@ export class UIManager {
             case "text":
                 const pText = document.createElement("p");
                 pText.className = "mensaje-texto";
-                if (data.categoria && ['pensamiento','carta'].includes(data.categoria.toLowerCase())) {
+                if (data.categoria && ['pensamiento'].includes(data.categoria.toLowerCase())) {
                     this.typeWriterEffect(pText, data.texto);
                 } else {
                     pText.textContent = data.texto;
