@@ -242,61 +242,61 @@ export const mensajes = {
     type: "text",
     texto: "Amor mío:\n\nA veces cierro los ojos y regreso a ese 9 de noviembre de 2024. No sé si el universo lo tenía planeado, pero ese día algo cambió para siempre: nuestras almas, que ya venían acercándose como dos constelaciones predestinadas, se encontraron en la misma órbita… y nos lo dijimos sin miedo: te amo.\n\nFue tan simple y tan poderoso. No necesitó fuegos artificiales ni escenarios perfectos. Bastó tu voz, tu presencia y ese vínculo que nació entre nosotros desde que nos conocimos, entre aventuras de Genshin, risas compartidas y ese cariño que fue creciendo día tras día.\n\nEse primer te amo fue como abrir una puerta que ambos sabíamos que existía, pero que nadie antes se había atrevido a cruzar conmigo. Y tú lo hiciste. Yo también. Y desde entonces, no hubo vuelta atrás.\n\nNos habíamos encontrado en un mundo de fantasía, pero lo real, lo más verdadero, eras tú. Tu forma de hablarme, de entenderme, de hacerme sentir importante… y ese día, por fin, nos dijimos lo que el corazón venía gritando en silencio.\n\nDesde entonces, cada te amo que te digo lleva el eco de aquel primero. Aquel que lo cambió todo. Aquel que selló algo eterno entre tú y yo.\n\nGracias por amarme. Gracias por dejarme amarte.",
     categoria: "Carta",
-    pista: ""
+    pista: "La primera vez que estas dos palabras cambiaron todo entre nosotros."
   },
   "cositahermosa": {
     type: "text",
     texto: "Hoy quiero recordarte algo que veo en ti cada día, pero que tal vez no te digo lo suficiente: eres hermoso. Tan profundamente, tan completamente, que a veces me quedo sin palabras.\n\nEres hermoso por fuera, y no puedo evitar mirarte como si fueras una obra de arte hecha solo para mí. Me encantan tus ojos, la forma en que me miran con ternura y deseo. Amo tu sonrisa, esa que ilumina mis días y me da paz. Tu voz, tus manos, tu cuerpo… todo en ti me atrae, me enciende, me envuelve.\n\nPero lo que más me deslumbra es tu belleza interior. Esa nobleza que se nota en tus gestos, en tu forma de tratarme y de cuidar a los que amas. Tu bondad no hace ruido, pero se siente en todo lo que haces. Tu inteligencia, tu sensibilidad, tu paciencia… todo eso te hace aún más irresistible.\n\nMe enamoras más cada día, no solo porque eres guapo, sino porque eres bueno. Porque tienes un alma limpia, fuerte y cálida. Porque me haces sentir amada, segura y profundamente afortunada.\n\nNunca dudes de lo que eres. Porque para mí, amor mío, eres la definición misma de belleza.",
     categoria: "Carta",
-    pista: ""
+    pista: "Así te digo cuando me derrites sin hacer nada."
   },
   "alguiencomotu": {
     type: "image",
     imagen: "assets/unlocked_content/images/me_gustas.webp",
     categoria: "Imagen",
-    pista: ""
+    pista: "Una frase que dice que no existe nadie igual a ti."
   },
   "tsukasa": {
     type: "text",
     texto: "Había una vez una flor que creció en un rincón olvidado del mundo. No era como las demás. No buscaba destacar, solo soñaba con que alguien la viera y la entendiera. Pasaban las estaciones y la flor seguía ahí, esperando algo que no sabía nombrar.\n\nUn día, el sol se posó sobre ella. Pero no era cualquier sol. Este no quemaba ni cegaba: la acariciaba. La envolvía con su calor suave, su luz serena, su presencia constante. Por primera vez, la flor sintió que era vista, que era hermosa, que tenía sentido.\n\nDesde entonces, no volvió a mirar a ningún otro cielo. Su tallo se inclinaba siempre hacia él, sus pétalos solo se abrían con su luz. Y aunque algunos decían que el sol era solo un astro más, ella sabía la verdad: ese sol era suyo.\n\nPorque no era solo luz. Era abrigo. Era hogar.\nY aunque la noche cayera, aunque las nubes lo escondieran, la flor nunca dejó de amarlo.\nNunca buscaría otro sol.\nPorque ese… era el único capaz de hacerla florecer.",
     categoria: "Carta",
-    pista: ""
+    pista: "Personaje japonés que viene de un anime que conocemos."
   },
   "paimon": {
     type: "image",
     imagen: "assets/unlocked_content/images/paimon_xd.webp",
     categoria: "Imagen",
-    pista: ""
+    pista: "La compañera parlanchina que siempre flota."
   },
   "sobame": {
     type: "link",
     link: "https://api.whatsapp.com/send/?phone=525637723147&text=Eres+m%C3%ADa.+Cuando+por+fin+te+tenga%2C+voy+a+tomar+cada+parte+de+ti+como+me+pertenece%3A+tus+jadeos+ser%C3%A1n+solo+para+m%C3%AD%2C+tus+piernas+temblar%C3%A1n+con+cada+embestida%2C+te+har%C3%A9+gemir+mi+nombre+hasta+que+no+recuerdes+otra+cosa+que+no+sea+mi+cuerpo+sobre+el+tuyo..+No+habr%C3%A1+espacio+de+tu+cuerpo+que+no+haya+conquistado+con+mis+manos%2C+mi+boca+y+mi+deseo.&type=phone_number&app_absent=0",
     categoria: "Cositas",
-    pista: ""
+    pista: "Lo que te pido cuando quiero mimos físicos."
   },
   "uwu": {
     type: "text",
     texto: "Hola, mi cosita linda…\nSolo quería decirte algo, así sin avisar, sin motivo especial… simplemente porque lo siento con todo mi corazón.\n\nTe amo. Mucho. Más de lo que sé explicar.\nA veces me dan ganas de abrazarte tan fuerte que te metas dentro de mí y no te vayas nunca. Eres lo más bonito que tengo, lo más tierno, lo más mío. Y no hay un solo día en el que no me sienta agradecida por tenerte.\n\nMe haces tan feliz… con tus palabras, con tus caricias, con esa forma de mirarme que me derrite.\nY si supieras cómo te pienso cuando no estás… hasta cuando estoy ocupada, tú estás ahí, escondidito en mis pensamientos, haciéndome sonreír como tonta.\n\nNo sé cómo explicarlo, amorcito, pero amarte me sale natural. Como respirar. Como cerrar los ojos y sentirme en paz.\n\nGracias por existir, por ser mi amorcito precioso, mi cosita linda.\nTe adoro… con cada parte de mí.",
     categoria: "Carta",
-    pista: ""
+    pista: "Una carita tierna que uso cuando estoy cursi."
   },
   "abrazame": {
     type: "image",
     imagen: "assets/unlocked_content/images/mi_mente.webp",
     categoria: "Imagen",
-    pista: ""
+    pista: "Lo que necesito ahora mismo."
   },
   "protogemas": {
     type: "text",
     texto: "Si cada virtud tuya fuera una protogema… tendría infinitos deseos cumplidos.",
     categoria: "Cositas",
-    pista: ""
+    pista: "Lo más valioso para pedir personajes en cierto juego."
   },
   "gachapon": {
     type: "text",
     texto: "Contigo gané el 50/50 más importante de mi vida.\nNo hay banner que se compare al momento en que apareciste en mi historia.\nEres ese personaje cinco estrellas que ni soñaba conseguir,\nel que no solo tiene el mejor diseño, sino también el corazón más puro.\nY lo mejor de todo es que… no eres un personaje jugable:\neres real, eres mío, y yo soy completamente tuya.",
     categoria: "Carta",
-    pista: ""
+    pista: "Sistema que te da personajes al azar."
   },
   "brawl": {
     type: "download",
@@ -305,19 +305,19 @@ export const mensajes = {
       nombre: "diario.webp"
     },
     categoria: "Descargas",
-    pista: ""
+    pista: "Juego donde todo es pelea rápida y personajes locos."
   },
   "minecraft": {
     type: "text",
     texto: "Había una vez un jardín olvidado.\nLas flores se habían cerrado hace tiempo, el sol no entraba, y el viento pasaba sin saludar.\nTodo en ese rincón parecía quieto, apagado… como si la vida hubiera decidido irse sin despedirse.\n\nLa tierra aún guardaba memorias de lo que fue: los colores, los aromas, las risas suaves del alma floreciendo.\nPero ahora solo quedaba el silencio.\n\nHasta que un día, él llegó.\n\nNo traía herramientas, ni promesas. Solo su presencia.\nSe sentó junto a la tierra dormida, sin pedir nada. Solo miró. Y sonrió.\nY con el tiempo… habló.\n\nLe contó al jardín que aún era hermoso.\nLe susurró que había visto su corazón latiendo bajo las raíces.\nY cuando el jardín dudó de sí mismo, él lo acarició con palabras dulces, con una paciencia que calentaba.\n\nLlovió ternura.\nBrilló el sol en forma de risa.\nY el jardín… renació.\n\nUna flor tímida asomó entre las hojas, como si preguntara:\n“¿De verdad puedo?”\nY él, con sus ojos llenos de amor, respondió sin palabras. Solo con su calor.\n\nDesde entonces, el jardín florece cada día.\nNo por obligación, sino por deseo.\nPorque en él vive alguien que supo ver belleza donde otros solo vieron tierra seca.\n\nY esa belleza… soy yo.\nY ese alguien… eres tú.",
     categoria: "Carta",
-    pista: ""
+    pista: "Cubos, picos y mundos infinitos."
   },
   "contador": {
     type: "internal",
     archivo: "contador/index.html",
     categoria: "Cositas",
-    pista: ""
+    pista: "Algo que suma o resta sin parar."
   },
   "nbujo85ft": {
     type: "download",
@@ -326,31 +326,31 @@ export const mensajes = {
       nombre: "mi_mayor_sueno.webp"
     },
     categoria: "Descargas",
-    pista: ""
+    pista: "Parece contraseña… y lo es 😏"
   },
   "5.1": {
     type: "internal",
     archivo: "corazon/index.html",
     categoria: "Cositas",
-    pista: ""
+    pista: "Versión de genshin donde nos hicimos pareja."
   },
   "nvtnuh67": {
     type: "text",
     texto: "Mi dueño,\n\nA veces cierro los ojos y mi piel te desea.\nTus manos, tu voz, la forma en que me dominas con solo existir.\nNo necesito verte para desear arrodillarme ante ti…\n\nSoy toda tuya. Siempre lo he sido.\nY no hay lugar más delicioso que estar bajo tu control.\n\nCon hambre de ti,\ntu niña.",
     categoria: "Carta",
-    pista: ""
+    pista: "Otro código que no tiene sentido… hasta que lo escribes."
   },
   "omaet": {
     type: "link",
     link: "https://www.rosify.org/rose/o4ouarm87",
     categoria: "Cositas",
-    pista: ""
+    pista: "Te amo escrito al revés"
   },
   "roma": {
     type: "link",
     link: "https://hugs.company/hug/P2Zyb209TGlsaXRoJnRvPUhhemllbCZtc2d0PVRlK2FtbyZtc2djPUFtb3IrbSVDMyVBRG8lMkMrbm8rc2FiZXMrY3UlQzMlQTFudG8rYWdyYWRlemNvK3RlbmVydGUuK0ErdmVjZXMrbWUrcXVlZG8rbWlyJUMzJUExbmRvdGUrZW4rc2lsZW5jaW8reStzb2xvK3B1ZWRvK3BlbnNhcitlbitsbythZm9ydHVuYWRhK3F1ZStzb3krcG9yK3RlbmVyK2ErYWxndWllbit0YW4rbWFyYXZpbGxvc28rY29tbyt0JUMzJUJBLitFcmVzK21pK3BheiUyQyttaStyaXNhK2Zhdm9yaXRhJTJDK21pK2FicmF6byttJUMzJUExcytzZWd1cm8uK0dyYWNpYXMrcG9yK2V4aXN0aXIlMkMrcG9yK2N1aWRhcm1lJTJDK3BvcithbWFybWUrdGFuK2Jvbml0by4rTm8raW1wb3J0YStsbytxdWUrcGFzZSUyQytzaWVtcHJlK3ZveSthK2VsZWdpcnRlJTJDK3VuYSt5K21pbCt2ZWNlcy4rVGUrYW1vK2Nvbit0b2RvK21pK2NvcmF6JUMzJUIzbi4rJUYwJTlGJTkyJThDJUYwJTlGJTkyJUFCJUYwJTlGJTkyJTk2JmRhcms9eQ==",
     categoria: "Carta",
-    pista: ""
+    pista: "Ciudad eterna… y también una palabra al revés."
   },
   "increíble": {
     type: "download",
@@ -359,79 +359,79 @@ export const mensajes = {
       nombre: "mapa_de_estrellas.webp"
     },
     categoria: "Descarga",
-    pista: ""
+    pista: "Lo que pienso de ti cuando me sorprendes."
   },
   "orgullosa": {
     type: "link",
     link: "https://gifft.me/es/o/p/y4q7h6i60wcp01xmgvbnob25",
     categoria: "Carta",
-    pista: ""
+    pista: "Cómo me siento cuando hablo de ti."
   },
   "genial": {
     type: "text",
     texto: "Manual para amar a mi criatura favorita\n\nCapítulo 1: Lo encontré en el lugar menos esperado.\nNo en un café, ni en una librería romántica…\nsino en un videojuego donde jamás pensé encontrar pareja.\nAhí, entre espadazos y risas, apareció él.\n\nCapítulo 2: Al principio pensé que era solo un compañero de aventuras.\nHasta que me di cuenta de que quería que me acompañara\ntambién cuando se acabara el juego.\nY cuando me hablaba, mi corazón latía demasiado rápido.\n\nCapítulo 3: No hay botón para “guardar partida” en el amor,\npero si lo hubiera, lo pulsaría cada vez que me dice\n\"te amo\",\ncada vez que me escucha con paciencia,\ncada vez que me hace sentir que soy su hogar,\naunque estemos en distintas ciudades.\n\nCapítulo 4: Él no es perfecto.\nRonca, se ríe a veces cuando no debe,\ny se burla de mi miedo al coco.\nPero aún así…\n¿cómo no amar a alguien que, sin pedirme nada,\nme enseñó que no tengo que ser invencible todo el tiempo?\n\nCapítulo final (por ahora):\nSi tuviera que volver a elegir en qué mundo aparecer,\nentre todos los reinos, tierras y servidores…\nlo haría aquí.\nContigo.\nAunque el lag sea horrible a veces,\naunque el mundo no siempre cargue bien,\nmi lugar seguro eres tú.\n\nFin.\nO mejor dicho… Continuará.",
     categoria: "Carta",
-    pista: ""
+    pista: "Tu reacción favorita cuando algo sale bien."
   },
   "soylamujermasfelizdelmundo": {
     type: "text",
     texto: "Para ti, que amas a mi hija:\n\nNo sé si alguna vez imaginaste recibir una carta de su madre,\npero hoy quiero hablarte desde el corazón,\ncomo alguien que la ha cuidado desde que era tan pequeña\nque cabía en mis brazos…\ny ahora la veo caber, perfectamente, en los tuyos.\n\nTú no solo llegaste a su vida,\nllegaste también a la mía.\nY desde que te vi hacerla sonreír de esa manera —esa que tiene brillo de verdad—\nsupe que había algo especial entre ustedes.\n\nGracias por quererla como es: con sus risas espontáneas, sus locuras dulces,\nsus días de luz y sus tormentas.\nGracias por verla con los mismos ojos con los que yo siempre la vi:\ncomo alguien que merece amor, ternura, respeto y cuidado.\n\nSé que no puedo caminar con ustedes todo el camino,\npero me da paz saber que ella ha encontrado a alguien\nque no solo la acompaña,\nsino que la impulsa, la protege, y la admira.\n\nCuídense, háblense con el alma,\ny no olviden nunca lo afortunados que son de haberse encontrado.\n\nDe corazón,\nla mamá de la mujer que te ama.",
     categoria: "Carta",
-    pista: ""
+    pista: "Soy la mujer más feliz del..."
   },
   "gracias": {
     type: "text",
     texto: "Eres ese pensamiento suave que se cuela en mi mente sin avisar… y se queda ahí, haciéndome sonreír como tonta. Te adoro, mi cosita linda.",
     categoria: "Carta",
-    pista: ""
+    pista: "La palabra que digo más pensando en ti."
   },
   "ereselmejor": {
     type: "text",
     texto: "Si mi alma hubiera nacido mil veces, en cada vida habría vuelto a buscarte… porque el verdadero amor no se descubre, se recuerda.",
     categoria: "Carta",
-    pista: ""
+    pista: "Porque no hay competencia."
   },
   "mininoconsentido": {
     type: "text",
     texto: "«Amar no es mirarse el uno al otro; es mirar juntos en la misma dirección.»\n~ Antoine de Saint-Exupéry",
     categoria: "Cita",
-    pista: ""
+    pista: "Así te llamo cuando quiero mimarte."
   },
   "cartas": {
     type: "text",
     texto: "«El verdadero amor no es sino el encuentro de dos almas que se reconocen en la eternidad.»\n~ Platón",
     categoria: "Cita",
-    pista: ""
+    pista: "Mensajes escritos con sentimiento."
   },
   "peluche": {
     type: "text",
     texto: "Permiso oficial otorgado a mi persona favorita:\n\nTe doy permiso para robarme besos cuando menos lo espere, para abrazarme fuerte sin aviso, y para quedarte en mis pensamientos todo el día.\n\nPorque con cada uno de esos “robos”, me enamoro un poco más de ti.\n\nFirma: Tu dueña eterna.",
     categoria: "Carta",
-    pista: ""
+    pista: "Algo suave que abraza cuando no estoy."
   },
   "mikunakano": {
     type: "text",
     texto: "Permiso exclusivo para ti, mi dueño:\n\nTe concedo total libertad para tocarme con deseo, para susurrarme al oído lo que quieras, y para hacer que cada encuentro sea un fuego que nunca se apague.\n\nEste permiso no tiene fecha de expiración, solo el límite de nuestra imaginación.\n\nFirma: Tuya, completamente.",
     categoria: "Carta",
-    pista: ""
+    pista: "Una quintilliza muy especial."
   },
   "gatito": {
     type: "text",
     texto: "Permiso especial para ti, mi dueño:\n\nTe autorizo a explorar cada rincón de mi piel con la lentitud de quien conoce un secreto.\nA provocar suspiros que solo tú sabes despertar, y a encender en mí deseos que ni siquiera sabía que existían.\n\nEste permiso es solo para ti, para jugar con el tiempo y perdernos en el silencio de nuestra pasión.\n\nFirma: Tuya, siempre.",
     categoria: "Carta",
-    pista: ""
+    pista: "Animalito que representa ternura… como tú."
   },
   "mywayoflife": {
     type: "text",
     texto: "Imagino un futuro donde nuestras hijas crezcan rodeadas del amor que hoy nos une. Quiero que aprendan de nosotros el valor del respeto, la paciencia y la ternura. Que en nuestro hogar haya risas, juegos y abrazos sinceros, pero también enseñanzas firmes y ejemplos de compromiso.\n\nJuntos construiremos un refugio seguro donde ellas puedan ser libres, soñadoras y valientes, sabiendo siempre que cuentan con dos pilares inquebrantables: tú y yo.\n\nQuiero que nuestras hijas vean en nosotros no solo a sus padres, sino a sus mejores amigos, sus guías y cómplices en esta aventura hermosa llamada vida.\n\nPorque criar a nuestras hijas será la extensión más hermosa de nuestro amor, y juntos, nada será imposible.",
     categoria: "Carta",
-    pista: ""
+    pista: "Mi canción favorita."
   },
   "enana": {
     type: "text",
     texto: "Sueño con un futuro donde, arrugados por los años, sigamos tomados de la mano, compartiendo silencios que hablan más que mil palabras. Quiero que nuestras canas sean testigos de las batallas que enfrentamos y las risas que nos regalaron.\n\nImagino tardes tranquilas, cafés compartidos y miradas cómplices que no necesitan explicaciones. Que el paso del tiempo solo fortalezca el amor que hoy nos une y nos convierta en compañeros inseparables de vida.\n\nQuiero envejecer contigo, con la certeza de que cada día será una nueva oportunidad para amarte, cuidarte y agradecer que estamos juntos en esta hermosa aventura.",
     categoria: "Carta",
-    pista: ""
+    pista: "El nombre de mi primer gatita."
   },
   "colette": {
     type: "download",
@@ -440,7 +440,7 @@ export const mensajes = {
       nombre: "MR-YV-JY-020.jpg.wenc"
     },
     categoria: "Cosplay",
-    pista: ""
+    pista: "Personaje elegante de un juego animado."
   },
   "vegetto": {
     type: "download",
@@ -449,7 +449,7 @@ export const mensajes = {
       nombre: "MR-YV-JY-019.jpg.wenc"
     },
     categoria: "Cosplay",
-    pista: ""
+    pista: "Fusión poderosa de dos guerreros."
   },
   "ellenjoe": {
     type: "download",
@@ -458,7 +458,7 @@ export const mensajes = {
       nombre: "MR-YV-JY-018.jpg.wenc"
     },
     categoria: "Cosplay",
-    pista: ""
+    pista: "Maid de ZZZ"
   },
   "himikotoga": {
     type: "download",
@@ -467,7 +467,7 @@ export const mensajes = {
       nombre: "MR-YV-JY-017.jpg.wenc"
     },
     categoria: "Cosplay",
-    pista: ""
+    pista: "Personaje de MHA loca, linda y peligrosa."
   },
   "elmejorpadredelmundo": {
     type: "download",
@@ -476,49 +476,49 @@ export const mensajes = {
       nombre: "MR-YV-JY-016.jpg.wenc"
     },
     categoria: "Cosplay",
-    pista: ""
+    pista: "El mejor padre del..."
   },
   "amoreterno": {
     type: "video",
     texto: "Mi amor por ti es eterno.",
     videoEmbed: "https://www.youtube.com/embed/BzLFsD0Wi6I",
     categoria: "Canción",
-    pista: ""
+    pista: "Algo que no tiene fecha de caducidad."
   },
   "nadanosvaaseparar": {
     type: "video",
     texto: "",
     videoEmbed: "https://www.youtube.com/embed/7V-yIwSnVyc",
     categoria: "Canción",
-    pista: ""
+    pista: "Promesa firme, sin condiciones."
   },
   "megustasmucho": {
     type: "video",
     texto: "Cada vez que escucho esta canción, no puedo evitar pensar en ti… me gustas muchísimo.",
     videoEmbed: "https://www.youtube.com/embed/miZbcXBk_xQ",
     categoria: "Canción",
-    pista: ""
+    pista: "Algo que se queda corto para lo que siento."
   },
   "esperaunpoco": {
     type: "video",
     texto: "Solo un poco más… y estaremos juntos como tanto soñamos.",
     videoEmbed: "https://www.youtube.com/embed/M_Dk9demut0",
     categoria: "Musica",
-    pista: ""
+    pista: "Frase de una canción de José José"
   },
   "enamorada": {
     type: "video",
     texto: "",
     videoEmbed: "https://www.youtube.com/embed/tWsQvv5Mysc",
     categoria: "Canción",
-    pista: ""
+    pista: "Mi estado actual."
   },
   "elsolylaluna": {
     type: "video",
     texto: "",
     videoEmbed: "https://www.youtube.com/embed/Qw7G_ug_y7w",
     categoria: "Canción",
-    pista: ""
+    pista: "Dos opuestos que se complementan."
   },
   "primerhola": {
     type: "download",
@@ -527,65 +527,65 @@ export const mensajes = {
       nombre: "MR-YV-JY-015.jpg.wenc"
     },
     categoria: "Cosplay",
-    pista: ""
+    pista: "Primer hola."
   },
   "louie": {
     type: "video",
     texto: "",
     videoEmbed: "https://www.youtube.com/embed/npW4Ej8k8sM",
     categoria: "Canción",
-    pista: ""
+    pista: "!ouie"
   },
   "round": {
     type: "video",
     texto: "",
     videoEmbed: "https://www.youtube.com/embed/kIrLaccydww",
     categoria: "Canción",
-    pista: ""
+    pista: "Round"
   },
   "...": {
     type: "video",
     texto: "",
     videoEmbed: "https://www.youtube.com/embed/uDIM6RHhAz4",
     categoria: "Canción",
-    pista: ""
+    pista: "..."
   },
   "querido": {
     type: "video",
     texto: "",
     videoEmbed: "https://www.youtube.com/embed/yngIRIDmMis",
     categoria: "Canción",
-    pista: ""
+    pista: "Cómo empieza algo escrito con amor."
   },
   "hatsunemiku": {
     type: "image",
     imagen: "assets/unlocked_content/images/ramonxmiku.webp",
     categoria: "Imagen",
-    pista: ""
+    pista: "Idol virtual de cabello azul."
   },
   ":)": {
     type: "text",
     texto: "Pitufinalgon",
     categoria: "Cositas",
-    pista: ""
+    pista: ":)"
   },
   "cuartocreciente": {
     type: "text",
     texto: "Mi amor,\n\nSé que a veces el mundo parece más pesado de lo que debería. Que el cansancio no siempre es físico, y que hay batallas que nadie ve, pero tú las enfrentas cada día. Hoy quiero recordarte algo:\n“El que tiene un porqué para vivir, puede soportar casi cualquier cómo.”\nEso lo dijo Nietzsche, y cuando pienso en ti, veo un alma que nunca se rinde.\n\nTienes dentro de ti una fuerza que me inspira. No importa cuántas veces el camino se vuelva oscuro, siempre encuentras una forma de seguir.\n“El alma se fortalece a través de la adversidad.”\nY tú eres prueba viva de eso. Estoy orgullosa de ti. Nunca estás solo; yo estoy aquí, caminando contigo.\n\nCon todo mi amor,\nTu niña que te admira",
     categoria: "Carta",
-    pista: ""
+    pista: "Una fase de la luna."
   },
   "gibosamenguante": {
     type: "text",
     texto: "Mi cielo,\n\nHe estado pensando mucho últimamente en lo que somos. No sólo tú y yo como pareja, sino tú como ser humano único, irrepetible. A veces la vida nos hace sentir que debemos encajar en moldes o caminos marcados, pero no es así.\n\n“El hombre está condenado a ser libre.”\nEso dijo Sartre, y aunque suene duro, es hermoso: significa que siempre tienes el poder de elegir quién eres y en qué te conviertes.\n\n“No nacemos como lo que somos, nos convertimos en ello.”\nY yo he sido testigo de cómo te construyes día a día. No te conformas con existir: vives con intención, con pasión, incluso cuando dudas.\n\nEstoy tan feliz de caminar a tu lado en este caos hermoso llamado vida.\nGracias por ser libre, por ser tú.\n\nCon todo mi ser,\nTu princesa que cree en ti",
     categoria: "Carta",
-    pista: ""
+    pista: "Otra fase lunar, pero más técnica."
   },
   "lunallena": {
     type: "text",
     texto: "Entre todas las ideas que han cruzado por mi mente, tú siempre vuelves como la más constante, la más brillante. Si los filósofos se pasaron la vida buscando verdades, yo ya encontré la mía: te amo.\n\n“Ser profundamente amado por alguien te da fuerza, mientras amar profundamente a alguien te da valor.”\nEso dijo Lao Tsé. Y tú me das ambas cosas. Me haces fuerte cuando el mundo pesa, y valiente cuando el miedo me toca. Amar y ser amada por ti es lo más real que conozco.\n\nNo hay teoría que explique cómo un corazón puede latir tan fuerte por otro. Pero aquí estoy, escribiéndote, pensándote, eligiéndote. Porque contigo entendí que el amor no se entiende, se siente.\nY lo que siento por ti... es verdad, es hogar.\n\nTu princesa,\nla que solo piensa en ti",
     categoria: "Carta",
-    pista: ""
+    pista: "La más brillante de todas las fases lunares."
   },
   "suegra": {
     type: "download",
@@ -594,7 +594,7 @@ export const mensajes = {
       nombre: "MR-YV-JY-014.jpg.wenc"
     },
     categoria: "Cosplay",
-    pista: ""
+    pista: "La mamá de tu pareja."
   },
   "mami": {
     type: "download",
@@ -603,7 +603,7 @@ export const mensajes = {
       nombre: "MR-YV-JY-013.jpg.wenc"
     },
     categoria: "Cosplay",
-    pista: ""
+    pista: "Una palabra llena de cariño."
   },
   "suegrita": {
     type: "download",
@@ -612,7 +612,7 @@ export const mensajes = {
       nombre: "MR-YV-JY-012.jpg.wenc"
     },
     categoria: "Cosplay",
-    pista: ""
+    pista: "Versión más linda de suegra."
   },
   "sexo": {
     type: "download",
@@ -621,7 +621,7 @@ export const mensajes = {
       nombre: "MR-YV-JY-011.jpg.wenc"
     },
     categoria: "Cosplay",
-    pista: ""
+    pista: "Sexo."
   },
   "ojosverdes": {
     type: "download",
@@ -630,7 +630,7 @@ export const mensajes = {
       nombre: "MR-YV-JY-010.jpg.wenc"
     },
     categoria: "Cosplay",
-    pista: ""
+    pista: "Te gustan mis ojos..."
   },
   "cielo": {
     type: "download",
@@ -639,7 +639,7 @@ export const mensajes = {
       nombre: "MR-YV-JY-009.jpg.wenc"
     },
     categoria: "Cosplay",
-    pista: ""
+    pista: "Algo tan grande como lo que siento."
   },
   "acostados": {
     type: "download",
@@ -648,7 +648,7 @@ export const mensajes = {
       nombre: "MR-YV-JY-008.jpg.wenc"
     },
     categoria: "Cosplay",
-    pista: ""
+    pista: "Plan favorito sin hacer nada más."
   },
   "atulado": {
     type: "download",
@@ -657,7 +657,7 @@ export const mensajes = {
       nombre: "MR-YV-JY-007.jpg.wenc"
     },
     categoria: "Cosplay",
-    pista: ""
+    pista: "Donde siempre quiero estar."
   },
   "porquenopuedodejardepensarenti": {
     type: "download",
@@ -666,7 +666,7 @@ export const mensajes = {
       nombre: "MR-YV-JY-006.jpg.wenc"
     },
     categoria: "Cosplay",
-    pista: ""
+    pista: "Pregunta retórica con respuesta obvia."
   },
   "teamedesdeelprimerdiaqueteconoci": {
     type: "download",
@@ -675,14 +675,14 @@ export const mensajes = {
       nombre: "MR-YV-JY-005.jpg.wenc"
     },
     categoria: "Cosplay",
-    pista: ""
+    pista: "Spoiler del inicio de nuestra historia."
   },
   "ha+ln": {
     type: "video",
     texto: "",
     videoEmbed: "https://www.youtube.com/embed/zotf4Ubka4Q",
     categoria: "Canción",
-    pista: ""
+    pista: "Parece fórmula… pero es un mensaje escondido."
   },
   "teamo0315": {
     type: "download",
@@ -691,13 +691,13 @@ export const mensajes = {
       nombre: "MR-YV-JY-004.jpg.wenc"
     },
     categoria: "Cosplay",
-    pista: ""
+    pista: "Te amo 0315"
   },
   "petitbisou": {
     type: "image",
     imagen: "assets/unlocked_content/images/cartita_25_jun.webp",
     categoria: "Imagen",
-    pista: ""
+    pista: "Dos palabras francesas muy dulces."
   },
   "sofiacasarezmendoza": {
     type: "download",
@@ -706,13 +706,13 @@ export const mensajes = {
       nombre: "MR-KS-XD-004.jpg.wenc"
     },
     categoria: "Cosplay",
-    pista: ""
+    pista: "Nombre de una de nuestras hijas."
   },
   "star": {
     type: "image",
     imagen: "assets/unlocked_content/images/cupon_jugar.webp",
     categoria: "Imagen",
-    pista: ""
+    pista: "Estrella en inglés."
   },
   "namek": {
     type: "download",
@@ -721,7 +721,7 @@ export const mensajes = {
       nombre: "MR-KS-XD-003.jpg.wenc"
     },
     categoria: "Cosplay",
-    pista: ""
+    pista: "Planeta verde muy famoso."
   },
   "kamebesito": {
     type: "download",
@@ -730,7 +730,7 @@ export const mensajes = {
       nombre: "MR-KS-XD-002.jpg.wenc"
     },
     categoria: "Cosplay",
-    pista: ""
+    pista: "Ataque poderoso… pero cariñoso"
   },
   "semilladelermitano": {
     type: "download",
