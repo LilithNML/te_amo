@@ -99,21 +99,89 @@ export class UIManager {
     }
 
     typeWriterEffect(element, text) {
-        if (this.typewriterTimeout) clearTimeout(this.typewriterTimeout);
-        element.innerHTML = ""; element.classList.add("typewriter-cursor");
-        let i = 0; const slow=60; const fast=30; const accel=50;
-        const type = () => {
-            if (i >= text.length) { element.classList.remove("typewriter-cursor"); return; }
-            const char = text.charAt(i);
-            if (char === '\n') element.appendChild(document.createElement('br'));
-            else element.appendChild(document.createTextNode(char));
-            let speed = i < accel ? slow : fast;
-            if (['.','!','?'].includes(char)) speed += 300;
-            if (char === '\n') speed += 400;
-            i++; this.typewriterTimeout = setTimeout(type, speed);
-        };
-        type();
+    if (this.typewriterTimeout) {
+        clearTimeout(this.typewriterTimeout);
+        this.typewriterTimeout = null;
     }
+
+    this.typewriterSkip = false;
+
+    if (!element) return;
+
+    element.innerHTML = "";
+    element.classList.add("typewriter-cursor");
+
+    let i = 0;
+    let tapCount = 0;
+    let tapTimer = null;
+
+    const textLength = text.length;
+
+    // Velocidades base
+    const slowStart = 65;
+    const minSpeed = 22;
+    const accelRange = Math.min(180, textLength * 0.4);
+
+    // Final inmediato
+    const finishInstantly = () => {
+        if (!element) return;
+        element.innerHTML = "";
+        text.split('\n').forEach((line, idx) => {
+            if (idx > 0) element.appendChild(document.createElement('br'));
+            element.appendChild(document.createTextNode(line));
+        });
+        element.classList.remove("typewriter-cursor");
+        this.typewriterSkip = true;
+    };
+
+    // Doble toque / click
+    const tapHandler = () => {
+        tapCount++;
+        clearTimeout(tapTimer);
+
+        if (tapCount === 2) {
+            finishInstantly();
+            tapCount = 0;
+            return;
+        }
+
+        tapTimer = setTimeout(() => {
+            tapCount = 0;
+        }, 280);
+    };
+
+    element.addEventListener("click", tapHandler);
+    element.addEventListener("touchstart", tapHandler);
+
+    const type = () => {
+        if (!element || this.typewriterSkip) return;
+
+        if (i >= textLength) {
+            element.classList.remove("typewriter-cursor");
+            return;
+        }
+
+        const char = text.charAt(i);
+
+        if (char === '\n') {
+            element.appendChild(document.createElement('br'));
+        } else {
+            element.appendChild(document.createTextNode(char));
+        }
+
+        // Aceleración progresiva
+        const progress = Math.min(i / accelRange, 1);
+        let speed = slowStart - (slowStart - minSpeed) * progress;
+
+        if (['.', '!', '?'].includes(char)) speed += 280;
+        if (char === '\n') speed += 360;
+
+        i++;
+        this.typewriterTimeout = setTimeout(type, speed);
+    };
+
+    type();
+}
 
     // --- RENDERIZADO ---
     renderContent(data, key) {
