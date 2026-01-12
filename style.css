@@ -515,81 +515,84 @@ h2, .section-title { font-family: var(--title-font); color: var(--header-color);
 
 
 /* =========================================
-   TYPEWRITER CURSOR — PREMIUM EXPERIENCE
+   TYPEWRITER CURSOR
    ========================================= */
 
 .typewriter-cursor {
   position: relative;
 }
 
-/* Cursor base */
+/* Cuerpo del cursor */
 .typewriter-cursor::after {
   content: '';
   display: inline-block;
 
-  width: 0.55ch;
-  height: 1.15em;
+  width: 2px;
+  height: 1.35em;
 
-  margin-left: 4px;
+  margin-left: 6px;
   vertical-align: -0.15em;
 
   background: linear-gradient(
     180deg,
-    transparent,
+    rgba(255,255,255,0),
     var(--highlight-pink),
-    transparent
+    rgba(255,255,255,0)
   );
 
   border-radius: 2px;
 
-  opacity: 0.75;
+  /* Profundidad */
+  box-shadow:
+    0 0 6px rgba(255, 122, 168, 0.35),
+    0 0 14px rgba(255, 122, 168, 0.25);
+
+  opacity: 0.85;
 
   animation:
-    cursorBreath 2.8s ease-in-out infinite,
-    cursorBlink 1.6s steps(2, start) infinite;
+    cursorPulse 3.6s ease-in-out infinite,
+    cursorFade 1.9s ease-in-out infinite;
 }
 
-/* Respiración suave */
-@keyframes cursorBreath {
+/* Pulso lento */
+@keyframes cursorPulse {
   0%, 100% {
+    transform: scaleY(0.92);
     opacity: 0.55;
-    transform: scaleY(0.95);
   }
   50% {
-    opacity: 0.9;
-    transform: scaleY(1.05);
+    transform: scaleY(1.08);
+    opacity: 1;
   }
 }
 
-/* Parpadeo lento, nada agresivo */
-@keyframes cursorBlink {
+/* Desaparición suave */
+@keyframes cursorFade {
   0%   { visibility: visible; }
-  55%  { visibility: hidden; }
+  60%  { visibility: hidden; }
   100% { visibility: visible; }
 }
 
 /* Cartas largas: más discreto */
 .mensaje-texto.typewriter-cursor::after {
-  opacity: 0.45;
-  animation-duration: 3.2s, 2s;
+  height: 1.25em;
+  box-shadow:
+    0 0 4px rgba(255, 122, 168, 0.25),
+    0 0 10px rgba(255, 122, 168, 0.15);
+  opacity: 0.55;
 }
 
-/* Dark mode refinado */
+/* Dark mode */
 body.dark-mode .typewriter-cursor::after {
-  background: linear-gradient(
-    180deg,
-    transparent,
-    var(--highlight-pink-light),
-    transparent
-  );
-  opacity: 0.6;
+  box-shadow:
+    0 0 6px rgba(255, 174, 208, 0.35),
+    0 0 16px rgba(255, 174, 208, 0.25);
 }
 
 /* Móvil: lujo silencioso */
 @media (max-width: 768px) {
   .typewriter-cursor::after {
-    margin-left: 3px;
-    width: 0.45ch;
-    opacity: 0.4;
+    margin-left: 4px;
+    opacity: 0.45;
   }
 }
