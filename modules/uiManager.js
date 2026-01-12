@@ -99,6 +99,7 @@ export class UIManager {
     }
 
     typeWriterEffect(element, text) {
+    // Limpieza de animación previa
     if (this.typewriterTimeout) {
         clearTimeout(this.typewriterTimeout);
         this.typewriterTimeout = null;
@@ -106,58 +107,67 @@ export class UIManager {
 
     this.typewriterSkip = false;
 
-    if (!element) return;
+    // Protección básica
+    if (!element || !text) return;
 
     element.innerHTML = "";
     element.classList.add("typewriter-cursor");
 
     let i = 0;
-    let tapCount = 0;
-    let tapTimer = null;
-
     const textLength = text.length;
 
-    // Velocidades base
+    // ---- Velocidad adaptativa ----
     const slowStart = 65;
     const minSpeed = 22;
-    const accelRange = Math.min(180, textLength * 0.4);
+    const accelRange = Math.min(220, textLength * 0.45);
 
-    // Final inmediato
+    // ---- Doble toque real (sin bug móvil) ----
+    let lastTapTime = 0;
+
     const finishInstantly = () => {
         if (!element) return;
+
+        // Cancelar futuras ejecuciones
+        this.typewriterSkip = true;
+        if (this.typewriterTimeout) {
+            clearTimeout(this.typewriterTimeout);
+            this.typewriterTimeout = null;
+        }
+
+        // Render completo
         element.innerHTML = "";
         text.split('\n').forEach((line, idx) => {
             if (idx > 0) element.appendChild(document.createElement('br'));
             element.appendChild(document.createTextNode(line));
         });
+
         element.classList.remove("typewriter-cursor");
-        this.typewriterSkip = true;
+        element.removeEventListener("pointerdown", tapHandler);
     };
 
-    // Doble toque / click
     const tapHandler = () => {
-        tapCount++;
-        clearTimeout(tapTimer);
+        const now = Date.now();
+        const delta = now - lastTapTime;
 
-        if (tapCount === 2) {
+        if (delta > 0 && delta < 300) {
             finishInstantly();
-            tapCount = 0;
+            lastTapTime = 0;
             return;
         }
 
-        tapTimer = setTimeout(() => {
-            tapCount = 0;
-        }, 280);
+        lastTapTime = now;
     };
 
-    element.addEventListener("click", tapHandler);
-    element.addEventListener("touchstart", tapHandler);
+    // Un solo evento, compatible mouse + touch
+    element.addEventListener("pointerdown", tapHandler);
 
     const type = () => {
+        // Abortos seguros
         if (!element || this.typewriterSkip) return;
 
         if (i >= textLength) {
             element.classList.remove("typewriter-cursor");
+            element.removeEventListener("pointerdown", tapHandler);
             return;
         }
 
@@ -169,10 +179,11 @@ export class UIManager {
             element.appendChild(document.createTextNode(char));
         }
 
-        // Aceleración progresiva
+        // Progresión suave (cartas largas)
         const progress = Math.min(i / accelRange, 1);
         let speed = slowStart - (slowStart - minSpeed) * progress;
 
+        // Pausas humanas
         if (['.', '!', '?'].includes(char)) speed += 280;
         if (char === '\n') speed += 360;
 
