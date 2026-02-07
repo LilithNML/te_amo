@@ -1692,6 +1692,7 @@ export const mensajes = {
   },
 };
 
+
 export const logros = [
   {
     id: "primer_paso",
@@ -1729,6 +1730,7 @@ export const logros = [
     mensaje: "¡Todos los secretos desbloqueados! Eres mi todo.",
   }
 ];
+
 
 export const herramientasExternas = [
   {
