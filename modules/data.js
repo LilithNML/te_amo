@@ -1,9 +1,3 @@
-/**
- * modules/data.js
- * Base de datos de cartas, logros y herramientas.
- * Contenido limpio: Texto plano sin etiquetas HTML para mejor renderizado.
- */
-
 export const mensajes = {
   "noviembre9": {
     type: "text",
