@@ -8,7 +8,7 @@ const FILES_TO_CACHE = [
   "./style.css",
   "./main.js",
   "./modules/utils.js",
-  "./modules/data.js",
+  "./data.json",
   "./modules/uiManager.js",
   "./modules/audioManager.js",
   "./modules/gameEngine.js",
