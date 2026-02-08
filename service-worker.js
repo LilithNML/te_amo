@@ -1,4 +1,4 @@
-const CACHE_NAME = "turegalo-cache-v3"; // Subimos versión para forzar actualización
+const CACHE_NAME = "turegalo-cache-v4"; // Subimos versión para forzar actualización
 
 // Usamos rutas relativas para que funcione en cualquier carpeta
 const FILES_TO_CACHE = [
