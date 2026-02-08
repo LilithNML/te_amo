@@ -4,11 +4,11 @@
  */
 
 import { normalizeText } from './utils.js';
-import { herramientasExternas } from './data.js';
 import { descifrarArchivo } from './webCryptoDecryptor.js';
 
 export class UIManager {
-    constructor() {
+        constructor(herramientas) {
+        this.herramientas = herramientas || [];
         this.elements = {
             input: document.getElementById("codeInput"),
             contentDiv: document.getElementById("contenido"),
@@ -541,7 +541,7 @@ export class UIManager {
     bindMenuAction(id,fn){const b=document.getElementById(id);if(b)b.addEventListener("click",()=>{fn();this.elements.dropdownMenu.classList.remove("show");});}
     openPanel(p){if(p){p.classList.add("show");p.setAttribute("aria-hidden","false");}}
     closePanel(p){if(p){p.classList.remove("show");p.setAttribute("aria-hidden","true");}}
-    renderTools(){const c=this.elements.toolsListContainer;if(!c)return;c.innerHTML="";herramientasExternas.forEach(t=>{const d=document.createElement("div");d.className="tool-card";d.innerHTML=`<div class="tool-header"><i class="${t.icono}"></i> ${t.nombre}</div><div class="tool-desc">${t.descripcion}</div><a href="${t.url}" target="_blank" class="tool-btn">Abrir <i class="fas fa-external-link-alt"></i></a>`;c.appendChild(d);});}
+    renderTools(){const c=this.elements.toolsListContainer;if(!c)return;c.innerHTML="";this.herramientas.forEach(t=>{const d=document.createElement("div");d.className="tool-card";d.innerHTML=`<div class="tool-header"><i class="${t.icono}"></i> ${t.nombre}</div><div class="tool-desc">${t.descripcion}</div><a href="${t.url}" target="_blank" class="tool-btn">Abrir <i class="fas fa-external-link-alt"></i></a>`;c.appendChild(d);});}
     
     setupListListeners(){
         this.elements.searchUnlocked.addEventListener("input",()=>this.triggerListFilter());
