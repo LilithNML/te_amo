@@ -3,241 +3,251 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Herramienta profesional de cifrado AES-GCM del lado del cliente.">
-    <title>SecureCrypt | Client-Side Encryption</title>
+    <meta name="description" content="SecureCrypt Pro - Cifrado AES-GCM Zero-Knowledge del lado del cliente.">
+    <title>SecureCrypt</title>
     
+    <!-- Fuentes e Iconos -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
     <style>
         /* =========================================
-           1. SISTEMA DE DISEÑO (VARIABLES CSS)
+           SYSTEM DESIGN & VARIABLES
            ========================================= */
         :root {
-            /* Paleta Dark Mode Profesional */
-            --bg-body: #0f172a;       /* Fondo principal */
-            --bg-panel: #1e293b;      /* Fondo de tarjeta */
-            --bg-input: #334155;      /* Fondo de inputs */
-            --border-color: #475569;  /* Bordes sutiles */
+            /* Colores Base - Dark Slate Theme */
+            --bg-app: #0f172a;
+            --bg-panel: #1e293b;
+            --bg-input: #334155;
+            --bg-hover: #475569;
             
+            /* Bordes y Separadores */
+            --border-subtle: #334155;
+            --border-focus: #3b82f6;
+
             /* Tipografía */
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --font-family: 'Inter', system-ui, sans-serif;
-            
-            /* Acciones y Estados */
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --font-main: 'Inter', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+
+            /* Branding & Estados */
             --brand-primary: #3b82f6;
-            --brand-hover: #2563eb;
-            --state-danger: #ef4444;
-            --state-success: #10b981;
-            --state-warning: #f59e0b;
-            
-            /* Componentes */
-            --radius-md: 8px;
-            --radius-lg: 12px;
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            --brand-glow: rgba(59, 130, 246, 0.5);
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --success: #10b981;
+
+            /* Dimensiones */
+            --radius: 12px;
+            --max-w: 580px;
         }
 
-        /* Reset y Base */
-        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
-
+        /* Reset */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        
         body {
-            font-family: var(--font-family);
-            background-color: var(--bg-body);
-            color: var(--text-primary);
+            font-family: var(--font-main);
+            background-color: var(--bg-app);
+            color: var(--text-main);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 1.5rem;
-        }
-
-        /* Contenedor Principal */
-        .app-shell {
-            width: 100%;
-            max-width: 600px;
-            background-color: var(--bg-panel);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-lg);
-            overflow: hidden;
+            display: grid;
+            place-items: center;
+            padding: 1rem;
+            line-height: 1.5;
         }
 
         /* =========================================
-           2. COMPONENTES UI
+           COMPONENTES UI
            ========================================= */
         
-        /* Encabezado */
-        .header {
-            padding: 1.5rem 2rem;
-            border-bottom: 1px solid var(--border-color);
-            background: rgba(15, 23, 42, 0.4);
+        /* Contenedor Principal */
+        .app-shell {
+            width: 100%;
+            max-width: var(--max-w);
+            background: var(--bg-panel);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            position: relative;
         }
-        
-        .header-brand { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
-        .header-title { font-size: 1.25rem; font-weight: 700; color: var(--text-primary); }
-        .header-subtitle { font-size: 0.875rem; color: var(--text-secondary); line-height: 1.5; }
-        .icon-brand { color: var(--brand-primary); }
 
-        /* Navegación (Tabs) */
-        .nav-tabs {
+        /* Header */
+        .header {
+            padding: 2rem;
+            background: linear-gradient(to bottom, #1e293b, #182234);
+            border-bottom: 1px solid var(--border-subtle);
+            text-align: center;
+        }
+
+        .brand-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--brand-primary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .title { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.025em; color: var(--text-main); margin-bottom: 0.5rem; }
+        .subtitle { color: var(--text-muted); font-size: 0.875rem; }
+
+        /* Navegación */
+        .tabs {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-app);
+            padding: 0.25rem;
+            margin: 0;
         }
 
         .tab-btn {
             background: transparent;
             border: none;
+            color: var(--text-muted);
             padding: 1rem;
-            color: var(--text-secondary);
             font-weight: 600;
-            font-size: 0.9rem;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
+            border-radius: calc(var(--radius) - 4px);
             display: flex;
-            align-items: center;
             justify-content: center;
             gap: 0.5rem;
-            border-bottom: 2px solid transparent;
         }
 
-        .tab-btn:hover { background-color: rgba(255,255,255,0.03); color: var(--text-primary); }
+        .tab-btn:hover { color: var(--text-main); }
         
         .tab-btn.active {
+            background: var(--bg-panel);
             color: var(--brand-primary);
-            border-bottom-color: var(--brand-primary);
-            background-color: rgba(59, 130, 246, 0.05);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
-        /* Paneles de Contenido */
-        .panel { padding: 2rem; display: none; }
-        .panel.active { display: block; animation: fade-in 0.3s ease-out; }
+        /* Paneles */
+        .panel { padding: 2rem; display: none; animation: slideUp 0.3s ease-out; }
+        .panel.active { display: block; }
 
-        @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         /* Formularios */
         .form-group { margin-bottom: 1.5rem; }
+        .label { display: block; font-size: 0.875rem; font-weight: 500; color: var(--text-muted); margin-bottom: 0.5rem; }
         
-        .label {
-            display: block;
-            font-size: 0.875rem;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-            color: var(--text-secondary);
-        }
-
-        .input-control {
+        .input-box {
             width: 100%;
-            padding: 0.75rem 1rem;
-            background-color: var(--bg-input);
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-md);
-            color: var(--text-primary);
+            background: var(--bg-input);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-main);
+            padding: 0.875rem;
+            border-radius: var(--radius);
             font-family: inherit;
-            transition: border-color 0.2s;
-        }
-
-        .input-control:focus { border-color: var(--brand-primary); }
-
-        /* Zona de Carga de Archivos */
-        .upload-zone {
-            border: 2px dashed var(--border-color);
-            border-radius: var(--radius-md);
-            padding: 2rem 1rem;
-            text-align: center;
-            cursor: pointer;
             transition: all 0.2s;
+        }
+
+        .input-box:focus {
+            outline: none;
+            border-color: var(--brand-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        /* Drag & Drop Zone */
+        .drop-zone {
+            border: 2px dashed var(--border-subtle);
+            border-radius: var(--radius);
+            padding: 2.5rem 1rem;
+            text-align: center;
+            transition: all 0.2s;
+            cursor: pointer;
+            background: rgba(255,255,255,0.01);
             position: relative;
-            background-color: rgba(255,255,255,0.01);
         }
 
-        .upload-zone:hover { border-color: var(--text-secondary); background-color: rgba(255,255,255,0.03); }
-        .upload-zone.drag-over { border-color: var(--brand-primary); background-color: rgba(59, 130, 246, 0.1); }
-        
-        .upload-input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
-        
-        .upload-content { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
-        .upload-title { font-weight: 600; font-size: 0.95rem; }
-        .upload-subtitle { font-size: 0.8rem; color: var(--text-secondary); }
+        .drop-zone:hover, .drop-zone.dragover {
+            border-color: var(--brand-primary);
+            background: rgba(59, 130, 246, 0.05);
+        }
 
-        /* Medidor de Fortaleza */
-        .strength-track {
+        .drop-input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+        .drop-icon { width: 48px; height: 48px; color: var(--text-muted); margin-bottom: 1rem; stroke-width: 1.5; }
+        
+        /* Indicador de Fortaleza */
+        .strength-meter {
             height: 4px;
-            background-color: var(--bg-input);
-            border-radius: 2px;
+            background: var(--bg-app);
             margin-top: 0.5rem;
+            border-radius: 2px;
             overflow: hidden;
+            position: relative;
         }
-        .strength-bar { height: 100%; width: 0%; transition: all 0.3s; }
+        
+        .strength-fill {
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
 
         /* Botones */
         .btn {
             width: 100%;
-            padding: 0.875rem;
+            padding: 1rem;
             border: none;
-            border-radius: var(--radius-md);
+            border-radius: var(--radius);
             font-weight: 600;
             font-size: 1rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.75rem;
-            transition: background-color 0.2s;
+            gap: 0.5rem;
+            transition: all 0.2s;
         }
 
-        .btn-primary { background-color: var(--brand-primary); color: white; }
-        .btn-primary:hover { background-color: var(--brand-hover); }
-        .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
-        
-        .btn-download {
-            background-color: rgba(16, 185, 129, 0.1);
-            color: var(--state-success);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            margin-top: 1.5rem;
-            text-decoration: none;
+        .btn-primary {
+            background: var(--brand-primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
-        .btn-download:hover { background-color: rgba(16, 185, 129, 0.2); }
 
-        /* Alertas y Estado */
-        .alert {
+        .btn-primary:hover:not(:disabled) {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Estado / Feedback */
+        .status-box {
             padding: 1rem;
-            border-radius: var(--radius-md);
+            border-radius: var(--radius);
             font-size: 0.875rem;
-            margin-bottom: 1.5rem;
-            display: flex;
-            gap: 0.75rem;
-            line-height: 1.4;
+            margin-top: 1.5rem;
+            display: none; /* Hidden by default */
         }
 
-        .alert-warning {
-            background-color: rgba(245, 158, 11, 0.1);
-            border: 1px solid rgba(245, 158, 11, 0.2);
-            color: var(--state-warning);
-        }
-
-        .alert-error {
-            background-color: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.2);
-            color: var(--state-danger);
-            display: none; /* Oculto por defecto */
-        }
-
-        /* Barra de Progreso */
-        .progress-wrapper { margin-top: 1.5rem; display: none; }
-        .progress-header { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 0.5rem; color: var(--text-secondary); }
-        .progress-track { height: 8px; background-color: var(--bg-input); border-radius: 4px; overflow: hidden; }
-        .progress-fill { height: 100%; background-color: var(--brand-primary); width: 0%; transition: width 0.1s linear; }
-
-        /* Utilidades */
-        .hidden { display: none !important; }
-        .text-success { color: var(--state-success); }
-        .text-danger { color: var(--state-danger); }
+        .status-error { background: rgba(239, 68, 68, 0.1); color: var(--danger); border: 1px solid rgba(239, 68, 68, 0.2); }
+        .status-success { background: rgba(16, 185, 129, 0.1); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.2); }
         
-        .icon { width: 20px; height: 20px; stroke-width: 2; }
-        .icon-lg { width: 40px; height: 40px; stroke-width: 1.5; }
+        .progress-container { margin-top: 1.5rem; display: none; }
+        .progress-meta { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+        .progress-track { height: 6px; background: var(--bg-app); border-radius: 3px; overflow: hidden; }
+        .progress-bar { height: 100%; background: var(--brand-primary); width: 0%; transition: width 0.1s linear; }
+
+        /* Iconos SVG inline */
+        .icon { width: 20px; height: 20px; stroke-width: 2; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; }
 
     </style>
 </head>
@@ -245,286 +255,279 @@
 
 <main class="app-shell">
     
+    <!-- Encabezado -->
     <header class="header">
-        <div class="header-brand">
-            <svg class="icon icon-brand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-            <h1 class="header-title">SecureCrypt</h1>
+        <div class="brand-badge">
+            <svg class="icon" viewBox="0 0 24 24" style="width:14px;height:14px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            V2.0
         </div>
-        <p class="header-subtitle">
-            Entorno seguro de cifrado AES-GCM 256-bit.<br>
-            Sin servidores. Sin persistencia de datos. Límite: 1GB.
-        </p>
+        <h1 class="title">SecureCrypt Pro</h1>
+        <p class="subtitle">Motor de cifrado AES-GCM 256-bit | Client-Side Only</p>
     </header>
 
-    <nav class="nav-tabs">
-        <button class="tab-btn active" id="tab-enc" onclick="App.switchMode('encrypt')">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+    <!-- Pestañas -->
+    <nav class="tabs">
+        <button class="tab-btn active" data-target="panel-encrypt">
+            <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
             Cifrar
         </button>
-        <button class="tab-btn" id="tab-dec" onclick="App.switchMode('decrypt')">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg>
+        <button class="tab-btn" data-target="panel-decrypt">
+            <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg>
             Descifrar
         </button>
     </nav>
 
+    <!-- Panel: Cifrar -->
     <section id="panel-encrypt" class="panel active">
         
-        <div class="alert alert-warning">
-            <svg class="icon" style="min-width:20px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-            <div>
-                <strong>Aviso Crítico:</strong> Las contraseñas no se almacenan. Si pierde su clave, los datos serán matemáticamente irrecuperables.
-            </div>
-        </div>
-
-        <div id="enc-error-box" class="alert alert-error"></div>
-
+        <!-- Drop Zone -->
         <div class="form-group">
             <label class="label">1. Seleccionar Archivos</label>
-            <div class="upload-zone" id="drop-enc">
-                <input type="file" id="enc-files" class="upload-input" multiple onchange="App.handleFileSelect(this, 'enc-status')">
-                <div class="upload-content">
-                    <svg class="icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                    <span id="enc-status" class="upload-title">Haga clic o arrastre archivos aquí</span>
-                    <span class="upload-subtitle">Soporte multi-archivo (Máx 1GB total)</span>
-                </div>
+            <div class="drop-zone" id="enc-drop-zone">
+                <input type="file" id="enc-files" class="drop-input" multiple>
+                <svg class="drop-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                <div id="enc-file-label" style="font-weight: 500;">Arrastre archivos aquí o haga clic</div>
+                <div class="subtitle" style="margin-top:0.25rem;">Máximo 1GB Total</div>
             </div>
         </div>
 
+        <!-- Password -->
         <div class="form-group">
             <label class="label">2. Contraseña Maestra</label>
-            <input type="password" id="enc-pass" class="input-control" placeholder="Mínimo 8 caracteres" oninput="App.checkStrength(this.value)">
-            <div class="strength-track"><div id="strength-bar" class="strength-bar"></div></div>
+            <input type="password" id="enc-pass" class="input-box" placeholder="Mínimo 8 caracteres">
+            <div class="strength-meter"><div id="enc-strength" class="strength-fill"></div></div>
         </div>
 
         <div class="form-group">
             <label class="label">3. Confirmar Contraseña</label>
-            <input type="password" id="enc-pass-confirm" class="input-control" placeholder="Repita la contraseña">
+            <input type="password" id="enc-pass-confirm" class="input-box" placeholder="Repita la contraseña">
         </div>
 
-        <button id="btn-enc" class="btn btn-primary" onclick="App.processEncryption()">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-            Iniciar Cifrado
+        <button id="btn-encrypt" class="btn btn-primary">
+            <svg class="icon" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Procesar Cifrado
         </button>
 
-        <div id="prog-enc" class="progress-wrapper">
-            <div class="progress-header">
-                <span id="prog-text-enc">Procesando...</span>
-                <span id="prog-percent-enc">0%</span>
+        <!-- Feedback UI -->
+        <div id="enc-progress" class="progress-container">
+            <div class="progress-meta">
+                <span id="enc-prog-text">Iniciando motor...</span>
+                <span id="enc-prog-percent">0%</span>
             </div>
-            <div class="progress-track"><div id="prog-bar-enc" class="progress-fill"></div></div>
+            <div class="progress-track"><div id="enc-prog-bar" class="progress-bar"></div></div>
         </div>
-
-        <div id="result-enc"></div>
+        
+        <div id="enc-status" class="status-box"></div>
     </section>
 
+
+    <!-- Panel: Descifrar -->
     <section id="panel-decrypt" class="panel">
         
-        <div id="dec-error-box" class="alert alert-error"></div>
-
         <div class="form-group">
-            <label class="label">1. Archivos Cifrados (.wenc) o ZIP generado</label>
-            <div class="upload-zone">
-                <input type="file" id="dec-files" class="upload-input" multiple accept=".wenc,.zip" onchange="App.handleFileSelect(this, 'dec-status')">
-                <div class="upload-content">
-                    <svg class="icon-lg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                    <span id="dec-status" class="upload-title">Seleccione archivo .wenc o .zip</span>
-                    <span class="upload-subtitle">Detección automática de lote</span>
-                </div>
+            <label class="label">1. Archivo Cifrado (.wenc o .zip)</label>
+            <div class="drop-zone" id="dec-drop-zone">
+                <input type="file" id="dec-files" class="drop-input" accept=".wenc,.zip">
+                <svg class="drop-icon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                <div id="dec-file-label" style="font-weight: 500;">Seleccionar archivo seguro</div>
             </div>
         </div>
 
         <div class="form-group">
             <label class="label">2. Contraseña de Acceso</label>
-            <input type="password" id="dec-pass" class="input-control" placeholder="Ingrese la contraseña original">
+            <input type="password" id="dec-pass" class="input-box" placeholder="Contraseña original">
         </div>
 
-        <button id="btn-dec" class="btn btn-primary" onclick="App.processDecryption()">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg>
-            Descifrar y Restaurar
+        <button id="btn-decrypt" class="btn btn-primary">
+            <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg>
+            Descifrar Archivos
         </button>
 
-        <div id="prog-dec" class="progress-wrapper">
-            <div class="progress-header">
-                <span id="prog-text-dec">Analizando...</span>
-                <span id="prog-percent-dec">0%</span>
+        <!-- Feedback UI -->
+        <div id="dec-progress" class="progress-container">
+            <div class="progress-meta">
+                <span id="dec-prog-text">Analizando...</span>
+                <span id="dec-prog-percent">0%</span>
             </div>
-            <div class="progress-track"><div id="prog-bar-dec" class="progress-fill"></div></div>
+            <div class="progress-track"><div id="dec-prog-bar" class="progress-bar"></div></div>
         </div>
 
-        <div id="result-dec"></div>
+        <div id="dec-status" class="status-box"></div>
     </section>
 
 </main>
 
 <script>
     /**
-     * @fileoverview SecureCrypt - Motor de cifrado del lado del cliente.
-     * Implementa AES-GCM 256-bit y PBKDF2 mediante Web Crypto API.
-     * Incluye un motor ZIP ligero (Store method) para manejo de lotes.
+     * @fileoverview SecureCrypt Pro V2
+     * Arquitectura modular para cifrado seguro en cliente.
+     * Creado para: Maquina deboradora de café ☕
      */
 
-    /**
-     * Configuración Global y Constantes Criptográficas
-     * @constant
-     */
+    // --- CONFIGURACIÓN GLOBAL ---
     const CONFIG = {
-        // Identificador de formato para validación (ASCII: WC01)
-        MAGIC_BYTES: new Uint8Array([0x57, 0x43, 0x30, 0x31]), 
-        // Longitud de la sal aleatoria en bytes
-        SALT_LENGTH: 16, 
-        // Longitud del vector de inicialización (IV) para AES-GCM
-        IV_LENGTH: 12, 
-        // Iteraciones para derivación de clave (Balance seguridad/rendimiento)
-        PBKDF2_ITERATIONS: 150000, 
-        // Longitud de clave AES (256 bits)
-        KEY_LENGTH: 256, 
-        // Límite de tamaño de archivo (1GB) para evitar colapso de memoria
-        MAX_SIZE_BYTES: 1024 * 1024 * 1024 
+        MAGIC_BYTES: new Uint8Array([0x57, 0x43, 0x30, 0x31]), // "WC01"
+        PBKDF2_ITERATIONS: 150000,
+        SALT_LEN: 16,
+        IV_LEN: 12,
+        KEY_LEN: 256,
+        MAX_SIZE: 1024 * 1024 * 1024 // 1GB
     };
 
     /**
-     * Módulo de Utilidades de Interfaz (DOM)
+     * MÓDULO 1: Motor Criptográfico
+     * Encapsula Web Crypto API.
      */
-    const UI = {
-        /**
-         * Obtiene un elemento del DOM por ID.
-         * @param {string} id 
-         * @returns {HTMLElement}
-         */
-        get: (id) => document.getElementById(id),
-
-        /**
-         * Formatea bytes a tamaño legible (KB, MB, GB).
-         * @param {number} bytes 
-         * @returns {string}
-         */
-        formatBytes: (bytes) => {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024, sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        },
-
-        /**
-         * Muestra un error en el contenedor UI correspondiente.
-         * @param {string} mode - 'enc' o 'dec'
-         * @param {string} msg - Mensaje de error
-         */
-        showError: (mode, msg) => {
-            const el = UI.get(`${mode}-error-box`);
-            el.textContent = msg;
-            el.style.display = 'flex';
-            setTimeout(() => el.style.display = 'none', 5000);
-        },
-
-        /**
-         * Genera el botón de descarga al finalizar.
-         * @param {string} mode - 'enc' o 'dec'
-         * @param {Blob} blob - Datos binarios del archivo
-         * @param {string} filename - Nombre del archivo
-         */
-        renderDownload: (mode, blob, filename) => {
-            const container = UI.get(`result-${mode}`);
-            const url = URL.createObjectURL(blob);
-            
-            // Icono SVG para el botón de descarga
-            const iconSvg = `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>`;
-            
-            container.innerHTML = `
-                <a href="${url}" download="${filename}" class="btn btn-download">
-                    ${iconSvg} Descargar ${filename}
-                </a>
-            `;
-            container.style.display = 'block';
+    class CryptoEngine {
+        
+        static async getKeyMaterial(password) {
+            const enc = new TextEncoder();
+            return window.crypto.subtle.importKey(
+                "raw", enc.encode(password), {name: "PBKDF2"}, false, ["deriveKey"]
+            );
         }
-    };
+
+        static async deriveKey(keyMaterial, salt) {
+            return window.crypto.subtle.deriveKey(
+                {
+                    name: "PBKDF2", salt: salt,
+                    iterations: CONFIG.PBKDF2_ITERATIONS,
+                    hash: "SHA-256"
+                },
+                keyMaterial,
+                { name: "AES-GCM", length: CONFIG.KEY_LEN },
+                false, ["encrypt", "decrypt"]
+            );
+        }
+
+        static async encrypt(fileBuffer, password) {
+            const salt = crypto.getRandomValues(new Uint8Array(CONFIG.SALT_LEN));
+            const iv = crypto.getRandomValues(new Uint8Array(CONFIG.IV_LEN));
+            const keyMaterial = await this.getKeyMaterial(password);
+            const key = await this.deriveKey(keyMaterial, salt);
+
+            const ciphertext = await crypto.subtle.encrypt(
+                { name: "AES-GCM", iv: iv }, key, fileBuffer
+            );
+
+            // Construcción del binario final: [Magic][Salt][IV][Data]
+            const finalBuffer = new Uint8Array(
+                CONFIG.MAGIC_BYTES.length + CONFIG.SALT_LEN + CONFIG.IV_LEN + ciphertext.byteLength
+            );
+            
+            finalBuffer.set(CONFIG.MAGIC_BYTES, 0);
+            finalBuffer.set(salt, CONFIG.MAGIC_BYTES.length);
+            finalBuffer.set(iv, CONFIG.MAGIC_BYTES.length + CONFIG.SALT_LEN);
+            finalBuffer.set(new Uint8Array(ciphertext), CONFIG.MAGIC_BYTES.length + CONFIG.SALT_LEN + CONFIG.IV_LEN);
+
+            return finalBuffer;
+        }
+
+        static async decrypt(encryptedBuffer, password) {
+            // Verificación de integridad básica (Magic Bytes)
+            for (let i = 0; i < CONFIG.MAGIC_BYTES.length; i++) {
+                if (encryptedBuffer[i] !== CONFIG.MAGIC_BYTES[i]) throw new Error("Formato inválido: No es un archivo SecureCrypt.");
+            }
+
+            let offset = CONFIG.MAGIC_BYTES.length;
+            const salt = encryptedBuffer.slice(offset, offset + CONFIG.SALT_LEN);
+            offset += CONFIG.SALT_LEN;
+            const iv = encryptedBuffer.slice(offset, offset + CONFIG.IV_LEN);
+            offset += CONFIG.IV_LEN;
+            const data = encryptedBuffer.slice(offset);
+
+            const keyMaterial = await this.getKeyMaterial(password);
+            const key = await this.deriveKey(keyMaterial, salt);
+
+            try {
+                return await crypto.subtle.decrypt(
+                    { name: "AES-GCM", iv: iv }, key, data
+                );
+            } catch (e) {
+                throw new Error("Descifrado fallido. Contraseña incorrecta o archivo dañado.");
+            }
+        }
+    }
 
     /**
-     * Motor ZIP Ligero (Sin compresión - Método STORE)
-     * Motivo: Los archivos cifrados tienen alta entropía y no se comprimen bien.
-     * Usar STORE es más rápido y evita ataques de canal lateral (CRIME/BREACH).
+     * MÓDULO 2: Motor ZIP (Store Method)
+     * Maneja empaquetado sin compresión para lotes.
      */
-    class ZipEngine {
+    class ZipStore {
         constructor() {
             this.files = [];
+            this.crcTable = this.makeCRCTable();
         }
 
-        /**
-         * Agrega un archivo virtual a la cola del ZIP.
-         * @param {string} name 
-         * @param {Uint8Array} data 
-         */
-        add(name, data) {
-            this.files.push({ name, data });
+        makeCRCTable() {
+            let c;
+            const table = [];
+            for (let n = 0; n < 256; n++) {
+                c = n;
+                for (let k = 0; k < 8; k++) c = ((c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1));
+                table[n] = c;
+            }
+            return table;
         }
 
-        /**
-         * Genera el archivo binario .zip completo.
-         * @returns {Blob}
-         */
+        crc32(buf) {
+            let crc = 0 ^ (-1);
+            for (let i = 0; i < buf.length; i++) {
+                crc = (crc >>> 8) ^ this.crcTable[(crc ^ buf[i]) & 0xFF];
+            }
+            return (crc ^ (-1)) >>> 0;
+        }
+
+        add(filename, dataUint8) {
+            this.files.push({ name: filename, data: dataUint8 });
+        }
+
         generate() {
             const parts = [];
             const centralDir = [];
             let offset = 0;
             const enc = new TextEncoder();
-            
-            // Tabla precalculada de CRC32 para rendimiento
-            const crcTable = (() => {
-                let t = [];
-                for (let i=0; i<256; i++) {
-                    let c = i;
-                    for (let k=0; k<8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1);
-                    t[i] = c;
-                }
-                return t;
-            })();
-
-            const crc32 = (arr) => {
-                let c = -1;
-                for(let i=0; i<arr.length; i++) c = (c >>> 8) ^ crcTable[(c ^ arr[i]) & 0xFF];
-                return (c ^ -1) >>> 0;
-            };
 
             for (const f of this.files) {
                 const nameBuf = enc.encode(f.name);
-                const crc = crc32(f.data);
+                const crc = this.crc32(f.data);
                 const size = f.data.length;
 
-                // 1. Local File Header
+                // Local Header
                 const h = new Uint8Array(30 + nameBuf.length);
                 const v = new DataView(h.buffer);
-                v.setUint32(0, 0x04034b50, true); // Firma
-                v.setUint16(4, 10, true);         // Versión necesaria
-                v.setUint16(6, 0, true);          // Flags
-                v.setUint16(8, 0, true);          // Método (0 = Store)
-                v.setUint32(14, crc, true);       // CRC32
-                v.setUint32(18, size, true);      // Tamaño comprimido
-                v.setUint32(22, size, true);      // Tamaño real
-                v.setUint16(26, nameBuf.length, true); // Longitud nombre
+                v.setUint32(0, 0x04034b50, true);
+                v.setUint16(4, 10, true); // Version
+                v.setUint16(6, 0, true);  // Flags
+                v.setUint16(8, 0, true);  // Method (0 = Store)
+                v.setUint32(14, crc, true);
+                v.setUint32(18, size, true); // Compressed
+                v.setUint32(22, size, true); // Uncompressed
+                v.setUint16(26, nameBuf.length, true);
                 h.set(nameBuf, 30);
-
+                
                 parts.push(h);
                 parts.push(f.data);
 
-                // 2. Central Directory Header
+                // Central Directory
                 const d = new Uint8Array(46 + nameBuf.length);
                 const dv = new DataView(d.buffer);
-                dv.setUint32(0, 0x02014b50, true); // Firma
-                dv.setUint16(4, 20, true);         // Versión hecha por
-                dv.setUint16(6, 10, true);         // Versión necesaria
-                dv.setUint16(10, 0, true);         // Método
-                dv.setUint32(16, crc, true);       // CRC32
-                dv.setUint32(20, size, true);      // Tamaño comp
-                dv.setUint32(24, size, true);      // Tamaño real
+                dv.setUint32(0, 0x02014b50, true);
+                dv.setUint16(4, 20, true);
+                dv.setUint16(6, 10, true);
+                dv.setUint16(10, 0, true); // Method
+                dv.setUint32(16, crc, true);
+                dv.setUint32(20, size, true);
+                dv.setUint32(24, size, true);
                 dv.setUint16(28, nameBuf.length, true);
-                dv.setUint32(42, offset, true);    // Offset local header
+                dv.setUint32(42, offset, true);
                 d.set(nameBuf, 46);
                 centralDir.push(d);
 
                 offset += h.length + size;
             }
 
-            // 3. End of Central Directory Record
+            // End of Central Directory
             let cdSize = 0; centralDir.forEach(b => cdSize += b.length);
             const e = new Uint8Array(22);
             const ev = new DataView(e.buffer);
@@ -537,32 +540,25 @@
             return new Blob([...parts, ...centralDir, e], { type: 'application/zip' });
         }
 
-        /**
-         * Parsea un archivo ZIP y extrae su contenido.
-         * Solo soporta método Store (sin compresión).
-         * @param {File} file 
-         * @returns {Promise<Array<{name: string, data: Uint8Array}>>}
-         */
-        static async unzip(file) {
-            const buffer = await file.arrayBuffer();
+        static async unzip(fileBlob) {
+            const buffer = await fileBlob.arrayBuffer();
             const view = new DataView(buffer);
             const files = [];
             let i = 0;
-            const decoder = new TextDecoder();
+            const dec = new TextDecoder();
 
-            // Recorrer Local File Headers secuencialmente
             while (i < buffer.byteLength - 4) {
                 const sig = view.getUint32(i, true);
-                if (sig !== 0x04034b50) break; // Fin de archivos o inicio de Central Dir
+                if (sig !== 0x04034b50) break; // Fin o Central Dir
 
                 const method = view.getUint16(i + 8, true);
                 const compSize = view.getUint32(i + 18, true);
                 const nameLen = view.getUint16(i + 26, true);
                 const extraLen = view.getUint16(i + 28, true);
 
-                if (method !== 0) throw new Error("El ZIP contiene archivos comprimidos no soportados.");
+                if (method !== 0) throw new Error("ZIP contiene compresión no soportada. Use método Store.");
 
-                const name = decoder.decode(new Uint8Array(buffer, i + 30, nameLen));
+                const name = dec.decode(new Uint8Array(buffer, i + 30, nameLen));
                 const data = new Uint8Array(buffer, i + 30 + nameLen + extraLen, compSize);
 
                 files.push({ name, data });
@@ -573,299 +569,272 @@
     }
 
     /**
-     * Módulo de Criptografía (Web Crypto API Wrapper)
+     * MÓDULO 3: Gestor de Interfaz (UI/UX)
      */
-    const Crypto = {
-        /**
-         * Importa la contraseña de texto plano a material de clave.
-         * @param {string} pass 
-         * @returns {Promise<CryptoKey>}
-         */
-        getKeyMaterial: async (pass) => {
-            const enc = new TextEncoder();
-            return window.crypto.subtle.importKey(
-                "raw", 
-                enc.encode(pass), 
-                {name: "PBKDF2"}, 
-                false, 
-                ["deriveKey"]
-            );
-        },
-
-        /**
-         * Deriva la clave AES-GCM usando PBKDF2 y una sal única.
-         * @param {CryptoKey} keyMaterial 
-         * @param {Uint8Array} salt 
-         * @returns {Promise<CryptoKey>}
-         */
-        deriveKey: async (keyMaterial, salt) => {
-            return window.crypto.subtle.deriveKey(
-                { 
-                    name: "PBKDF2", 
-                    salt: salt, 
-                    iterations: CONFIG.PBKDF2_ITERATIONS, 
-                    hash: "SHA-256" 
-                },
-                keyMaterial, 
-                { name: "AES-GCM", length: CONFIG.KEY_LENGTH }, 
-                false, 
-                ["encrypt", "decrypt"]
-            );
-        },
-
-        /**
-         * Cifra datos binarios generando IV y Salt únicos.
-         * @param {ArrayBuffer} data 
-         * @param {CryptoKey} keyMaterial 
-         * @returns {Promise<Uint8Array>} Estructura: [Magic][Salt][IV][Ciphertext]
-         */
-        encrypt: async (data, keyMaterial) => {
-            const salt = crypto.getRandomValues(new Uint8Array(CONFIG.SALT_LENGTH));
-            const iv = crypto.getRandomValues(new Uint8Array(CONFIG.IV_LENGTH));
-            
-            const aesKey = await Crypto.deriveKey(keyMaterial, salt);
-            const content = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, aesKey, data);
-            
-            // Empaquetado final
-            const res = new Uint8Array(CONFIG.MAGIC_BYTES.length + CONFIG.SALT_LENGTH + CONFIG.IV_LENGTH + content.byteLength);
-            res.set(CONFIG.MAGIC_BYTES, 0); 
-            res.set(salt, CONFIG.MAGIC_BYTES.length); 
-            res.set(iv, CONFIG.MAGIC_BYTES.length + CONFIG.SALT_LENGTH); 
-            res.set(new Uint8Array(content), CONFIG.MAGIC_BYTES.length + CONFIG.SALT_LENGTH + CONFIG.IV_LENGTH);
-            return res;
-        },
-
-        /**
-         * Descifra datos validando estructura e integridad.
-         * @param {Uint8Array} data 
-         * @param {CryptoKey} keyMaterial 
-         * @returns {Promise<ArrayBuffer>}
-         */
-        decrypt: async (data, keyMaterial) => {
-            // Validar Magic Bytes
-            for(let i=0; i<CONFIG.MAGIC_BYTES.length; i++) {
-                if(data[i] !== CONFIG.MAGIC_BYTES[i]) throw new Error("Formato de archivo inválido.");
-            }
-            
-            let ptr = CONFIG.MAGIC_BYTES.length;
-            const salt = data.slice(ptr, ptr + CONFIG.SALT_LENGTH); 
-            ptr += CONFIG.SALT_LENGTH;
-            const iv = data.slice(ptr, ptr + CONFIG.IV_LENGTH); 
-            ptr += CONFIG.IV_LENGTH;
-            const cipher = data.slice(ptr);
-            
-            const aesKey = await Crypto.deriveKey(keyMaterial, salt);
-            // Si la clave es incorrecta o el archivo está corrupto, esto lanzará error.
-            return await crypto.subtle.decrypt({ name: "AES-GCM", iv }, aesKey, cipher);
+    class UIManager {
+        constructor() {
+            this.bindEvents();
+            this.lastDownloadUrl = null;
         }
-    };
+
+        get(id) { return document.getElementById(id); }
+
+        bindEvents() {
+            // Tabs
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => this.switchTab(e.currentTarget));
+            });
+
+            // Drag & Drop Encrypt
+            this.setupDropZone('enc-drop-zone', 'enc-files', (files) => this.handleFileSelect(files, 'enc'));
+            // Drag & Drop Decrypt
+            this.setupDropZone('dec-drop-zone', 'dec-files', (files) => this.handleFileSelect(files, 'dec'));
+
+            // Password Strength
+            this.get('enc-pass').addEventListener('input', (e) => this.updateStrength(e.target.value));
+
+            // Botones Acción
+            this.get('btn-encrypt').addEventListener('click', () => App.runEncryption());
+            this.get('btn-decrypt').addEventListener('click', () => App.runDecryption());
+        }
+
+        switchTab(btn) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            
+            btn.classList.add('active');
+            this.get(btn.dataset.target).classList.add('active');
+            
+            // Limpieza al cambiar tab
+            this.resetStatus('enc');
+            this.resetStatus('dec');
+        }
+
+        setupDropZone(zoneId, inputId, callback) {
+            const zone = this.get(zoneId);
+            const input = this.get(inputId);
+
+            zone.addEventListener('click', () => input.click());
+            input.addEventListener('change', () => callback(input.files));
+
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                zone.addEventListener(eventName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                });
+            });
+
+            zone.addEventListener('dragover', () => zone.classList.add('dragover'));
+            zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+            zone.addEventListener('drop', (e) => {
+                zone.classList.remove('dragover');
+                input.files = e.dataTransfer.files; // Sync con input
+                callback(e.dataTransfer.files);
+            });
+        }
+
+        handleFileSelect(files, mode) {
+            const label = this.get(`${mode}-file-label`);
+            if (!files.length) return;
+
+            let size = 0;
+            for(let f of files) size += f.size;
+
+            if (size > CONFIG.MAX_SIZE) {
+                label.textContent = "Error: Excede 1GB";
+                label.style.color = "var(--danger)";
+                this.get(`${mode}-files`).value = ""; // Clear
+            } else {
+                label.textContent = files.length === 1 
+                    ? files[0].name 
+                    : `${files.length} archivos (${this.formatBytes(size)})`;
+                label.style.color = "var(--text-main)";
+            }
+        }
+
+        updateStrength(pass) {
+            const meter = this.get('enc-strength');
+            let s = 0;
+            if (pass.length > 7) s += 25;
+            if (pass.length > 12) s += 25;
+            if (/[A-Z]/.test(pass) && /[0-9]/.test(pass)) s += 25;
+            if (/[^A-Za-z0-9]/.test(pass)) s += 25;
+
+            meter.style.width = `${s}%`;
+            meter.style.backgroundColor = s < 50 ? 'var(--danger)' : s < 75 ? 'var(--warning)' : 'var(--success)';
+        }
+
+        updateProgress(mode, percent, text) {
+            this.get(`${mode}-progress`).style.display = 'block';
+            this.get(`${mode}-prog-bar`).style.width = `${percent}%`;
+            this.get(`${mode}-prog-percent`).textContent = `${Math.round(percent)}%`;
+            if (text) this.get(`${mode}-prog-text`).textContent = text;
+        }
+
+        showStatus(mode, type, msg, downloadBlob = null, filename = null) {
+            const box = this.get(`${mode}-status`);
+            box.className = `status-box status-${type}`;
+            box.style.display = 'block';
+
+            if (type === 'error') {
+                box.innerHTML = `<strong>Error:</strong> ${msg}`;
+            } else if (type === 'success' && downloadBlob) {
+                // Liberar URL anterior si existe para evitar fugas de memoria
+                if (this.lastDownloadUrl) URL.revokeObjectURL(this.lastDownloadUrl);
+                
+                this.lastDownloadUrl = URL.createObjectURL(downloadBlob);
+                box.innerHTML = `
+                    <div style="display:flex; flex-direction:column; gap:0.5rem; align-items:center;">
+                        <svg class="icon" viewBox="0 0 24 24" style="width:32px;height:32px;color:var(--success)"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        <strong>¡Proceso Completado!</strong>
+                        <a href="${this.lastDownloadUrl}" download="${filename}" class="btn btn-primary" style="background:var(--success); margin-top:0.5rem;">
+                            Descargar ${filename}
+                        </a>
+                    </div>
+                `;
+            }
+        }
+
+        resetStatus(mode) {
+            this.get(`${mode}-status`).style.display = 'none';
+            this.get(`${mode}-progress`).style.display = 'none';
+            this.get(`btn-${mode === 'enc' ? 'encrypt' : 'decrypt'}`).disabled = false;
+        }
+
+        formatBytes(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+    }
+
+    const UI = new UIManager();
 
     /**
-     * Controlador Principal de la Aplicación
+     * CONTROLADOR PRINCIPAL
      */
     const App = {
-        /**
-         * Inicialización y gestión de pestañas.
-         * @param {string} mode - 'encrypt' | 'decrypt'
-         */
-        switchMode: (mode) => {
-            UI.get('panel-encrypt').classList.toggle('active', mode === 'encrypt');
-            UI.get('panel-decrypt').classList.toggle('active', mode === 'decrypt');
-            UI.get('tab-enc').classList.toggle('active', mode === 'encrypt');
-            UI.get('tab-dec').classList.toggle('active', mode === 'decrypt');
-            App.resetUI();
-        },
-
-        resetUI: () => {
-            UI.get('prog-enc').style.display = 'none';
-            UI.get('prog-dec').style.display = 'none';
-            UI.get('result-enc').style.display = 'none';
-            UI.get('result-dec').style.display = 'none';
-            UI.get('btn-enc').disabled = false;
-            UI.get('btn-dec').disabled = false;
-        },
-
-        handleFileSelect: (input, statusId) => {
-            const files = input.files;
-            const statusEl = UI.get(statusId);
-            
-            if (files.length === 0) {
-                statusEl.textContent = "Haga clic o arrastre archivos aquí";
-                statusEl.className = 'upload-title';
-                return;
-            }
-
-            let totalSize = 0;
-            for (let f of files) totalSize += f.size;
-
-            if (totalSize > CONFIG.MAX_SIZE_BYTES) {
-                statusEl.textContent = `Error: Excede límite de 1GB (${UI.formatBytes(totalSize)})`;
-                statusEl.classList.add('text-danger');
-                input.value = ""; // Resetear selección
-            } else {
-                const label = files.length === 1 ? files[0].name : `${files.length} archivos seleccionados`;
-                statusEl.textContent = `${label} (${UI.formatBytes(totalSize)})`;
-                statusEl.classList.remove('text-danger');
-                statusEl.classList.add('text-success');
-            }
-        },
-
-        checkStrength: (pass) => {
-            const bar = UI.get('strength-bar');
-            let strength = 0;
-            if (pass.length > 7) strength += 30;
-            if (pass.length > 12) strength += 30;
-            if (/[A-Z]/.test(pass) && /[0-9]/.test(pass)) strength += 20;
-            if (/[^A-Za-z0-9]/.test(pass)) strength += 20;
-
-            bar.style.width = strength + '%';
-            if (strength < 40) bar.style.backgroundColor = 'var(--state-danger)';
-            else if (strength < 80) bar.style.backgroundColor = 'var(--state-warning)';
-            else bar.style.backgroundColor = 'var(--state-success)';
-        },
-
-        updateProgress: (type, percent, text) => {
-            UI.get(`prog-${type}`).style.display = 'block';
-            UI.get(`prog-bar-${type}`).style.width = percent + '%';
-            UI.get(`prog-percent-${type}`).textContent = Math.round(percent) + '%';
-            UI.get(`prog-text-${type}`).textContent = text;
-        },
-
-        /**
-         * Lógica de Cifrado (Batch)
-         */
-        processEncryption: async () => {
+        
+        async runEncryption() {
             const files = UI.get('enc-files').files;
             const p1 = UI.get('enc-pass').value;
             const p2 = UI.get('enc-pass-confirm').value;
 
-            if (!files.length) return UI.showError('enc', "Seleccione al menos un archivo.");
-            if (!p1) return UI.showError('enc', "La contraseña es obligatoria.");
-            if (p1 !== p2) return UI.showError('enc', "Las contraseñas no coinciden.");
-            if (p1.length < 8) return UI.showError('enc', "Contraseña demasiado corta.");
+            if (!files.length) return UI.showStatus('enc', 'error', 'Seleccione archivos primero.');
+            if (p1.length < 8) return UI.showStatus('enc', 'error', 'La contraseña es muy corta (mín 8).');
+            if (p1 !== p2) return UI.showStatus('enc', 'error', 'Las contraseñas no coinciden.');
 
-            UI.get('btn-enc').disabled = true;
-            const zip = new ZipEngine();
-            
+            UI.resetStatus('enc');
+            UI.get('btn-encrypt').disabled = true;
+
             try {
-                const keyMaterial = await Crypto.getKeyMaterial(p1);
+                const zip = new ZipStore();
                 
                 for (let i = 0; i < files.length; i++) {
-                    const percent = ((i / files.length) * 100);
-                    App.updateProgress('enc', percent, `Cifrando ${files[i].name}...`);
+                    const f = files[i];
+                    const percent = (i / files.length) * 100;
+                    UI.updateProgress('enc', percent, `Cifrando: ${f.name}`);
                     
-                    // Pausa mínima para permitir renderizado UI
+                    // Pausa para render UI
                     await new Promise(r => requestAnimationFrame(r));
                     
-                    const buffer = await files[i].arrayBuffer();
-                    const encrypted = await Crypto.encrypt(buffer, keyMaterial);
+                    const buffer = await f.arrayBuffer();
+                    const encrypted = await CryptoEngine.encrypt(buffer, p1);
                     
-                    // Si es un solo archivo, descarga directa
+                    // Si es único archivo, retorno directo
                     if (files.length === 1) {
+                        UI.updateProgress('enc', 100, "Finalizando...");
                         const blob = new Blob([encrypted], {type: "application/octet-stream"});
-                        UI.renderDownload('enc', blob, files[0].name + ".wenc");
-                        App.updateProgress('enc', 100, "Cifrado Completado");
-                        return; 
+                        UI.showStatus('enc', 'success', null, blob, f.name + ".wenc");
+                        return;
                     }
                     
-                    // Si son varios, agregar al ZIP
-                    zip.add(files[i].name + ".wenc", encrypted);
+                    zip.add(f.name + ".wenc", encrypted);
                 }
 
-                App.updateProgress('enc', 95, "Generando archivo contenedor ZIP...");
-                await new Promise(r => setTimeout(r, 50));
-                
-                const zipBlob = zip.generate();
-                UI.renderDownload('enc', zipBlob, "archivos_seguros.zip");
-                App.updateProgress('enc', 100, "Proceso Finalizado");
-                
+                UI.updateProgress('enc', 95, "Empaquetando ZIP...");
+                const finalZip = zip.generate();
+                UI.showStatus('enc', 'success', null, finalZip, "archivos_protegidos.zip");
+                UI.updateProgress('enc', 100, "Listo");
+
                 // Limpieza de seguridad
                 UI.get('enc-pass').value = '';
                 UI.get('enc-pass-confirm').value = '';
 
             } catch (e) {
                 console.error(e);
-                UI.showError('enc', "Error crítico: " + e.message);
+                UI.showStatus('enc', 'error', e.message);
             } finally {
-                UI.get('btn-enc').disabled = false;
+                UI.get('btn-encrypt').disabled = false;
             }
         },
 
-        /**
-         * Lógica de Descifrado (Batch/Individual)
-         */
-        processDecryption: async () => {
-            const input = UI.get('dec-files');
+        async runDecryption() {
+            const files = UI.get('dec-files').files;
             const pass = UI.get('dec-pass').value;
-            
-            if (!input.files.length) return UI.showError('dec', "Seleccione un archivo cifrado.");
-            if (!pass) return UI.showError('dec', "Ingrese la contraseña.");
 
-            UI.get('btn-dec').disabled = true;
-            const zipOut = new ZipEngine();
-            const filesToProcess = [];
+            if (!files.length) return UI.showStatus('dec', 'error', 'Falta archivo fuente.');
+            if (!pass) return UI.showStatus('dec', 'error', 'Falta contraseña.');
+
+            UI.resetStatus('dec');
+            UI.get('btn-decrypt').disabled = true;
 
             try {
-                App.updateProgress('dec', 5, "Analizando estructura de archivos...");
-                const keyMaterial = await Crypto.getKeyMaterial(pass);
-                
-                // 1. Fase de extracción (Soporte ZIP o WENC directo)
-                for (let f of input.files) {
+                const zipOut = new ZipStore();
+                const queue = [];
+
+                // 1. Análisis de Entrada
+                UI.updateProgress('dec', 5, "Analizando estructura...");
+                for (let f of files) {
                     if (f.name.endsWith('.zip')) {
                         try {
-                            const extracted = await ZipEngine.unzip(f);
-                            filesToProcess.push(...extracted);
-                        } catch(e) {
-                            throw new Error("El ZIP no es válido o está corrupto.");
-                        }
+                            const extracted = await ZipStore.unzip(f);
+                            queue.push(...extracted);
+                        } catch(e) { throw new Error("ZIP corrupto o comprimido (Use método Store)."); }
                     } else {
-                        filesToProcess.push({ name: f.name, data: new Uint8Array(await f.arrayBuffer()) });
+                        queue.push({ name: f.name, data: new Uint8Array(await f.arrayBuffer()) });
                     }
                 }
 
-                // 2. Fase de Descifrado
-                for (let i = 0; i < filesToProcess.length; i++) {
-                    const item = filesToProcess[i];
-                    const percent = ((i / filesToProcess.length) * 100);
-                    App.updateProgress('dec', percent, `Descifrando ${item.name}...`);
+                // 2. Descifrado
+                for (let i = 0; i < queue.length; i++) {
+                    const item = queue[i];
+                    UI.updateProgress('dec', (i/queue.length)*100, `Descifrando ${item.name}...`);
                     await new Promise(r => requestAnimationFrame(r));
 
-                    try {
-                        const decrypted = await Crypto.decrypt(item.data, keyMaterial);
-                        
-                        // Restaurar nombre original
-                        let origName = item.name.replace(".wenc", "");
-                        if(origName === item.name) origName = "restaurado_" + item.name;
+                    const decrypted = await CryptoEngine.decrypt(item.data, pass);
+                    
+                    let origName = item.name.replace(".wenc", "");
+                    if (origName === item.name) origName = "restaurado_" + item.name;
 
-                        // Descarga directa si es solo 1 archivo total
-                        if (filesToProcess.length === 1) {
-                             const blob = new Blob([decrypted]);
-                             UI.renderDownload('dec', blob, origName);
-                             App.updateProgress('dec', 100, "Archivo Restaurado");
-                             return;
-                        }
-                        zipOut.add(origName, new Uint8Array(decrypted));
-                    } catch(e) {
-                        throw new Error(`Error en ${item.name}. Contraseña incorrecta.`);
+                    if (queue.length === 1) {
+                        const blob = new Blob([decrypted]);
+                        UI.showStatus('dec', 'success', null, blob, origName);
+                        UI.updateProgress('dec', 100, "Restaurado");
+                        return;
                     }
+                    zipOut.add(origName, new Uint8Array(decrypted));
                 }
 
-                App.updateProgress('dec', 98, "Empaquetando resultados...");
+                UI.updateProgress('dec', 95, "Creando ZIP final...");
                 const finalZip = zipOut.generate();
-                UI.renderDownload('dec', finalZip, "archivos_restaurados.zip");
-                App.updateProgress('dec', 100, "Operación Exitosa");
-                
+                UI.showStatus('dec', 'success', null, finalZip, "archivos_descifrados.zip");
+                UI.updateProgress('dec', 100, "Listo");
+
                 UI.get('dec-pass').value = '';
 
             } catch (e) {
                 console.error(e);
-                UI.showError('dec', e.message);
-                App.updateProgress('dec', 0, "Proceso fallido");
+                UI.showStatus('dec', 'error', e.message);
             } finally {
-                UI.get('btn-dec').disabled = false;
+                UI.get('btn-decrypt').disabled = false;
             }
         }
     };
+
+    console.log("%c SecureCrypt Pro V2 %c ☕ Powered by Caffeine", "background: #3b82f6; color: white; padding: 4px; border-radius: 4px;", "color: #94a3b8;");
 </script>
 </body>
 </html>
